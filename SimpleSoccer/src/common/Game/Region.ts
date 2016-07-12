@@ -1,3 +1,4 @@
+/// <reference path="../math/Vector2.ts" />
 /**
  *  Desc:   Defines a rectangular region. A region has an identifying
  *          number, and four corners.

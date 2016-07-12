@@ -1,3 +1,7 @@
+
+/// <reference path="./MovingEntity.ts" />
+
+
 /**
  *  Desc: Class to implement a soccer ball. This class inherits from
  *        MovingEntity and provides further functionality for collision

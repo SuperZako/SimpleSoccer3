@@ -1,4 +1,7 @@
 /// <reference path="./common/Game/Region.ts" />
+/// <reference path="./Goal.ts" />
+/// <reference path="./ParamLoader.ts" />
+/// <reference path="./SoccerBall.ts" />
 
 /**
  *  Desc:   A SoccerPitch is the main game object. It owns instances of
@@ -8,6 +11,7 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
+
 //package SimpleSoccer;
 
 //import SimpleSoccer.TeamStates.PrepareForKickOff;
@@ -100,8 +104,8 @@ namespace SimpleSoccer {
 
 
             //create the teams 
-            this.m_pRedTeam = new SoccerTeam(this.m_pRedGoal, this.m_pBlueGoal, this, SoccerTeam.red);
-            this.m_pBlueTeam = new SoccerTeam(this.m_pBlueGoal, this.m_pRedGoal, this, SoccerTeam.blue);
+            this.m_pRedTeam = new SoccerTeam(this.m_pRedGoal, this.m_pBlueGoal, this, TeamColor.Red);
+            this.m_pBlueTeam = new SoccerTeam(this.m_pBlueGoal, this.m_pRedGoal, this, TeamColor.Blue);
 
             //make sure each team knows who their opponents are
             this.m_pRedTeam.SetOpponents(this.m_pBlueTeam);

@@ -31,7 +31,6 @@
     <TypeScriptCompile Include="src\common\D2\geometry.ts" />
     <Content Include="src\common\D2\InvertedAABBox2D.java" />
     <TypeScriptCompile Include="src\common\D2\Transformation.ts" />
-    <TypeScriptCompile Include="src\common\D2\Vector2D.ts" />
     <TypeScriptCompile Include="src\common\D2\Wall2D.ts" />
     <Content Include="src\common\Debug\DbgConsole.java" />
     <Content Include="src\common\Debug\DebugConsole.java" />
@@ -40,6 +39,7 @@
     <TypeScriptCompile Include="src\common\Game\EntityFunctionTemplates.ts" />
     <TypeScriptCompile Include="src\common\Game\EntityManager.ts" />
     <TypeScriptCompile Include="src\common\Game\Region.ts" />
+    <TypeScriptCompile Include="src\common\math\Vector2.ts" />
     <TypeScriptCompile Include="src\common\Messaging\MessageDispatcher.ts" />
     <TypeScriptCompile Include="src\common\Messaging\Telegram.ts" />
     <TypeScriptCompile Include="src\common\misc\AutoList.ts" />
@@ -149,8 +149,7 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>
-    </TypeScriptModuleKind>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptOutFile>build/out.js</TypeScriptOutFile>
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>

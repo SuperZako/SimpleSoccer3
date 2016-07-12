@@ -136,7 +136,7 @@ namespace SimpleSoccer {
             //        gdi.TextColor(Cgdi.grey);
 
             //set appropriate team color
-            if (this.Team().Color() === SoccerTeam.blue) {
+            if (this.Team().isBlue()) {
                 //gdi.BluePen();
                 ctx.fillStyle = "rgb(0, 0, 255)";
             } else {

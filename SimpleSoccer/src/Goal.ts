@@ -7,11 +7,6 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer;
-
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
-//import static common.D2.geometry.*;
 namespace SimpleSoccer {
     export class Goal {
 

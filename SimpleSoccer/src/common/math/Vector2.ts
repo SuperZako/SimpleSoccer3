@@ -1,16 +1,7 @@
-/**
+﻿/**
  *   2D vector struct
  *   @author Petr Bilek (http://www.sallyx.org/)
  */
-//package common.D2;
-
-//import common.misc.utils;
-//import java.util.Scanner;
-//import java.io.InputStream;
-//import static common.misc.utils.*;
-//import common.windows.*;
-//import static common.misc.Stream_Utility_function.ttos;
-
 namespace SimpleSoccer {
     export class Vector2D {
 

@@ -3,20 +3,7 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer;
 
-//import SimpleSoccer.GoalKeeperStates.GlobalKeeperState;
-//import common.Messaging.Telegram;
-//import common.misc.AutoList;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
-//import static common.D2.Transformation.WorldTransform;
-//import common.FSM.State;
-//import common.FSM.StateMachine;
-//import static common.misc.Cgdi.gdi;
-//import static common.misc.Stream_Utility_function.ttos;
-//import static common.Game.EntityFunctionTemplates.EnforceNonPenetrationContraint;
-//import static SimpleSoccer.ParamLoader.Prm;
 namespace SimpleSoccer {
     export class GoalKeeper extends PlayerBase {
         //    //an instance of the state machine class

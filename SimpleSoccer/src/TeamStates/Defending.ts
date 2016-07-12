@@ -34,7 +34,7 @@ namespace SimpleSoccer {
             const RedRegions = [16, 9, 11, 12, 14];
 
             //set up the player's home regions
-            if (team.Color() === SoccerTeam.blue) {
+            if (team.isBlue()) {
                 ChangePlayerHomeRegions(team, BlueRegions);
             } else {
                 ChangePlayerHomeRegions(team, RedRegions);

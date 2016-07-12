@@ -6,49 +6,20 @@
 // * 
 // * @author Petr (http://www.sallyx.org/)
 // */
-//package SimpleSoccer;
-
-//import SimpleSoccer.FieldPlayerStates.ReturnToHomeRegion;
-//import SimpleSoccer.FieldPlayerStates.Wait;
-//import SimpleSoccer.TeamStates.PrepareForKickOff;
-//import SimpleSoccer.TeamStates.Attacking;
-//import SimpleSoccer.TeamStates.Defending;
-//import SimpleSoccer.GoalKeeperStates.TendGoal;
-//import static common.Debug.DbgConsole.*;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
-//import static common.D2.Transformation.*;
-//import static common.D2.geometry.*;
-//import common.FSM.StateMachine;
-//import static common.Game.EntityManager.EntityMgr;
-//import static common.Messaging.MessageDispatcher.*;
-//import common.misc.Cgdi;
-//import static common.misc.Cgdi.gdi;
-//import static common.misc.CppToJava.ObjectRef;
-//import static common.misc.utils.*;
-//import static common.misc.Stream_Utility_function.ttos;
-//import static java.lang.Math.abs;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.ListIterator;
-//import static SimpleSoccer.DEFINE.*;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import static SimpleSoccer.MessageTypes.*;
 
 namespace SimpleSoccer {
-    export enum team_color {
-        blue, red
+    export enum TeamColor {
+        Blue,
+        Red,
     }
 
     export class SoccerTeam {
 
-
-        public static blue = team_color.blue;
-        public static red = team_color.red;
         //an instance of the state machine class
-        private m_pStateMachine: StateMachine<SoccerTeam>;
+        private stateMachine: StateMachine<SoccerTeam>;
         //the team must know its own color!
-        private m_Color: team_color;
+        //private color: TeamColor;
+
         //pointers to the team members
         private m_Players = <PlayerBase[]>[]; // new Array<PlayerBase>(5);
         //a pointer to the soccer pitch
@@ -73,12 +44,11 @@ namespace SimpleSoccer {
         //----------------------------- ctor -------------------------------------
         //
         //------------------------------------------------------------------------
-        constructor(home_goal: Goal, opponents_goal: Goal, pitch: SoccerPitch, color: team_color) {
+        constructor(home_goal: Goal, opponents_goal: Goal, pitch: SoccerPitch, private color: TeamColor) {
             this.m_pOpponentsGoal = opponents_goal;
             this.m_pHomeGoal = home_goal;
             this.m_pOpponents = null;
             this.m_pPitch = pitch;
-            this.m_Color = color;
             this.m_dDistSqToBallOfClosestPlayer = 0.0;
             this.m_pSupportingPlayer = null;
             this.m_pReceivingPlayer = null;
@@ -86,11 +56,11 @@ namespace SimpleSoccer {
             this.m_pPlayerClosestToBall = null;
 
             //setup the state machine
-            this.m_pStateMachine = new StateMachine<SoccerTeam>(this);
+            this.stateMachine = new StateMachine<SoccerTeam>(this);
 
-            this.m_pStateMachine.SetCurrentState(Defending.Instance());
-            this.m_pStateMachine.SetPreviousState(Defending.Instance());
-            this.m_pStateMachine.SetGlobalState(null);
+            this.stateMachine.SetCurrentState(Defending.Instance());
+            this.stateMachine.SetPreviousState(Defending.Instance());
+            this.stateMachine.SetGlobalState(null);
 
             //create the players and goalkeeper
             this.CreatePlayers();
@@ -104,6 +74,14 @@ namespace SimpleSoccer {
 
             //create the sweet spot calculator
             this.m_pSupportSpotCalc = new SupportSpotCalculator(ParamLoader.NumSupportSpotsX, ParamLoader.NumSupportSpotsY, this);
+        }
+
+        public isBlue() {
+            return this.color === TeamColor.Blue;
+        }
+
+        public isRed() {
+            return this.color === TeamColor.Red;
         }
 
         //    //----------------------- dtor -------------------------------------------
@@ -133,10 +111,10 @@ namespace SimpleSoccer {
             //if (Prm.bShowControllingTeam) {
             //    gdi.TextColor(Cgdi.white);
 
-            if (this.Color() === team_color.blue && this.InControl()) {
+            if (this.isBlue() && this.InControl()) {
                 ctx.strokeStyle = "blue";
                 ctx.strokeText("Blue in Control", 20, 3);
-            } else if (this.Color() === team_color.red && this.InControl()) {
+            } else if (this.isRed() && this.InControl()) {
                 ctx.strokeStyle = "red";
                 ctx.strokeText("Red in Control", 20, 3);
 
@@ -147,10 +125,10 @@ namespace SimpleSoccer {
             //    }
             //}
 
-            ////render the sweet spots
-            //if (Prm.bSupportSpots && InControl()) {
-            //    m_pSupportSpotCalc.Render();
-            //}
+            //render the sweet spots
+            if (/*ParamLoader.bSupportSpots &&*/ this.InControl()) {
+                this.m_pSupportSpotCalc.Render(ctx);
+            }
 
             ////define(SHOW_TEAM_STATE);
             //if (def(SHOW_TEAM_STATE)) {
@@ -201,7 +179,7 @@ namespace SimpleSoccer {
             //the team state machine switches between attack/defense behavior. It
             //also handles the 'kick off' state where a team must return to their
             //kick off positions before the whistle is blown
-            this.m_pStateMachine.Update();
+            this.stateMachine.Update();
 
             //now update each player
             //ListIterator<PlayerBase> it = m_Players.listIterator();
@@ -536,7 +514,7 @@ namespace SimpleSoccer {
         }
 
         public GetFSM() {
-            return this.m_pStateMachine;
+            return this.stateMachine;
         }
 
         public HomeGoal() {
@@ -559,9 +537,9 @@ namespace SimpleSoccer {
             this.m_pOpponents = opps;
         }
 
-        public Color() {
-            return this.m_Color;
-        }
+        //public Color() {
+        //    return this.color;
+        //}
 
         public SetPlayerClosestToBall(plyr: PlayerBase) {
             this.m_pPlayerClosestToBall = plyr;
@@ -681,7 +659,7 @@ namespace SimpleSoccer {
          */
         private CreatePlayers() {
             let m_Players = this.m_Players;
-            if (this.Color() === SoccerTeam.blue) {
+            if (this.isBlue()) {
                 //goalkeeper
                 m_Players.push(new GoalKeeper(this,
                     1,

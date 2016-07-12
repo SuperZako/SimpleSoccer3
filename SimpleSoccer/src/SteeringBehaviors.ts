@@ -8,102 +8,56 @@
 
 /* tslint:disable:no-bitwise */
 
-//package SimpleSoccer;
-
-//import java.util.ArrayList;
-//import java.util.ListIterator;
-//import common.misc.AutoList;
-//import java.util.List;
-//import common.D2.Vector2D;
-//import java.lang.reflect.Array;
-//import java.util.Arrays;
-//import static common.D2.Vector2D.*;
-//import static common.misc.Cgdi.gdi;
-//import static SimpleSoccer.ParamLoader.Prm;
 namespace SimpleSoccer {
-    enum behavior_type {
-
-        none = 0x0000,
-        seek = 0x0001,
-        arrive = 0x0002,
-        separation = 0x0004,
-        pursuit = 0x0008,
-        interpose = 0x0010,
-        //private static flag: number;
-
-        //static behavior_type(flag: number) {
-        //    this.flag = flag;
-        //}
-
-        //static flag() {
-        //    return this.flag;
-        //}
+    enum BehaviorType {
+        None = 0x0000,
+        Seek = 0x0001,
+        Arrive = 0x0002,
+        Separation = 0x0004,
+        Pursuit = 0x0008,
+        Interpose = 0x0010,
     }
 
 
     //Arrive makes use of these to determine how quickly a vehicle
     //should decelerate to its target
     enum Deceleration {
-        slow = 3,
-        normal = 2,
-        fast = 1,
+        Slow = 3,
+        Normal = 2,
+        Fast = 1,
     }
 
     export class SteeringBehaviors {
-
-        private m_pPlayer: PlayerBase;
-        private m_pBall: SoccerBall;
         //the steering force created by the combined effect of all
         //the selected behaviors
         private m_vSteeringForce = new Vector2D();
         //the current target (usually the ball or predicted ball position)
         private m_vTarget = new Vector2D();
         //the distance the player tries to interpose from the target
-        private m_dInterposeDist: number;
+        private m_dInterposeDist = 0.0;
         //multipliers. 
         private m_dMultSeparation: number;
         //how far it can 'see'
         private m_dViewDistance: number;
         //binary flags to indicate whether or not a behavior should be active
-        private m_iFlags: number;
+        private m_iFlags = 0;
 
         //    //a vertex buffer to contain the feelers rqd for dribbling
-        private m_Antenna: Vector2D[];
+        private m_Antenna: Vector2D[] = [];
 
         //used by group behaviors to tag neighbours
-        private m_bTagged: boolean;
-
-        //    //Arrive makes use of these to determine how quickly a vehicle
-        //    //should decelerate to its target
-        //    private enum Deceleration {
-
-        //        slow(3), normal(2), fast(1);
-        //        private int dec;
-
-        //        Deceleration(int d) {
-        //            this.dec = d;
-        //        }
-
-        //        public int value() {
-        //            return dec;
-        //        }
-        //    }
-
-
-
+        private m_bTagged = false;
 
         //------------------------- ctor -----------------------------------------
         //
         //------------------------------------------------------------------------
-        constructor(agent: PlayerBase, world: SoccerPitch, ball: SoccerBall) {
-            this.m_pPlayer = agent;
-            this.m_iFlags = 0;
+        constructor(private player: PlayerBase, world: SoccerPitch, private ball: SoccerBall) {
+            //this.m_iFlags = 0;
             this.m_dMultSeparation = ParamLoader.SeparationCoefficient;
-            this.m_bTagged = false;
+            //this.m_bTagged = false;
             this.m_dViewDistance = ParamLoader.ViewDistance;
-            this.m_pBall = ball;
-            this.m_dInterposeDist = 0.0;
-            this.m_Antenna = <Vector2D[]>[];
+            //this.m_dInterposeDist = 0.0;
+            //this.m_Antenna = <Vector2D[]>[];
         }
 
         //    @Override
@@ -123,7 +77,7 @@ namespace SimpleSoccer {
             this.m_vSteeringForce = this.SumForces();
 
             //make sure the force doesn't exceed the vehicles maximum allowable
-            this.m_vSteeringForce.Truncate(this.m_pPlayer.MaxForce());
+            this.m_vSteeringForce.Truncate(this.player.MaxForce());
 
             return new Vector2D(this.m_vSteeringForce.x, this.m_vSteeringForce.y);
         }
@@ -133,7 +87,7 @@ namespace SimpleSoccer {
          * with the vehicle heading
          */
         public ForwardComponent() {
-            return this.m_pPlayer.Heading().Dot(this.m_vSteeringForce);
+            return this.player.Heading().Dot(this.m_vSteeringForce);
         }
 
         /**
@@ -141,7 +95,7 @@ namespace SimpleSoccer {
          * with the vehicle heading
          */
         public SideComponent() {
-            return this.m_pPlayer.Side().Dot(this.m_vSteeringForce) * this.m_pPlayer.MaxTurnRate();
+            return this.player.Side().Dot(this.m_vSteeringForce) * this.player.MaxTurnRate();
         }
 
         public Force() {
@@ -187,74 +141,74 @@ namespace SimpleSoccer {
         }
 
         public SeekOn() {
-            this.m_iFlags |= behavior_type.seek;
+            this.m_iFlags |= BehaviorType.Seek;
         }
 
         public ArriveOn() {
-            this.m_iFlags |= behavior_type.arrive;
+            this.m_iFlags |= BehaviorType.Arrive;
         }
 
         public PursuitOn() {
-            this.m_iFlags |= behavior_type.pursuit;
+            this.m_iFlags |= BehaviorType.Pursuit;
         }
 
         public SeparationOn() {
-            this.m_iFlags |= behavior_type.separation;
+            this.m_iFlags |= BehaviorType.Separation;
         }
 
         public InterposeOn(d: number) {
-            this.m_iFlags |= behavior_type.interpose;
+            this.m_iFlags |= BehaviorType.Interpose;
             this.m_dInterposeDist = d;
         }
 
         public SeekOff() {
-            if (this.On(behavior_type.seek)) {
-                this.m_iFlags ^= behavior_type.seek;
+            if (this.On(BehaviorType.Seek)) {
+                this.m_iFlags ^= BehaviorType.Seek;
             }
         }
 
         public ArriveOff() {
-            if (this.On(behavior_type.arrive)) {
-                this.m_iFlags ^= behavior_type.arrive;
+            if (this.On(BehaviorType.Arrive)) {
+                this.m_iFlags ^= BehaviorType.Arrive;
             }
         }
 
         public PursuitOff() {
-            if (this.On(behavior_type.pursuit)) {
-                this.m_iFlags ^= behavior_type.pursuit;
+            if (this.On(BehaviorType.Pursuit)) {
+                this.m_iFlags ^= BehaviorType.Pursuit;
             }
         }
 
         public SeparationOff() {
-            if (this.On(behavior_type.separation)) {
-                this.m_iFlags ^= behavior_type.separation;
+            if (this.On(BehaviorType.Separation)) {
+                this.m_iFlags ^= BehaviorType.Separation;
             }
         }
 
         public InterposeOff() {
-            if (this.On(behavior_type.interpose)) {
-                this.m_iFlags ^= behavior_type.interpose;
+            if (this.On(BehaviorType.Interpose)) {
+                this.m_iFlags ^= BehaviorType.Interpose;
             }
         }
 
         public SeekIsOn() {
-            return this.On(behavior_type.seek);
+            return this.On(BehaviorType.Seek);
         }
 
         public ArriveIsOn() {
-            return this.On(behavior_type.arrive);
+            return this.On(BehaviorType.Arrive);
         }
 
         public PursuitIsOn() {
-            return this.On(behavior_type.pursuit);
+            return this.On(BehaviorType.Pursuit);
         }
 
         public SeparationIsOn() {
-            return this.On(behavior_type.separation);
+            return this.On(BehaviorType.Separation);
         }
 
         public InterposeIsOn() {
-            return this.On(behavior_type.interpose);
+            return this.On(BehaviorType.Interpose);
         }
 
         /**
@@ -264,9 +218,9 @@ namespace SimpleSoccer {
        */
         private Seek(target: Vector2D) {
 
-            let DesiredVelocity = Vec2DNormalize(mul(this.m_pPlayer.MaxSpeed(), sub(target, this.m_pPlayer.Pos())));
+            let DesiredVelocity = Vec2DNormalize(mul(this.player.MaxSpeed(), sub(target, this.player.Pos())));
 
-            return sub(DesiredVelocity, this.m_pPlayer.Velocity());
+            return sub(DesiredVelocity, this.player.Velocity());
         }
 
         /**
@@ -274,7 +228,7 @@ namespace SimpleSoccer {
          *  target with a zero velocity
          */
         private Arrive(TargetPos: Vector2D, deceleration: Deceleration) {
-            let ToTarget = sub(TargetPos, this.m_pPlayer.Pos());
+            let ToTarget = sub(TargetPos, this.player.Pos());
 
             //calculate the distance to the target
             let dist = ToTarget.Length();
@@ -289,14 +243,14 @@ namespace SimpleSoccer {
                 let speed = dist / (deceleration * DecelerationTweaker);
 
                 //make sure the velocity does not exceed the max
-                speed = Math.min(speed, this.m_pPlayer.MaxSpeed());
+                speed = Math.min(speed, this.player.MaxSpeed());
 
                 //from here proceed just like Seek except we don't need to normalize 
                 //the ToTarget vector because we have already gone to the trouble
                 //of calculating its length: dist. 
                 let DesiredVelocity = mul(speed / dist, ToTarget);
 
-                return sub(DesiredVelocity, this.m_pPlayer.Velocity());
+                return sub(DesiredVelocity, this.player.Velocity());
             }
 
             return new Vector2D(0, 0);
@@ -309,7 +263,7 @@ namespace SimpleSoccer {
          * ball
          */
         private Pursuit(ball: SoccerBall) {
-            let ToBall = sub(ball.Pos(), this.m_pPlayer.Pos());
+            let ToBall = sub(ball.Pos(), this.player.Pos());
 
             //the lookahead time is proportional to the distance between the ball
             //and the pursuer; 
@@ -323,7 +277,7 @@ namespace SimpleSoccer {
             this.m_vTarget = ball.FuturePosition(LookAheadTime);
 
             //now seek to the predicted future position of the ball
-            return this.Arrive(this.m_vTarget, Deceleration.fast);
+            return this.Arrive(this.m_vTarget, Deceleration.Fast);
         }
 
         /**
@@ -342,8 +296,8 @@ namespace SimpleSoccer {
                 //PlayerBase curPlyr = it.next();
                 //make sure this agent isn't included in the calculations and that
                 //the agent is close enough
-                if ((it !== this.m_pPlayer) && it.Steering().Tagged()) {
-                    let ToAgent = sub(this.m_pPlayer.Pos(), it.Pos());
+                if ((it !== this.player) && it.Steering().Tagged()) {
+                    let ToAgent = sub(this.player.Pos(), it.Pos());
 
                     //scale the force inversely proportional to the agents distance  
                     //from its neighbor.
@@ -358,10 +312,8 @@ namespace SimpleSoccer {
          * Given an opponent and an object position this method returns a 
          * force that attempts to position the agent between them
          */
-        private Interpose(ball: SoccerBall,
-            target: Vector2D,
-            DistFromTarget: number) {
-            return this.Arrive(add(target, mul(DistFromTarget, Vec2DNormalize(sub(ball.Pos(), target)))), Deceleration.normal);
+        private Interpose(ball: SoccerBall, target: Vector2D, DistFromTarget: number) {
+            return this.Arrive(add(target, mul(DistFromTarget, Vec2DNormalize(sub(ball.Pos(), target)))), Deceleration.Normal);
         }
 
         /**
@@ -379,7 +331,7 @@ namespace SimpleSoccer {
                 it.Steering().UnTag();
 
                 //work in distance squared to avoid sqrts
-                let to = sub(it.Pos(), this.m_pPlayer.Pos());
+                let to = sub(it.Pos(), this.player.Pos());
 
                 if (to.LengthSq() < (this.m_dViewDistance * this.m_dViewDistance)) {
                     it.Steering().Tag();
@@ -390,7 +342,7 @@ namespace SimpleSoccer {
         /**
          * this function tests if a specific bit of m_iFlags is set
          */
-        private On(bt: behavior_type) {
+        private On(bt: BehaviorType) {
             return (this.m_iFlags & bt) === bt;
         }
 
@@ -403,7 +355,7 @@ namespace SimpleSoccer {
             //first calculate how much steering force we have left to use
             let MagnitudeSoFar = sf.Length();
 
-            let magnitudeRemaining = this.m_pPlayer.MaxForce() - MagnitudeSoFar;
+            let magnitudeRemaining = this.player.MaxForce() - MagnitudeSoFar;
 
             //return false if there is no more force left to use
             if (magnitudeRemaining <= 0.0) {
@@ -437,7 +389,7 @@ namespace SimpleSoccer {
             //the soccer players must always tag their neighbors
             this.FindNeighbours();
 
-            if (this.On(behavior_type.separation)) {
+            if (this.On(BehaviorType.Separation)) {
                 force.add(mul(this.m_dMultSeparation, this.Separation()));
 
                 if (!this.AccumulateForce(this.m_vSteeringForce, force)) {
@@ -445,7 +397,7 @@ namespace SimpleSoccer {
                 }
             }
 
-            if (this.On(behavior_type.seek)) {
+            if (this.On(BehaviorType.Seek)) {
                 force.add(this.Seek(this.m_vTarget));
 
                 if (!this.AccumulateForce(this.m_vSteeringForce, force)) {
@@ -453,24 +405,24 @@ namespace SimpleSoccer {
                 }
             }
 
-            if (this.On(behavior_type.arrive)) {
-                force.add(this.Arrive(this.m_vTarget, Deceleration.fast));
+            if (this.On(BehaviorType.Arrive)) {
+                force.add(this.Arrive(this.m_vTarget, Deceleration.Fast));
 
                 if (!this.AccumulateForce(this.m_vSteeringForce, force)) {
                     return this.m_vSteeringForce;
                 }
             }
 
-            if (this.On(behavior_type.pursuit)) {
-                force.add(this.Pursuit(this.m_pBall));
+            if (this.On(BehaviorType.Pursuit)) {
+                force.add(this.Pursuit(this.ball));
 
                 if (!this.AccumulateForce(this.m_vSteeringForce, force)) {
                     return this.m_vSteeringForce;
                 }
             }
 
-            if (this.On(behavior_type.interpose)) {
-                force.add(this.Interpose(this.m_pBall, this.m_vTarget, this.m_dInterposeDist));
+            if (this.On(BehaviorType.Interpose)) {
+                force.add(this.Interpose(this.ball, this.m_vTarget, this.m_dInterposeDist));
 
                 if (!this.AccumulateForce(this.m_vSteeringForce, force)) {
                     return this.m_vSteeringForce;
