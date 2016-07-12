@@ -10,9 +10,6 @@
 //import common.Messaging.Telegram;
 namespace SimpleSoccer {
     export class ChaseBall extends State<FieldPlayer> {
-        public getName() {
-            return "ChaseBall";
-        }
 
         private static instance = new ChaseBall();
 
@@ -22,6 +19,10 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "ChaseBall";
         }
 
         //@Override
@@ -38,7 +39,7 @@ namespace SimpleSoccer {
         public Execute(player: FieldPlayer) {
             //if the ball is within kicking range the player changes state to KickBall.
             if (player.BallWithinKickingRange()) {
-                player.GetFSM().ChangeState(KickBall.Instance());
+                player.ChangeState(KickBall.Instance());
                 return;
             }
 
@@ -52,7 +53,7 @@ namespace SimpleSoccer {
 
             //if the player is not closest to the ball anymore, he should return back
             //to his home region and wait for another opportunity
-            player.GetFSM().ChangeState(ReturnToHomeRegion.Instance());
+            player.ChangeState(ReturnToHomeRegion.Instance());
         }
 
         //@Override

@@ -13,9 +13,6 @@
 namespace SimpleSoccer {
     export class SupportAttacker extends State<FieldPlayer> {
 
-        public getName() {
-            return "SupportAttacker";
-        }
 
         private static instance = new SupportAttacker();
 
@@ -25,6 +22,11 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+
+        public getName() {
+            return "SupportAttacker";
         }
 
         //    @Override
@@ -42,12 +44,12 @@ namespace SimpleSoccer {
         public Execute(player: FieldPlayer) {
             //if his team loses control go back home
             if (!player.Team().InControl()) {
-                player.GetFSM().ChangeState(ReturnToHomeRegion.Instance());
+                player.ChangeState(ReturnToHomeRegion.Instance());
                 return;
             }
 
             //if the best supporting spot changes, change the steering target
-            if (player.Team().GetSupportSpot() != player.Steering().Target()) {
+            if (player.Team().GetSupportSpot() !== player.Steering().Target()) {
                 player.Steering().SetTarget(player.Team().GetSupportSpot());
 
                 player.Steering().ArriveOn();

@@ -11,6 +11,10 @@
 //import static common.misc.utils.*;
 namespace SimpleSoccer {
     export class Regulator {
+        ////the number of milliseconds the update period can vary per required
+        ////update-step. This is here to make sure any multiple clients of this class
+        ////have their updates spread evenly
+        private static UpdatePeriodVariator = 10.0;
 
         //the time period between updates 
         private m_dUpdatePeriod: number;
@@ -28,10 +32,7 @@ namespace SimpleSoccer {
                 this.m_dUpdatePeriod = -1;
             }
         }
-        ////the number of milliseconds the update period can vary per required
-        ////update-step. This is here to make sure any multiple clients of this class
-        ////have their updates spread evenly
-        private static UpdatePeriodVariator = 10.0;
+
 
         /**
          * @return true if the current time exceeds m_dwNextUpdateTime
@@ -49,10 +50,11 @@ namespace SimpleSoccer {
                 return false;
             }
 
-            let CurrentTime = new Date().getTime();//System.currentTimeMillis();
+            let CurrentTime = new Date().getTime(); // System.currentTimeMillis();
 
             if (CurrentTime >= this.m_dwNextUpdateTime) {
-                this.m_dwNextUpdateTime = (CurrentTime + this.m_dUpdatePeriod + RandInRange(-Regulator.UpdatePeriodVariator, Regulator.UpdatePeriodVariator));
+                const updatePeriodVariator = Regulator.UpdatePeriodVariator;
+                this.m_dwNextUpdateTime = (CurrentTime + this.m_dUpdatePeriod + RandInRange(-updatePeriodVariator, updatePeriodVariator));
                 return true;
             }
 

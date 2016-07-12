@@ -30,7 +30,7 @@ namespace SimpleSoccer {
     }
 
     export abstract class PlayerBase extends MovingEntity {
-        private static m_Members = <PlayerBase[]>[]
+        private static m_Members: PlayerBase[] = [];
 
 
         //this player's role in the team
@@ -170,7 +170,9 @@ namespace SimpleSoccer {
             if (this.Team().SupportingPlayer() == null) {
                 let BestSupportPly = this.Team().DetermineBestSupportingAttacker();
                 this.Team().SetSupportingPlayer(BestSupportPly);
-                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_SupportAttacker, null);
+                let supportingPlayer = this.Team().SupportingPlayer();
+                let message = MessageTypes.Msg_SupportAttacker;
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), supportingPlayer.ID(), message, null);
             }
 
             let BestSupportPly = this.Team().DetermineBestSupportingAttacker();
@@ -181,12 +183,16 @@ namespace SimpleSoccer {
             if (BestSupportPly !== null && (BestSupportPly !== this.Team().SupportingPlayer())) {
 
                 if (this.Team().SupportingPlayer() !== null) {
-                    MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_GoHome, null);
+                    let supportingPlayer = this.Team().SupportingPlayer();
+                    let message = MessageTypes.Msg_GoHome;
+                    MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), supportingPlayer.ID(), message, null);
                 }
 
                 this.Team().SetSupportingPlayer(BestSupportPly);
 
-                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_SupportAttacker, null);
+                let supportingPlayer = this.Team().SupportingPlayer();
+                let message = MessageTypes.Msg_SupportAttacker;
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), supportingPlayer.ID(), message, null);
             }
         }
 
@@ -228,7 +234,9 @@ namespace SimpleSoccer {
          * @return true if this player is ahead of the attacker
          */
         public isAheadOfAttacker() {
-            return Math.abs(this.Pos().x - this.Team().OpponentsGoal().Center().x) < Math.abs(this.Team().ControllingPlayer().Pos().x - this.Team().OpponentsGoal().Center().x);
+            let opponentsGoal = this.Team().OpponentsGoal();
+            let controllingPlayer = this.Team().ControllingPlayer();
+            return Math.abs(this.Pos().x - opponentsGoal.Center().x) < Math.abs(controllingPlayer.Pos().x - opponentsGoal.Center().x);
         }
 
         //returns true if a player is located at the designated support spot

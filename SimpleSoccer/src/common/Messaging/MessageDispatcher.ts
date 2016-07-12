@@ -34,14 +34,14 @@ namespace SimpleSoccer {
         ////because of the benefit of automatic sorting and avoidance
         ////of duplicates. Messages are sorted by their dispatch time.
         //private TreeSet<Telegram> PriorityQ = new TreeSet<Telegram>();
-        static PriorityQ: Telegram[] = [];
+        private static PriorityQ: Telegram[] = [];
 
         /** 
          * this method is utilized by DispatchMsg or DispatchDelayedMessages.
          * This method calls the message handling member function of the receiving
          * entity, pReceiver, with the newly created telegram
          */
-        static Discharge(pReceiver: BaseGameEntity, telegram: Telegram) {
+        public static Discharge(pReceiver: BaseGameEntity, telegram: Telegram) {
             if (!pReceiver.HandleMessage(telegram)) {
                 //telegram could not be handled
                 //if (def(SHOW_MESSAGING_INFO)) {
@@ -79,7 +79,7 @@ namespace SimpleSoccer {
         //    DispatchMsg(delay, sender, receiver, msg, null);
         //}
 
-        static DispatchMsg(delay: number, sender: number, receiver: number, msg: MessageTypes, AdditionalInfo: Object) {
+        public static DispatchMsg(delay: number, sender: number, receiver: number, msg: MessageTypes, AdditionalInfo: Object) {
 
             //get a pointer to the receiver
             let pReceiver = EntityManager.EntityMgr.GetEntityFromID(receiver);
@@ -99,13 +99,14 @@ namespace SimpleSoccer {
             //if there is no delay, route telegram immediately                       
             if (delay <= 0.0) {
                 //if (def(SHOW_MESSAGING_INFO)) {
-                //    debug_con.print("\nTelegram dispatched at time: ").print(TickCounter.GetCurrentFrame()).print(" by ").print(sender).print(" for ").print(receiver).print(". Msg is ").print(msg).print("");
+                //    debug_con.print("\nTelegram dispatched at time: ").
+                //print(TickCounter.GetCurrentFrame()).print(" by ").
+                //print(sender).print(" for ").print(receiver).print(". Msg is ").print(msg).print("");
                 //}
                 //send the telegram to the recipient
                 this.Discharge(pReceiver, telegram);
-            } //else calculate the time when the telegram should be dispatched
-            else {
-                let CurrentTime = new Date().getTime();//TickCounter.GetCurrentFrame();
+            } else {  // else calculate the time when the telegram should be dispatched
+                let CurrentTime = new Date().getTime(); // TickCounter.GetCurrentFrame();
 
                 telegram.DispatchTime = CurrentTime + delay;
 
@@ -113,7 +114,9 @@ namespace SimpleSoccer {
                 this.PriorityQ.push(telegram);
 
                 //if (def(SHOW_MESSAGING_INFO)) {
-                //    debug_con.print("\nDelayed telegram from ").print(sender).print(" recorded at time ").print(TickCounter.GetCurrentFrame()).print(" for ").print(receiver).print(". Msg is ").print(msg).print("");
+                //    debug_con.print("\nDelayed telegram from ").print(sender).
+                //print(" recorded at time ").print(TickCounter.GetCurrentFrame()).print(" for ").
+                //print(receiver).print(". Msg is ").print(msg).print("");
                 //}
             }
         }
@@ -139,7 +142,8 @@ namespace SimpleSoccer {
         //        BaseGameEntity pReceiver = EntityMgr.GetEntityFromID(telegram.Receiver);
 
         //        if (def(SHOW_MESSAGING_INFO)) {
-        //            debug_con.print("\nQueued telegram ready for dispatch: Sent to ").print(pReceiver.ID()).print(". Msg is ").print(telegram.Msg).print("");
+        //            debug_con.print("\nQueued telegram ready for dispatch: Sent to ").
+        //print(pReceiver.ID()).print(". Msg is ").print(telegram.Msg).print("");
         //        }
 
         //        //send the telegram to the recipient

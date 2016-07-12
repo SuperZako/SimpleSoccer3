@@ -14,6 +14,17 @@ namespace SimpleSoccer {
     export abstract class BaseGameEntity {
 
         public static default_entity_type = -1;
+
+        private static m_iNextValidID = 0;
+
+        //its location in the environment
+        protected m_vPosition = new Vector2D();
+        protected m_vScale = new Vector2D();
+        //the magnitude of this object's bounding radius
+        protected m_dBoundingRadius: number;
+
+
+
         //each entity has a unique ID
         private m_ID: number;
         //every entity has a type associated with it (health, troll, ammo etc)
@@ -22,30 +33,8 @@ namespace SimpleSoccer {
         private m_bTag: boolean;
         //    //this is the next valid ID. Each time a BaseGameEntity is instantiated
         //    //this value is updated
-        private static m_iNextValidID = 0;
-
-        /**
-         *  this must be called within each constructor to make sure the ID is set
-         *  correctly. It verifies that the value passed to the method is greater
-         *  or equal to the next valid ID, before setting the ID and incrementing
-         *  the next valid ID
-         */
-        private SetID(val: number) {
-            //make sure the val is equal to or greater than the next available ID
-            //assert (val >= m_iNextValidID) : "<BaseGameEntity::SetID>: invalid ID";
-
-            this.m_ID = val;
-
-            BaseGameEntity.m_iNextValidID = this.m_ID + 1;
-        }
-        //its location in the environment
-        protected m_vPosition = new Vector2D();
-        protected m_vScale = new Vector2D();
-        //the magnitude of this object's bounding radius
-        protected m_dBoundingRadius: number;
 
         //------------------------------ ctor -----------------------------------------
-        //-----------------------------------------------------------------------------
         constructor(ID: number) {
             this.m_dBoundingRadius = 0.0;
             this.m_vScale = new Vector2D(1.0, 1.0);
@@ -55,12 +44,18 @@ namespace SimpleSoccer {
             this.SetID(ID);
         }
 
+        // use this to grab the next valid ID
+        public static GetNextValidID() {
+            return this.m_iNextValidID;
+        }
+
         //    @Override
         //    protected void finalize() throws Throwable {
         //        super.finalize();
         //    }
 
         public Update() {
+            return;
         }
 
         public abstract Render(ctx: CanvasRenderingContext2D): void;
@@ -72,10 +67,7 @@ namespace SimpleSoccer {
         //    //entities should be able to read/write their data to a stream
         //    //virtual void Write(std::ostream&  os)const{}
         //    //virtual void Read (std::ifstream& is){}
-        //use this to grab the next valid ID
-        public static GetNextValidID() {
-            return this.m_iNextValidID;
-        }
+
 
         //    //this can be used to reset the next ID
         //    public static void ResetNextValidID() {
@@ -135,5 +127,20 @@ namespace SimpleSoccer {
         //    public void SetEntityType(int new_type) {
         //        m_iType = new_type;
         //    }
+
+        /**
+       *  this must be called within each constructor to make sure the ID is set
+       *  correctly. It verifies that the value passed to the method is greater
+       *  or equal to the next valid ID, before setting the ID and incrementing
+       *  the next valid ID
+       */
+        private SetID(val: number) {
+            //make sure the val is equal to or greater than the next available ID
+            //assert (val >= m_iNextValidID) : "<BaseGameEntity::SetID>: invalid ID";
+
+            this.m_ID = val;
+
+            BaseGameEntity.m_iNextValidID = this.m_ID + 1;
+        }
     }
 }

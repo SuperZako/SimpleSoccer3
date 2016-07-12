@@ -16,19 +16,21 @@
 namespace SimpleSoccer {
     export class PutBallBackInPlay extends State<GoalKeeper> {
 
-        public getName() {
-            return "PutBallBackInPlay";
-        }
-
-
         private static instance = new PutBallBackInPlay();
 
-
+        constructor() {
+            super();
+        }
 
         //this is a singleton
         public static Instance() {
             return this.instance;
         }
+
+        public getName() {
+            return "PutBallBackInPlay";
+        }
+
 
         //@Override
         public Enter(keeper: GoalKeeper) {
@@ -49,7 +51,7 @@ namespace SimpleSoccer {
             //let receiverRef = receiver;
             //test if there are players further forward on the field we might
             //be able to pass to. If so, make a pass.
-            let result = keeper.Team().FindPass(keeper,  ParamLoader.MaxPassingForce, ParamLoader.GoalkeeperMinPassDistance)
+            let result = keeper.Team().FindPass(keeper, ParamLoader.MaxPassingForce, ParamLoader.GoalkeeperMinPassDistance);
             if (result.receiver) {
 
                 //make the pass   
@@ -59,10 +61,11 @@ namespace SimpleSoccer {
                 keeper.Pitch().SetGoalKeeperHasBall(false);
 
                 //let the receiving player know the ball's comin' at him
-                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, keeper.ID(), result.receiver.ID(), MessageTypes.Msg_ReceiveBall, result.PassTarget);
+                let message = MessageTypes.Msg_ReceiveBall;
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, keeper.ID(), result.receiver.ID(), message, result.PassTarget);
 
                 //go back to tending the goal   
-                keeper.GetFSM().ChangeState(TendGoal.Instance());
+                keeper.ChangeState(TendGoal.Instance());
 
                 return;
             }
@@ -72,6 +75,7 @@ namespace SimpleSoccer {
 
         //@Override
         public Exit(keeper: GoalKeeper) {
+            return;
         }
 
         //@Override

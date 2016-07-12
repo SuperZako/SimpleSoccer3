@@ -87,7 +87,7 @@ namespace SimpleSoccer {
         for (let it of others) {
             //let curOb = it.next();
             //make sure we don't check against this entity
-            if (it == entity) {
+            if (it === entity) {
                 continue;
             }
 

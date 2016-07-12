@@ -16,10 +16,6 @@
 namespace SimpleSoccer {
     export class Dribble extends State<FieldPlayer> {
 
-        public getName() {
-            return "Dribble";
-        }
-
         private static instance = new Dribble();
 
         //private Dribble() {
@@ -28,6 +24,10 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "Dribble";
         }
 
         //@Override
@@ -65,23 +65,23 @@ namespace SimpleSoccer {
                 const KickingForce = 0.8;
 
                 player.Ball().Kick(direction, KickingForce);
-            } //kick the ball down the field
-            else {
+            } else { // kick the ball down the field
                 player.Ball().Kick(player.Team().HomeGoal().Facing(), ParamLoader.MaxDribbleForce);
             }
 
             //the player has kicked the ball so he must now change state to follow it
-            player.GetFSM().ChangeState(ChaseBall.Instance());
+            player.ChangeState(ChaseBall.Instance());
 
             return;
         }
 
         //@Override
         public Exit(player: FieldPlayer) {
+            return;
         }
 
         //@Override
-        public OnMessage(e: FieldPlayer,   t:Telegram) {
+        public OnMessage(e: FieldPlayer, t: Telegram) {
             return false;
         }
     }

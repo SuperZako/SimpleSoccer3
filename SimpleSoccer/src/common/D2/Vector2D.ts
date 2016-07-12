@@ -22,16 +22,21 @@ namespace SimpleSoccer {
         //        y = 0.0;
         //    }
 
-        static UnitX() {
-            return new Vector2D(1, 0);
-        }
+        public static clockwise = 1;
+        public static anticlockwise = -1;
 
-        static UnitY() {
-            return new Vector2D(0, 1);
-        }
+
 
         constructor(public x = 0, public y = 0) {
 
+        }
+
+        public static UnitX() {
+            return new Vector2D(1, 0);
+        }
+
+        public static UnitY() {
+            return new Vector2D(0, 1);
         }
 
         //    public Vector2D(Vector2D v) {
@@ -96,8 +101,7 @@ namespace SimpleSoccer {
         }
 
 
-        public static clockwise = 1;
-        public static anticlockwise = -1;
+
         /**
         /* returns positive if v2 is clockwise of this vector,
         /* negative if anticlockwise (assuming the Y axis is pointing down,

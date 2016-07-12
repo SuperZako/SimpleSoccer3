@@ -9,10 +9,6 @@
 namespace SimpleSoccer {
     export class GlobalKeeperState extends State<GoalKeeper> {
 
-        public getName() {
-            return "GlobalKeeperState";
-        }
-
         private static instance = new GlobalKeeperState();
 
         constructor() {
@@ -23,16 +19,23 @@ namespace SimpleSoccer {
             return this.instance;
         }
 
+        public getName() {
+            return "GlobalKeeperState";
+        }
+
         //@Override
         public Enter(keeper: GoalKeeper) {
+            return;
         }
 
         //@Override
         public Execute(keeper: GoalKeeper) {
+            return;
         }
 
         //@Override
         public Exit(keeper: GoalKeeper) {
+            return;
         }
 
         //@Override
@@ -40,13 +43,13 @@ namespace SimpleSoccer {
             switch (telegram.Msg) {
                 case MessageTypes.Msg_GoHome: {
                     keeper.SetDefaultHomeRegion();
-                    keeper.GetFSM().ChangeState(ReturnHome.Instance());
+                    keeper.ChangeState(ReturnHome.Instance());
                 }
 
                     break;
 
                 case MessageTypes.Msg_ReceiveBall: {
-                    keeper.GetFSM().ChangeState(InterceptBall.Instance());
+                    keeper.ChangeState(InterceptBall.Instance());
                 }
 
                     break;

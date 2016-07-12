@@ -14,9 +14,6 @@
 namespace SimpleSoccer {
     export class ReceiveBall extends State<FieldPlayer> {
 
-        public getName() {
-            return "ReceiveBall";
-        }
         private static instance = new ReceiveBall();
 
         //private ReceiveBall() {
@@ -25,6 +22,10 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "ReceiveBall";
         }
 
         //@Override
@@ -44,8 +45,10 @@ namespace SimpleSoccer {
             //player is in the opponents 'hot region' (the third of the pitch closest
             //to the opponent's goal
             const PassThreatRadius = 70.0;
-
-            if ((player.InHotRegion() || RandFloat() < ParamLoader.ChanceOfUsingArriveTypeReceiveBehavior) && !player.Team().isOpponentWithinRadius(player.Pos(), PassThreatRadius)) {
+            const chanceOfUsingArriveTypeReceiveBehavior = ParamLoader.ChanceOfUsingArriveTypeReceiveBehavior;
+            const inHotRegion = player.InHotRegion();
+            const isOpponentWithinRadius = player.Team().isOpponentWithinRadius(player.Pos(), PassThreatRadius);
+            if ((inHotRegion || RandFloat() < chanceOfUsingArriveTypeReceiveBehavior) && !isOpponentWithinRadius) {
                 player.Steering().ArriveOn();
 
                 //if (def(PLAYER_STATE_INFO_ON)) {
@@ -64,7 +67,7 @@ namespace SimpleSoccer {
             //if the ball comes close enough to the player or if his team lose control
             //he should change state to chase the ball
             if (player.BallWithinReceivingRange() || !player.Team().InControl()) {
-                player.GetFSM().ChangeState(ChaseBall.Instance());
+                player.ChangeState(ChaseBall.Instance());
 
                 return;
             }

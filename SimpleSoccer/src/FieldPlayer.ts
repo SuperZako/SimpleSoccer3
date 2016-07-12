@@ -34,7 +34,6 @@ namespace SimpleSoccer {
         private m_pKickLimiter: Regulator;
 
         //----------------------------- ctor -------------------------------------
-        //------------------------------------------------------------------------
         constructor(home_team: SoccerTeam,
             home_region: number,
             start_state: State<FieldPlayer>,
@@ -137,12 +136,12 @@ namespace SimpleSoccer {
             //        gdi.TextColor(Cgdi.grey);
 
             //set appropriate team color
-            if (this.Team().Color() == SoccerTeam.blue) {
+            if (this.Team().Color() === SoccerTeam.blue) {
                 //gdi.BluePen();
-                ctx.fillStyle = 'rgb(0, 0, 255)';
+                ctx.fillStyle = "rgb(0, 0, 255)";
             } else {
                 //gdi.RedPen();
-                ctx.fillStyle = 'rgb(255, 0, 0)';
+                ctx.fillStyle = "rgb(255, 0, 0)";
             }
 
             //        //render the player's body
@@ -194,8 +193,16 @@ namespace SimpleSoccer {
             return this.m_pStateMachine.HandleMessage(msg);
         }
 
-        public GetFSM() {
-            return this.m_pStateMachine;
+        //public GetFSM() {
+        //    return this.m_pStateMachine;
+        //}
+
+        public ChangeState(state: State<FieldPlayer>) {
+            return this.m_pStateMachine.ChangeState(state);
+        }
+
+        public isInState(state: State<FieldPlayer>) {
+            return this.m_pStateMachine.isInState(state);
         }
 
         public isReadyForNextKick() {

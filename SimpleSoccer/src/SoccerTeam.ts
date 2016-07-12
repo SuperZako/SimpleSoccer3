@@ -654,7 +654,7 @@ namespace SimpleSoccer {
                     //cast to a field player
                     let plyr = <FieldPlayer>it;
 
-                    if (plyr.GetFSM().isInState(Wait.Instance()) || plyr.GetFSM().isInState(ReturnToHomeRegion.Instance())) {
+                    if (plyr.isInState(Wait.Instance()) || plyr.isInState(ReturnToHomeRegion.Instance())) {
                         plyr.Steering().SetTarget(plyr.HomeRegion().Center());
                     }
                 }

@@ -21,9 +21,7 @@
 namespace SimpleSoccer {
     export class KickBall extends State<FieldPlayer> {
 
-        public getName() {
-            return "KickBall";
-        }
+
 
         private static instance = new KickBall();
 
@@ -35,6 +33,10 @@ namespace SimpleSoccer {
             return this.instance;
         }
 
+        public getName() {
+            return "KickBall";
+        }
+
         //@Override
         public Enter(player: FieldPlayer) {
             //let the team know this player is controlling
@@ -42,7 +44,7 @@ namespace SimpleSoccer {
 
             //the player can only make so many kick attempts per second.
             if (!player.isReadyForNextKick()) {
-                player.GetFSM().ChangeState(ChaseBall.Instance());
+                player.ChangeState(ChaseBall.Instance());
             }
 
 
@@ -68,7 +70,7 @@ namespace SimpleSoccer {
                 console.log("Goaly has ball / ball behind player");
                 //}
 
-                player.GetFSM().ChangeState(ChaseBall.Instance());
+                player.ChangeState(ChaseBall.Instance());
 
                 return;
             }
@@ -87,7 +89,7 @@ namespace SimpleSoccer {
             //OR if he should just kick the ball anyway, the player will attempt
             //to make the shot
             let ShotTarget = player.Team().CanShoot(player.Ball().Pos(), power);
-            if (/*player.Team().CanShoot(player.Ball().Pos(), power)*/ ShotTarget || (RandFloat() < ParamLoader.ChancePlayerAttemptsPotShot)) {
+            if (ShotTarget || (RandFloat() < ParamLoader.ChancePlayerAttemptsPotShot)) {
                 //if (def(PLAYER_STATE_INFO_ON)) {
                 //    debug_con.print("Player ").print(player.ID()).print(" attempts a shot at ").print(BallTarget).print("");
                 //}
@@ -103,7 +105,7 @@ namespace SimpleSoccer {
                 player.Ball().Kick(KickDirection, power);
 
                 //change state   
-                player.GetFSM().ChangeState(Wait.Instance());
+                player.ChangeState(Wait.Instance());
 
                 player.FindSupport();
 
@@ -121,7 +123,7 @@ namespace SimpleSoccer {
             //ObjectRef < PlayerBase > receiverRef = new ObjectRef<PlayerBase>();
             //let receiverRef: PlayerBase = null;
             //test if there are any potential candidates available to receive a pass
-            let result = player.Team().FindPass(player, power, ParamLoader.MinPassDistance)
+            let result = player.Team().FindPass(player, power, ParamLoader.MinPassDistance);
             if (player.isThreatened() && result.receiver) {
                 //receiver = receiverRef;//.get();
                 //add some noise to the kick
@@ -132,32 +134,35 @@ namespace SimpleSoccer {
                 player.Ball().Kick(KickDirection, power);
 
                 //if (def(PLAYER_STATE_INFO_ON)) {
-                //    debug_con.print("Player ").print(player.ID()).print(" passes the ball with force ").print(ttos(power, 3)).print("  to player ").print(receiver.ID()).print("  Target is ").print(BallTarget).print("");
-                console.log("Player " + player.ID() + " passes the ball with force " + power + "  to player " + result.receiver.ID() + "  Target is " + BallTarget.x + "," + BallTarget.y);
+                console.log(
+                    "Player " + player.ID() + " passes the ball with force " +
+                    power + "  to player " + result.receiver.ID() +
+                    "  Target is " + BallTarget.x + "," + BallTarget.y);
                 //}
 
 
                 //let the receiver know a pass is coming 
-                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, player.ID(), result.receiver.ID(), MessageTypes.Msg_ReceiveBall, BallTarget);
+                let message = MessageTypes.Msg_ReceiveBall;
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, player.ID(), result.receiver.ID(), message, BallTarget);
 
 
                 //the player should wait at his current position unless instruced
                 //otherwise  
-                player.GetFSM().ChangeState(Wait.Instance());
+                player.ChangeState(Wait.Instance());
 
                 player.FindSupport();
 
                 return;
-            } //cannot shoot or pass, so dribble the ball upfield
-            else {
+            } else { // cannot shoot or pass, so dribble the ball upfield
                 player.FindSupport();
 
-                player.GetFSM().ChangeState(Dribble.Instance());
+                player.ChangeState(Dribble.Instance());
             }
         }
 
         //@Override
         public Exit(player: FieldPlayer) {
+            return;
         }
 
         //@Override

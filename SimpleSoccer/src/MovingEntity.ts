@@ -30,7 +30,16 @@ namespace SimpleSoccer {
         //the maximum rate (radians per second)this vehicle can rotate         
         protected m_dMaxTurnRate: number;
 
-        constructor(position: Vector2D, radius: number, velocity: Vector2D, max_speed: number, heading: Vector2D, mass: number, scale: Vector2D, turn_rate: number, max_force: number) {
+        constructor(
+            position: Vector2D,
+            radius: number,
+            velocity: Vector2D,
+            max_speed: number,
+            heading: Vector2D,
+            mass: number,
+            scale: Vector2D,
+            turn_rate: number,
+            max_force: number) {
             super(BaseGameEntity.GetNextValidID());
             this.m_vHeading = new Vector2D(heading.x, heading.y);
             this.m_vVelocity = new Vector2D(velocity.x, velocity.y);

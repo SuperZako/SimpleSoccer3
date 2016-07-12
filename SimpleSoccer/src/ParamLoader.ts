@@ -1,129 +1,129 @@
 /**
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer;
+// package SimpleSoccer;
 
-//import common.misc.iniFileLoaderBase;
-//import java.io.IOException;
+// import common.misc.iniFileLoaderBase;
+// import java.io.IOException;
 namespace SimpleSoccer {
     export class ParamLoader {
-        static GoalWidth = 100;
+        public static GoalWidth = 100;
 
 
         //use to set up the sweet spot calculator
-        static NumSweetSpotsX = 13;
-        static NumSweetSpotsY = 6;
+        public static NumSweetSpotsX = 13;
+        public static NumSweetSpotsY = 6;
 
-        /**/static NumSupportSpotsX = 13;
-        /**/static NumSupportSpotsY = 6
+        /**/public static NumSupportSpotsX = 13;
+        /**/public static NumSupportSpotsY = 6;
 
         //these values tweak the various rules used to calculate the support spots
-        static Spot_CanPassScore = 2.0;
-        /**/static Spot_PassSafeScore = 2.0;
-        static Spot_CanScoreFromPositionScore = 1.0;
-        static Spot_DistFromControllingPlayerScore = 2.0
-        static Spot_ClosenessToSupportingPlayerScore = 0.0;
-        static Spot_AheadOfAttackerScore = 0.0;
+        public static Spot_CanPassScore = 2.0;
+        /**/public static Spot_PassSafeScore = 2.0;
+        public static Spot_CanScoreFromPositionScore = 1.0;
+        public static Spot_DistFromControllingPlayerScore = 2.0;
+        public static Spot_ClosenessToSupportingPlayerScore = 0.0;
+        public static Spot_AheadOfAttackerScore = 0.0;
 
         //how many times per second the support spots will be calculated
-        static SupportSpotUpdateFreq = 1;
+        public static SupportSpotUpdateFreq = 1;
 
         //the chance a player might take a random pot shot at the goal
-        static ChancePlayerAttemptsPotShot = 0.005;
+        public static ChancePlayerAttemptsPotShot = 0.005;
 
         //this is the chance that a player will receive a pass using the arrive
         //steering behavior, rather than Pursuit
-        static ChanceOfUsingArriveTypeReceiveBehavior = 0.5;
+        public static ChanceOfUsingArriveTypeReceiveBehavior = 0.5;
 
-        static BallSize = 5.0;
-        static BallMass = 1.0;
-        static Friction = -0.015;
+        public static BallSize = 5.0;
+        public static BallMass = 1.0;
+        public static Friction = -0.015;
 
         //the goalkeeper has to be this close to the ball to be able to interact with it
-        static KeeperInBallRange = 10.0;
-        static KeeperInBallRangeSq = 10.0 * 10.0;
-        static PlayerInTargetRange = 10.0;
-        static PlayerInTargetRangeSq = 10.0 * 10.0;
+        public static KeeperInBallRange = 10.0;
+        public static KeeperInBallRangeSq = 10.0 * 10.0;
+        public static PlayerInTargetRange = 10.0;
+        public static PlayerInTargetRangeSq = 10.0 * 10.0;
 
         //player has to be this close to the ball to be able to kick it. The higher
         //the value this gets, the easier it gets to tackle. 
-        static PlayerKickingDistance = 6.0 + 5.0;
+        public static PlayerKickingDistance = 6.0 + 5.0;
         //static PlayerKickingDistance   += BallSize;
-        static PlayerKickingDistanceSq = (6.0 + 5.0) * (6.0 + 5.0);
+        public static PlayerKickingDistanceSq = (6.0 + 5.0) * (6.0 + 5.0);
 
         //the number of times a player can kick the ball per second
-        static PlayerKickFrequency = 8;
-        static PlayerMass = 3.0;
-        static PlayerMaxForce = 1.0;
-        static PlayerMaxSpeedWithBall = 1.2;
-        static PlayerMaxSpeedWithoutBall = 1.6;
-        static PlayerMaxTurnRate = 0.4;
-        static PlayerScale = 1.0;
+        public static PlayerKickFrequency = 8;
+        public static PlayerMass = 3.0;
+        public static PlayerMaxForce = 1.0;
+        public static PlayerMaxSpeedWithBall = 1.2;
+        public static PlayerMaxSpeedWithoutBall = 1.6;
+        public static PlayerMaxTurnRate = 0.4;
+        public static PlayerScale = 1.0;
 
         //when an opponents comes within this range the player will attempt to pass
         //the ball. Players tend to pass more often, the higher the value
-        static PlayerComfortZone = 60.0;
-        static PlayerComfortZoneSq = 60.0 * 60.0;
+        public static PlayerComfortZone = 60.0;
+        public static PlayerComfortZoneSq = 60.0 * 60.0;
         //in the range zero to 1.0. adjusts the amount of noise added to a kick,
         //the lower the value the worse the players get.
-        static PlayerKickingAccuracy = 0.99;
+        public static PlayerKickingAccuracy = 0.99;
 
         //the number of times the SoccerTeam::CanShoot method attempts to find
         //a valid shot
-        static NumAttemptsToFindValidStrike = 5;
+        public static NumAttemptsToFindValidStrike = 5;
 
-        static MaxDribbleForce = 1.5;
-        static MaxShootingForce = 6.0;
-        static MaxPassingForce = 3.0;
+        public static MaxDribbleForce = 1.5;
+        public static MaxShootingForce = 6.0;
+        public static MaxPassingForce = 3.0;
 
 
         //the distance away from the center of its home region a player
         //must be to be considered at home
-        static WithinRangeOfHome = 15.0;
+        public static WithinRangeOfHome = 15.0;
 
         //how close a player must get to a sweet spot before he can change state
-        static WithinRangeOfSweetSpot = 15.0;
+        public static WithinRangeOfSweetSpot = 15.0;
 
         //the minimum distance a receiving player must be from the passing player
-        static MinPassDistance = 120.0;
+        public static MinPassDistance = 120.0;
         //the minimum distance a player must be from the goalkeeper before it will
         //pass the ball
-        static GoalkeeperMinPassDistance = 50.0;
+        public static GoalkeeperMinPassDistance = 50.0;
 
         //this is the distance the keeper puts between the back of the net 
         //and the ball when using the interpose steering behavior
-        static GoalKeeperTendingDistance = 20.0;
+        public static GoalKeeperTendingDistance = 20.0;
 
         //when the ball becomes within this distance of the goalkeeper he
         //changes state to intercept the ball
-        static GoalKeeperInterceptRange = 100.0;
-        static GoalKeeperInterceptRangeSq = 100.0 * 100.0;
+        public static GoalKeeperInterceptRange = 100.0;
+        public static GoalKeeperInterceptRangeSq = 100.0 * 100.0;
         //how close the ball must be to a receiver before he starts chasing it
-        static BallWithinReceivingRange = 10.0;
-        static BallWithinReceivingRangeSq = 10.0 * 10.0;
+        public static BallWithinReceivingRange = 10.0;
+        public static BallWithinReceivingRangeSq = 10.0 * 10.0;
         //these (boolean) values control the amount of player and pitch info shown
         //1=ON; 0=OFF
-        static ViewStates = 1;
-        static ViewIDs = 1;
-        static ViewSupportSpots = 1;
-        static ViewRegions = 0;
-        static bShowControllingTeam = 1;
-        static ViewTargets = 0;
-        static HighlightIfThreatened = 0;
+        public static ViewStates = 1;
+        public static ViewIDs = 1;
+        public static ViewSupportSpots = 1;
+        public static ViewRegions = 0;
+        public static bShowControllingTeam = 1;
+        public static ViewTargets = 0;
+        public static HighlightIfThreatened = 0;
 
         //simple soccer's physics are calculated using each tick as the unit of time
         //so changing this will adjust the speed
-        static FrameRate = 60;
+        public static FrameRate = 60;
 
 
         //--------------------------------------------steering behavior stuff
-        static SeparationCoefficient = 10.0;
+        public static SeparationCoefficient = 10.0;
 
         //how close a neighbour must be to be considered for separation
-        static ViewDistance = 30.0;
+        public static ViewDistance = 30.0;
 
         //1=ON; 0=OFF
-        static bNonPenetrationConstraint = 0;
+        public static bNonPenetrationConstraint = 0;
 
         //  public final static ParamLoader Prm;
 

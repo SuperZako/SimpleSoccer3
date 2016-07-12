@@ -18,10 +18,6 @@
 namespace SimpleSoccer {
     export class TendGoal extends State<GoalKeeper> {
 
-        public getName() {
-            return "TendGoal";
-        }
-
         private static instance = new TendGoal();
 
         constructor() {
@@ -31,6 +27,10 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "TendGoal";
         }
 
         public Enter(keeper: GoalKeeper) {
@@ -55,7 +55,7 @@ namespace SimpleSoccer {
 
                 keeper.Pitch().SetGoalKeeperHasBall(true);
 
-                keeper.GetFSM().ChangeState(PutBallBackInPlay.Instance());
+                keeper.ChangeState(PutBallBackInPlay.Instance());
 
                 return;
             }
@@ -63,13 +63,13 @@ namespace SimpleSoccer {
             //if ball is within a predefined distance, the keeper moves out from
             //position to try and intercept it.
             if (keeper.BallWithinRangeForIntercept() && !keeper.Team().InControl()) {
-                keeper.GetFSM().ChangeState(InterceptBall.Instance());
+                keeper.ChangeState(InterceptBall.Instance());
             }
 
             //if the keeper has ventured too far away from the goal-line and there
             //is no threat from the opponents he should move back towards it
             if (keeper.TooFarFromGoalMouth() && keeper.Team().InControl()) {
-                keeper.GetFSM().ChangeState(ReturnHome.Instance());
+                keeper.ChangeState(ReturnHome.Instance());
                 return;
             }
         }

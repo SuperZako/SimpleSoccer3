@@ -195,8 +195,7 @@ namespace SimpleSoccer {
 
         let Bot = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
 
-        if (Bot == 0)//parallel
-        {
+        if (Bot === 0) { //parallel
             return false;
         }
 

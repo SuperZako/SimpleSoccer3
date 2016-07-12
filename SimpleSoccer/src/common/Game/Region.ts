@@ -82,7 +82,7 @@ namespace SimpleSoccer {
         //}
 
         public Inside(pos: Vector2D, r = region_modifier.normal) {
-            if (r == region_modifier.normal) {
+            if (r === region_modifier.normal) {
                 return ((pos.x > this.m_dLeft) && (pos.x < this.m_dRight) && (pos.y > this.m_dTop) && (pos.y < this.m_dBottom));
             } else {
                 const marginX = this.m_dWidth * 0.25;

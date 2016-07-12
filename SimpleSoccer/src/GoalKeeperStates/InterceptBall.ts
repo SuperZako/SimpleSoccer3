@@ -15,20 +15,22 @@
 namespace SimpleSoccer {
     export class InterceptBall extends State<GoalKeeper> {
 
-        public getName() {
-            return "InterceptBall";
-        }
-
-
         private static instance = new InterceptBall();
 
         //private InterceptBall() {
         //}
-
+        constructor() {
+            super();
+        }
         //this is a singleton
         public static Instance() {
             return this.instance;
         }
+
+        public getName() {
+            return "InterceptBall";
+        }
+
 
         //@Override
         public Enter(keeper: GoalKeeper) {
@@ -45,7 +47,7 @@ namespace SimpleSoccer {
             //home region UNLESS he is the closest player to the ball, in which case,
             //he should keep trying to intercept it.
             if (keeper.TooFarFromGoalMouth() && !keeper.isClosestPlayerOnPitchToBall()) {
-                keeper.GetFSM().ChangeState(ReturnHome.Instance());
+                keeper.ChangeState(ReturnHome.Instance());
                 return;
             }
 
@@ -56,7 +58,7 @@ namespace SimpleSoccer {
 
                 keeper.Pitch().SetGoalKeeperHasBall(true);
 
-                keeper.GetFSM().ChangeState(PutBallBackInPlay.Instance());
+                keeper.ChangeState(PutBallBackInPlay.Instance());
 
                 return;
             }

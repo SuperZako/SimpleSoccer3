@@ -10,9 +10,9 @@
 namespace SimpleSoccer {
     class Matrix {
 
-        _11 = 0; _12 = 0; _13 = 0;
-        _21 = 0; _22 = 0; _23 = 0;
-        _31 = 0; _32 = 0; _33 = 0;
+        public _11 = 0; public _12 = 0; public _13 = 0;
+        public _21 = 0; public _22 = 0; public _23 = 0;
+        public _31 = 0; public _32 = 0; public _33 = 0;
     }
 
     export class C2DMatrix {
@@ -62,27 +62,7 @@ namespace SimpleSoccer {
             this.m_Matrix._33 = val;
         }
 
-        //multiply two matrices together
-        private MatrixMultiply(mIn: Matrix) {
-            let mat_temp = new Matrix();
 
-            //first row
-            mat_temp._11 = (this.m_Matrix._11 * mIn._11) + (this.m_Matrix._12 * mIn._21) + (this.m_Matrix._13 * mIn._31);
-            mat_temp._12 = (this.m_Matrix._11 * mIn._12) + (this.m_Matrix._12 * mIn._22) + (this.m_Matrix._13 * mIn._32);
-            mat_temp._13 = (this.m_Matrix._11 * mIn._13) + (this.m_Matrix._12 * mIn._23) + (this.m_Matrix._13 * mIn._33);
-
-            //second
-            mat_temp._21 = (this.m_Matrix._21 * mIn._11) + (this.m_Matrix._22 * mIn._21) + (this.m_Matrix._23 * mIn._31);
-            mat_temp._22 = (this.m_Matrix._21 * mIn._12) + (this.m_Matrix._22 * mIn._22) + (this.m_Matrix._23 * mIn._32);
-            mat_temp._23 = (this.m_Matrix._21 * mIn._13) + (this.m_Matrix._22 * mIn._23) + (this.m_Matrix._23 * mIn._33);
-
-            //third
-            mat_temp._31 = (this.m_Matrix._31 * mIn._11) + (this.m_Matrix._32 * mIn._21) + (this.m_Matrix._33 * mIn._31);
-            mat_temp._32 = (this.m_Matrix._31 * mIn._12) + (this.m_Matrix._32 * mIn._22) + (this.m_Matrix._33 * mIn._32);
-            mat_temp._33 = (this.m_Matrix._31 * mIn._13) + (this.m_Matrix._32 * mIn._23) + (this.m_Matrix._33 * mIn._33);
-
-            this.m_Matrix = mat_temp;
-        }
 
         //applies a 2D transformation matrix to a std::vector of Vector2Ds
         //public TransformVector2Ds(vPoint: Vector2D[]) {
@@ -174,5 +154,27 @@ namespace SimpleSoccer {
         //        //and multiply
         //        MatrixMultiply(mat);
         //    }
+
+        //multiply two matrices together
+        private MatrixMultiply(mIn: Matrix) {
+            let mat_temp = new Matrix();
+
+            //first row
+            mat_temp._11 = (this.m_Matrix._11 * mIn._11) + (this.m_Matrix._12 * mIn._21) + (this.m_Matrix._13 * mIn._31);
+            mat_temp._12 = (this.m_Matrix._11 * mIn._12) + (this.m_Matrix._12 * mIn._22) + (this.m_Matrix._13 * mIn._32);
+            mat_temp._13 = (this.m_Matrix._11 * mIn._13) + (this.m_Matrix._12 * mIn._23) + (this.m_Matrix._13 * mIn._33);
+
+            //second
+            mat_temp._21 = (this.m_Matrix._21 * mIn._11) + (this.m_Matrix._22 * mIn._21) + (this.m_Matrix._23 * mIn._31);
+            mat_temp._22 = (this.m_Matrix._21 * mIn._12) + (this.m_Matrix._22 * mIn._22) + (this.m_Matrix._23 * mIn._32);
+            mat_temp._23 = (this.m_Matrix._21 * mIn._13) + (this.m_Matrix._22 * mIn._23) + (this.m_Matrix._23 * mIn._33);
+
+            //third
+            mat_temp._31 = (this.m_Matrix._31 * mIn._11) + (this.m_Matrix._32 * mIn._21) + (this.m_Matrix._33 * mIn._31);
+            mat_temp._32 = (this.m_Matrix._31 * mIn._12) + (this.m_Matrix._32 * mIn._22) + (this.m_Matrix._33 * mIn._32);
+            mat_temp._33 = (this.m_Matrix._31 * mIn._13) + (this.m_Matrix._32 * mIn._23) + (this.m_Matrix._33 * mIn._33);
+
+            this.m_Matrix = mat_temp;
+        }
     }
 }

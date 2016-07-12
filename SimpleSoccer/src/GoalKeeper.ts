@@ -118,7 +118,7 @@ namespace SimpleSoccer {
             //        gdi.BrownBrush();
             //        gdi.Circle(Pos(), 6);
             ctx.beginPath();
-            ctx.fillStyle = 'rgb(0, 0, 0)'; // black
+            ctx.fillStyle = "rgb(0, 0, 0)"; // black
             ctx.arc(this.Pos().x, this.Pos().y, 6, 0, Math.PI * 2, false);
             ctx.fill();
             //        //draw the ID
@@ -169,15 +169,21 @@ namespace SimpleSoccer {
          * goal width to playingfield width
          */
         public GetRearInterposeTarget() {
+            let goalWidth = ParamLoader.GoalWidth;
+            let playingArea = this.Pitch().PlayingArea();
             let xPosTarget = this.Team().HomeGoal().Center().x;
 
-            let yPosTarget = this.Pitch().PlayingArea().Center().y - ParamLoader.GoalWidth * 0.5 + (this.Ball().Pos().y * ParamLoader.GoalWidth) / this.Pitch().PlayingArea().Height();
+            let yPosTarget = playingArea.Center().y - goalWidth * 0.5 + (this.Ball().Pos().y * goalWidth) / playingArea.Height();
 
             return new Vector2D(xPosTarget, yPosTarget);
         }
 
-        public GetFSM() {
-            return this.m_pStateMachine;
+        //public GetFSM() {
+        //    return this.m_pStateMachine;
+        //}
+
+        public ChangeState(state: State<GoalKeeper>) {
+            return this.m_pStateMachine.ChangeState(state);
         }
 
         public LookAt() {

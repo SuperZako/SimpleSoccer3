@@ -1,3 +1,5 @@
+/// <reference path="./common/Game/Region.ts" />
+
 /**
  *  Desc:   A SoccerPitch is the main game object. It owns instances of
  *          two soccer teams, two goals, the playing area, the ball

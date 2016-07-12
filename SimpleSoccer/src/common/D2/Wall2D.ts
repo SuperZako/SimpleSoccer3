@@ -19,12 +19,7 @@ namespace SimpleSoccer {
         protected m_vB = new Vector2D();
         protected m_vN = new Vector2D();
 
-        protected CalculateNormal() {
-            let temp = Vec2DNormalize(sub(this.m_vB, this.m_vA));
 
-            this.m_vN.x = -temp.y;
-            this.m_vN.y = temp.x;
-        }
 
         //public Wall2D() {
         //}
@@ -121,5 +116,12 @@ namespace SimpleSoccer {
         //    y = br.nextDouble();
         //    SetNormal(new Vector2D(x, y));
         //}
+
+        protected CalculateNormal() {
+            let temp = Vec2DNormalize(sub(this.m_vB, this.m_vA));
+
+            this.m_vN.x = -temp.y;
+            this.m_vN.y = temp.x;
+        }
     }
 }

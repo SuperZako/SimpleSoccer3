@@ -16,17 +16,23 @@
 namespace SimpleSoccer {
 
     export class ReturnHome extends State<GoalKeeper> {
-        public getName() {
-            return "ReturnHome";
-        }
+
         private static instance = new ReturnHome();
 
         //private ReturnHome() {
         //}
 
+        constructor() {
+            super();
+        }
+
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "ReturnHome";
         }
 
         //@Override
@@ -41,7 +47,7 @@ namespace SimpleSoccer {
             //if close enough to home or the opponents get control over the ball,
             //change state to tend goal
             if (keeper.InHomeRegion() || !keeper.Team().InControl()) {
-                keeper.GetFSM().ChangeState(TendGoal.Instance());
+                keeper.ChangeState(TendGoal.Instance());
             }
         }
 

@@ -11,9 +11,6 @@
 //import common.Messaging.Telegram;
 namespace SimpleSoccer {
     export class ReturnToHomeRegion extends State<FieldPlayer> {
-        public getName() {
-            return "ReturnToHomeRegion";
-        }
 
         private static instance = new ReturnToHomeRegion();
 
@@ -24,6 +21,10 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "ReturnToHomeRegion";
         }
 
         //@Override
@@ -46,7 +47,7 @@ namespace SimpleSoccer {
                 //there is not an assigned receiver && the goalkeeper does not gave
                 //the ball, go chase it
                 if (player.isClosestTeamMemberToBall() && (player.Team().Receiver() == null) && !player.Pitch().GoalKeeperHasBall()) {
-                    player.GetFSM().ChangeState(ChaseBall.Instance());
+                    player.ChangeState(ChaseBall.Instance());
 
                     return;
                 }
@@ -57,11 +58,11 @@ namespace SimpleSoccer {
             //position he can move back to it)
             if (player.Pitch().GameOn() && player.HomeRegion().Inside(player.Pos(), Region.halfsize)) {
                 player.Steering().SetTarget(player.Pos());
-                player.GetFSM().ChangeState(Wait.Instance());
-            } //if game is not on the player must return much closer to the center of his
-            //home region
-            else if (!player.Pitch().GameOn() && player.AtTarget()) {
-                player.GetFSM().ChangeState(Wait.Instance());
+                player.ChangeState(Wait.Instance());
+            } else if (!player.Pitch().GameOn() && player.AtTarget()) {
+                //if game is not on the player must return much closer to the center of his
+                //home region
+                player.ChangeState(Wait.Instance());
             }
         }
 

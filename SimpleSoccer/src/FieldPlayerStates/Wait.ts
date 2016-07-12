@@ -13,10 +13,6 @@
 namespace SimpleSoccer {
     export class Wait extends State<FieldPlayer> {
 
-        public getName() {
-            return "Wait";
-        }
-
         private static instance = new Wait();
 
         constructor() {
@@ -26,6 +22,10 @@ namespace SimpleSoccer {
         //this is a singleton
         public static Instance() {
             return this.instance;
+        }
+
+        public getName() {
+            return "Wait";
         }
 
         //@Override
@@ -75,7 +75,7 @@ namespace SimpleSoccer {
                 if (player.isClosestTeamMemberToBall()
                     && player.Team().Receiver() == null
                     && !player.Pitch().GoalKeeperHasBall()) {
-                    player.GetFSM().ChangeState(ChaseBall.Instance());
+                    player.ChangeState(ChaseBall.Instance());
 
                     return;
                 }
@@ -84,6 +84,7 @@ namespace SimpleSoccer {
 
         //@Override
         public Exit(player: FieldPlayer) {
+            return;
         }
 
         //@Override
