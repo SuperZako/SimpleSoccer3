@@ -9,9 +9,6 @@
  */
 namespace SimpleSoccer {
     export class Goal {
-
-        //private m_vLeftPost: Vector2;
-        //private m_vRightPost: Vector2;
         //a vector representing the facing direction of the goal
         //private m_vFacing: Vector2;
         //the position of the center of the goal line
@@ -20,11 +17,7 @@ namespace SimpleSoccer {
         private m_iNumGoalsScored = 0;
 
         constructor(private leftPost: Vector2, private rightPost: Vector2, private facing: Vector2) {
-            //this.m_vLeftPost = left;
-            //this.m_vRightPost = right;
             this.m_vCenter = div(add(leftPost, rightPost), 2.0);
-            //this.m_iNumGoalsScored = 0;
-            //this.m_vFacing = facing;
         }
 
         /**

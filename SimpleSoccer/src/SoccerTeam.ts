@@ -191,7 +191,7 @@ namespace SimpleSoccer {
             for (let it of this.players) {
                 //PlayerBase cur = it.next();
                 if (it.Role() !== PlayerRole.GoalKeeper) {
-                    MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, 1, it.ID(), MessageTypes.Msg_GoHome, null);
+                    MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, 1, it.ID(), MessageTypes.GoHome, null);
                 }
             }
         }
@@ -463,7 +463,7 @@ namespace SimpleSoccer {
                 //tell the player to make the pass
                 //let the receiver know a pass is coming 
                 let controllingPlayer = this.ControllingPlayer();
-                let message = MessageTypes.Msg_PassToMe;
+                let message = MessageTypes.PassToMe;
                 MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, requester.ID(), controllingPlayer.ID(), message, requester);
 
             }

@@ -5,11 +5,6 @@
 // * 
 // * @author Petr (http://www.sallyx.org/)
 // */
-//package SimpleSoccer;
-
-//import common.D2.Vector2;
-//import common.D2.C2DMatrix;
-//import static common.D2.Vector2.*;
 
 ///<reference path='BaseGameEntity.ts' />
 
@@ -32,7 +27,7 @@ namespace SimpleSoccer {
 
         constructor(
             position: Vector2,
-            radius: number,
+            boundingRadius: number,
             velocity: Vector2,
             max_speed: number,
             heading: Vector2,
@@ -50,7 +45,7 @@ namespace SimpleSoccer {
             this.m_dMaxForce = max_force;
 
             this.position = new Vector2(position.x, position.y);
-            this.m_dBoundingRadius = radius;
+            this.boundingRadius = boundingRadius;
             this.scale = new Vector2(scale.x, scale.y);
         }
 

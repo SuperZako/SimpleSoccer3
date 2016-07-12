@@ -163,7 +163,7 @@ namespace SimpleSoccer {
             //    gdi.Circle(m_vPosition, m_dBoundingRadius);
             ctx.beginPath();
             ctx.fillStyle = "black";
-            ctx.arc(this.position.x, this.position.y, this.m_dBoundingRadius, 0, Math.PI * 2, false);
+            ctx.arc(this.position.x, this.position.y, this.boundingRadius, 0, Math.PI * 2, false);
             ctx.fill();
             //    /*
             //    gdi.GreenBrush();

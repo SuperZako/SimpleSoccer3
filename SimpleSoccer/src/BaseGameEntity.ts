@@ -18,7 +18,7 @@ namespace SimpleSoccer {
         protected position = new Vector2();
         protected scale = Vector2.One;
         //the magnitude of this object's bounding radius
-        protected m_dBoundingRadius = 0.0;
+        protected boundingRadius = 0.0;
 
         //each entity has a unique ID
         private m_ID: number;
@@ -40,9 +40,9 @@ namespace SimpleSoccer {
         }
 
         //    @Override
-        //    protected void finalize() throws Throwable {
-        //        super.finalize();
-        //    }
+        protected finalize() {
+            //super.finalize();
+        }
 
         public Update() {
             return;
@@ -71,11 +71,11 @@ namespace SimpleSoccer {
         }
 
         public BRadius() {
-            return this.m_dBoundingRadius;
+            return this.boundingRadius;
         }
 
         public SetBRadius(r: number) {
-            this.m_dBoundingRadius = r;
+            this.boundingRadius = r;
         }
 
         public ID() {

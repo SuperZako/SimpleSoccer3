@@ -1,11 +1,6 @@
 /**
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer.GoalKeeperStates;
-
-//import SimpleSoccer.GoalKeeper;
-//import common.FSM.State;
-//import common.Messaging.Telegram;
 namespace SimpleSoccer {
     export class GlobalKeeperState extends State<GoalKeeper> {
 
@@ -41,17 +36,13 @@ namespace SimpleSoccer {
         //@Override
         public OnMessage(keeper: GoalKeeper, telegram: Telegram) {
             switch (telegram.Msg) {
-                case MessageTypes.Msg_GoHome: {
+                case MessageTypes.GoHome:
                     keeper.SetDefaultHomeRegion();
                     keeper.ChangeState(ReturnHome.Instance());
-                }
-
                     break;
 
-                case MessageTypes.Msg_ReceiveBall: {
+                case MessageTypes.ReceiveBall:
                     keeper.ChangeState(InterceptBall.Instance());
-                }
-
                     break;
 
             }//end switch

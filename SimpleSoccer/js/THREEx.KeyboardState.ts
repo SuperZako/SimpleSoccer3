@@ -38,7 +38,7 @@ namespace THREEx {
         keyCodes: { [index: number]: boolean } = {};
         modifiers: { [index: string]: boolean } = {};
 
-        _onBlur = () => {
+        private _onBlur = () => {
             for (var prop in this.keyCodes)
                 this.keyCodes[prop] = false;
             for (var prop in this.modifiers)

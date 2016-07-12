@@ -24,6 +24,10 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="build\out.js" />
+    <Content Include="images\checkerboard.jpg" />
+    <Content Include="images\explosion.jpg" />
+    <Content Include="images\icon-info.png" />
+    <Content Include="images\run.png" />
     <Content Include="index.html" />
     <TypeScriptCompile Include="js\THREEx.KeyboardState.ts" />
     <Content Include="src\Applet.java" />
@@ -116,7 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
-    <Folder Include="images\" />
+    <Folder Include="src\THREEx\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

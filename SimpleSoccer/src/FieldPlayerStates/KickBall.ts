@@ -126,7 +126,7 @@ namespace SimpleSoccer {
 
 
                 //let the receiver know a pass is coming 
-                let message = MessageTypes.Msg_ReceiveBall;
+                let message = MessageTypes.ReceiveBall;
                 MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, player.ID(), result.receiver.ID(), message, BallTarget);
 
 

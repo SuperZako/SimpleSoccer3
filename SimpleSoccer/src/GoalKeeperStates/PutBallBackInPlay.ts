@@ -1,18 +1,6 @@
 /**
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer.GoalKeeperStates;
-
-//import SimpleSoccer.GoalKeeper;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import static SimpleSoccer.MessageTypes.*;
-//import SimpleSoccer.PlayerBase;
-//import common.D2.Vector2;
-//import static common.D2.Vector2.*;
-//import common.FSM.State;
-//import common.Messaging.Telegram;
-//import static common.Messaging.MessageDispatcher.*;
-//import common.misc.CppToJava.ObjectRef;
 namespace SimpleSoccer {
     export class PutBallBackInPlay extends State<GoalKeeper> {
 
@@ -46,9 +34,6 @@ namespace SimpleSoccer {
         public Execute(keeper: GoalKeeper) {
 
             //let BallTarget = new Vector2();
-
-            //ObjectRef < PlayerBase > receiverRef = new ObjectRef<PlayerBase>(receiver);
-            //let receiverRef = receiver;
             //test if there are players further forward on the field we might
             //be able to pass to. If so, make a pass.
             let result = keeper.Team().FindPass(keeper, ParamLoader.MaxPassingForce, ParamLoader.GoalkeeperMinPassDistance);
@@ -61,7 +46,7 @@ namespace SimpleSoccer {
                 keeper.Pitch().SetGoalKeeperHasBall(false);
 
                 //let the receiving player know the ball's comin' at him
-                let message = MessageTypes.Msg_ReceiveBall;
+                let message = MessageTypes.ReceiveBall;
                 MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, keeper.ID(), result.receiver.ID(), message, result.PassTarget);
 
                 //go back to tending the goal   

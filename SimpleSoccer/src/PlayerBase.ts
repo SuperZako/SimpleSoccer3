@@ -81,12 +81,12 @@ namespace SimpleSoccer {
 
                 //set the bounding radius to the length of the 
                 //greatest extent
-                if (Math.abs(player[vtx].x) > this.m_dBoundingRadius) {
-                    this.m_dBoundingRadius = Math.abs(player[vtx].x);
+                if (Math.abs(player[vtx].x) > this.boundingRadius) {
+                    this.boundingRadius = Math.abs(player[vtx].x);
                 }
 
-                if (Math.abs(player[vtx].y) > this.m_dBoundingRadius) {
-                    this.m_dBoundingRadius = Math.abs(player[vtx].y);
+                if (Math.abs(player[vtx].y) > this.boundingRadius) {
+                    this.boundingRadius = Math.abs(player[vtx].y);
                 }
             }
 
@@ -158,7 +158,7 @@ namespace SimpleSoccer {
                 let BestSupportPly = this.Team().DetermineBestSupportingAttacker();
                 this.Team().SetSupportingPlayer(BestSupportPly);
                 let supportingPlayer = this.Team().SupportingPlayer();
-                let message = MessageTypes.Msg_SupportAttacker;
+                let message = MessageTypes.SupportAttacker;
                 MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), supportingPlayer.ID(), message, null);
             }
 
@@ -171,14 +171,14 @@ namespace SimpleSoccer {
 
                 if (this.Team().SupportingPlayer() !== null) {
                     let supportingPlayer = this.Team().SupportingPlayer();
-                    let message = MessageTypes.Msg_GoHome;
+                    let message = MessageTypes.GoHome;
                     MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), supportingPlayer.ID(), message, null);
                 }
 
                 this.Team().SetSupportingPlayer(BestSupportPly);
 
                 let supportingPlayer = this.Team().SupportingPlayer();
-                let message = MessageTypes.Msg_SupportAttacker;
+                let message = MessageTypes.SupportAttacker;
                 MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), supportingPlayer.ID(), message, null);
             }
         }

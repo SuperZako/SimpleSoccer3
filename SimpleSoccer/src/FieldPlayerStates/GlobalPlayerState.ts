@@ -58,7 +58,7 @@ namespace SimpleSoccer {
         //@Override
         public OnMessage(player: FieldPlayer, telegram: Telegram) {
             switch (telegram.Msg) {
-                case MessageTypes.Msg_ReceiveBall: {
+                case MessageTypes.ReceiveBall: {
                     //set the target
                     player.Steering().SetTarget(<Vector2>telegram.ExtraInfo);
 
@@ -69,7 +69,7 @@ namespace SimpleSoccer {
                 }
                 //break;
 
-                case MessageTypes.Msg_SupportAttacker: {
+                case MessageTypes.SupportAttacker: {
                     //if already supporting just return
                     if (player.isInState(SupportAttacker.Instance())) {
                         return true;
@@ -86,7 +86,7 @@ namespace SimpleSoccer {
 
                 //break;
 
-                case MessageTypes.Msg_Wait: {
+                case MessageTypes.Wait: {
                     //change the state
                     player.ChangeState(Wait.Instance());
 
@@ -94,7 +94,7 @@ namespace SimpleSoccer {
                 }
                 // break;
 
-                case MessageTypes.Msg_GoHome: {
+                case MessageTypes.GoHome: {
                     player.SetDefaultHomeRegion();
 
                     player.ChangeState(ReturnToHomeRegion.Instance());
@@ -104,7 +104,7 @@ namespace SimpleSoccer {
 
                 // break;
 
-                case MessageTypes.Msg_PassToMe: {
+                case MessageTypes.PassToMe: {
                     //get the position of the player requesting the pass 
                     let receiver = <FieldPlayer>telegram.ExtraInfo;
 
@@ -136,7 +136,7 @@ namespace SimpleSoccer {
                     //}
 
                     //let the receiver know a pass is coming 
-                    let message = MessageTypes.Msg_ReceiveBall;
+                    let message = MessageTypes.ReceiveBall;
                     MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, player.ID(), receiver.ID(), message, receiver.Pos());
 
 
