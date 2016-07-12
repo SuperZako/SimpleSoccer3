@@ -8,35 +8,35 @@ namespace SimpleSoccer {
     export class GoalKeeper extends PlayerBase {
         //    //an instance of the state machine class
 
-        private m_pStateMachine: StateMachine<GoalKeeper>;
+        private stateMachine: StateMachine<GoalKeeper>;
         //    //this vector is updated to point towards the ball and is used when
         //    //rendering the goalkeeper (instead of the underlaying vehicle's heading)
         //    //to ensure he always appears to be watching the ball
-        private m_vLookAt = new Vector2D();
+        private lookAt = new Vector2();
 
         //----------------------------- ctor ------------------------------------
         //-----------------------------------------------------------------------
         public constructor(home_team: SoccerTeam,
             home_region: number,
             start_state: State<GoalKeeper>,
-            heading: Vector2D,
-            velocity: Vector2D,
+            heading: Vector2,
+            velocity: Vector2,
             mass: number,
             max_force: number,
             max_speed: number,
             max_turn_rate: number,
             scale: number) {
-            super(home_team, home_region, heading, velocity, mass, max_force, max_speed, max_turn_rate, scale, player_role.goal_keeper);
+            super(home_team, home_region, heading, velocity, mass, max_force, max_speed, max_turn_rate, scale, PlayerRole.GoalKeeper);
 
 
             //set up the state machine
-            this.m_pStateMachine = new StateMachine<GoalKeeper>(this);
+            this.stateMachine = new StateMachine<GoalKeeper>(this);
 
-            this.m_pStateMachine.SetCurrentState(start_state);
-            this.m_pStateMachine.SetPreviousState(start_state);
-            this.m_pStateMachine.SetGlobalState(GlobalKeeperState.Instance());
+            this.stateMachine.SetCurrentState(start_state);
+            this.stateMachine.SetPreviousState(start_state);
+            this.stateMachine.SetGlobalState(GlobalKeeperState.Instance());
 
-            this.m_pStateMachine.CurrentState().Enter(this);
+            this.stateMachine.CurrentState().Enter(this);
         }
 
         //    @Override
@@ -48,7 +48,7 @@ namespace SimpleSoccer {
         //    //these must be implemented
         public Update() {
             //run the logic for the current state
-            this.m_pStateMachine.Update();
+            this.stateMachine.Update();
 
             //calculate the combined force from each steering behavior 
             let SteeringForce = this.m_pSteering.Calculate();
@@ -62,7 +62,7 @@ namespace SimpleSoccer {
             this.m_vVelocity.Truncate(this.m_dMaxSpeed);
 
             //update the position
-            this.m_vPosition.add(this.m_vVelocity);
+            this.position.add(this.m_vVelocity);
 
 
             //enforce a non-penetration constraint if desired
@@ -78,7 +78,7 @@ namespace SimpleSoccer {
 
             //look-at vector always points toward the ball
             if (!this.Pitch().GoalKeeperHasBall()) {
-                this.m_vLookAt = Vec2DNormalize(sub(this.Ball().Pos(), this.Pos()));
+                this.lookAt = Vec2DNormalize(sub(this.Ball().Pos(), this.Pos()));
             }
         }
 
@@ -128,7 +128,7 @@ namespace SimpleSoccer {
          */
         //@Override
         public HandleMessage(msg: Telegram) {
-            return this.m_pStateMachine.HandleMessage(msg);
+            return this.stateMachine.HandleMessage(msg);
         }
 
         /**
@@ -162,7 +162,7 @@ namespace SimpleSoccer {
 
             let yPosTarget = playingArea.Center().y - goalWidth * 0.5 + (this.Ball().Pos().y * goalWidth) / playingArea.Height();
 
-            return new Vector2D(xPosTarget, yPosTarget);
+            return new Vector2(xPosTarget, yPosTarget);
         }
 
         //public GetFSM() {
@@ -170,15 +170,15 @@ namespace SimpleSoccer {
         //}
 
         public ChangeState(state: State<GoalKeeper>) {
-            return this.m_pStateMachine.ChangeState(state);
+            this.stateMachine.ChangeState(state);
         }
 
         public LookAt() {
-            return new Vector2D(this.m_vLookAt.x, this.m_vLookAt.y);
+            return new Vector2(this.lookAt.x, this.lookAt.y);
         }
 
-        public SetLookAt(v: Vector2D) {
-            this.m_vLookAt = new Vector2D(v.x, v.y);
+        public SetLookAt(v: Vector2) {
+            this.lookAt = new Vector2(v.x, v.y);
         }
     }
 }

@@ -3,16 +3,16 @@
  */
 package common.D2;
 
-import static common.D2.Vector2D.add;
+import static common.D2.Vector2.add;
 import static common.misc.Cgdi.gdi;
 
 public class InvertedAABBox2D {
 
-    private Vector2D m_vTopLeft;
-    private Vector2D m_vBottomRight;
-    private Vector2D m_vCenter;
+    private Vector2 m_vTopLeft;
+    private Vector2 m_vBottomRight;
+    private Vector2 m_vCenter;
 
-    public InvertedAABBox2D(Vector2D tl, Vector2D br) {
+    public InvertedAABBox2D(Vector2 tl, Vector2 br) {
         m_vTopLeft = tl;
         m_vBottomRight = br;
         m_vCenter = add(tl, br).div(2.0);
@@ -26,11 +26,11 @@ public class InvertedAABBox2D {
                 || (other.Right() < this.Left()));
     }
 
-    public Vector2D TopLeft() {
+    public Vector2 TopLeft() {
         return m_vTopLeft;
     }
 
-    public Vector2D BottomRight() {
+    public Vector2 BottomRight() {
         return m_vBottomRight;
     }
 
@@ -50,7 +50,7 @@ public class InvertedAABBox2D {
         return m_vBottomRight.x;
     }
 
-    public Vector2D Center() {
+    public Vector2 Center() {
         return m_vCenter;
     }
 

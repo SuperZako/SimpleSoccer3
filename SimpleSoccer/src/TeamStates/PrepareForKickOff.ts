@@ -41,7 +41,7 @@ namespace SimpleSoccer {
         public Execute(team: SoccerTeam) {
             //if both teams in position, start the game
             if (team.AllPlayersAtHome() && team.Opponents().AllPlayersAtHome()) {
-                team.GetFSM().ChangeState(Defending.Instance());
+                team.ChangeState(Defending.Instance());
             }
         }
 

@@ -51,7 +51,7 @@ namespace SimpleSoccer {
         public Execute(team: SoccerTeam) {
             //if this team is no longer in control change states
             if (!team.InControl()) {
-                team.GetFSM().ChangeState(Defending.Instance());
+                team.ChangeState(Defending.Instance());
                 return;
             }
 

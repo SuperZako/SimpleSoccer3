@@ -49,7 +49,7 @@ namespace SimpleSoccer {
         public Execute(team: SoccerTeam) {
             //if in control change states
             if (team.InControl()) {
-                team.GetFSM().ChangeState(Attacking.Instance());
+                team.ChangeState(Attacking.Instance());
                 return;
             }
         }

@@ -7,20 +7,20 @@
 // */
 //package SimpleSoccer;
 
-//import common.D2.Vector2D;
+//import common.D2.Vector2;
 //import common.D2.C2DMatrix;
-//import static common.D2.Vector2D.*;
+//import static common.D2.Vector2.*;
 
 ///<reference path='BaseGameEntity.ts' />
 
 namespace SimpleSoccer {
     export abstract class MovingEntity extends BaseGameEntity {
 
-        protected m_vVelocity: Vector2D;
+        protected m_vVelocity: Vector2;
         //a normalized vector pointing in the direction the entity is heading. 
-        protected m_vHeading: Vector2D;
+        protected m_vHeading: Vector2;
         //a vector perpendicular to the heading vector
-        protected m_vSide: Vector2D;
+        protected m_vSide: Vector2;
         protected m_dMass: number;
         //the maximum speed this entity may travel at.
         protected m_dMaxSpeed: number;
@@ -31,27 +31,27 @@ namespace SimpleSoccer {
         protected m_dMaxTurnRate: number;
 
         constructor(
-            position: Vector2D,
+            position: Vector2,
             radius: number,
-            velocity: Vector2D,
+            velocity: Vector2,
             max_speed: number,
-            heading: Vector2D,
+            heading: Vector2,
             mass: number,
-            scale: Vector2D,
+            scale: Vector2,
             turn_rate: number,
             max_force: number) {
             super(BaseGameEntity.GetNextValidID());
-            this.m_vHeading = new Vector2D(heading.x, heading.y);
-            this.m_vVelocity = new Vector2D(velocity.x, velocity.y);
+            this.m_vHeading = new Vector2(heading.x, heading.y);
+            this.m_vVelocity = new Vector2(velocity.x, velocity.y);
             this.m_dMass = mass;
             this.m_vSide = this.m_vHeading.Perp();
             this.m_dMaxSpeed = max_speed;
             this.m_dMaxTurnRate = turn_rate;
             this.m_dMaxForce = max_force;
 
-            this.m_vPosition = new Vector2D(position.x, position.y);
+            this.position = new Vector2(position.x, position.y);
             this.m_dBoundingRadius = radius;
-            this.m_vScale = new Vector2D(scale.x, scale.y);
+            this.scale = new Vector2(scale.x, scale.y);
         }
 
         //@Override
@@ -61,10 +61,10 @@ namespace SimpleSoccer {
 
         //accessors
         public Velocity() {
-            return new Vector2D(this.m_vVelocity.x, this.m_vVelocity.y);
+            return new Vector2(this.m_vVelocity.x, this.m_vVelocity.y);
         }
 
-        public SetVelocity(NewVel: Vector2D) {
+        public SetVelocity(NewVel: Vector2) {
             this.m_vVelocity = NewVel;
         }
 
@@ -97,7 +97,7 @@ namespace SimpleSoccer {
         }
 
         public Speed() {
-            return this.m_vVelocity.Length();
+            return this.m_vVelocity.length();
         }
 
         public SpeedSq() {
@@ -123,11 +123,11 @@ namespace SimpleSoccer {
          *
          *  @return true when the heading is facing in the desired direction
          */
-        public RotateHeadingToFacePosition(target: Vector2D) {
-            let toTarget = Vec2DNormalize(sub(target, this.m_vPosition));
+        public RotateHeadingToFacePosition(target: Vector2) {
+            let toTarget = Vec2DNormalize(sub(target, this.position));
 
             //first determine the angle between the heading vector and the target
-            let angle = Math.acos(this.m_vHeading.Dot(toTarget));
+            let angle = Math.acos(this.m_vHeading.dot(toTarget));
 
             //sometimes m_vHeading.Dot(toTarget) == 1.000000002
             if (/*Double.isNaN(angle)*/ isNaN(angle)) {
@@ -164,7 +164,7 @@ namespace SimpleSoccer {
          *  new heading is valid this fumction sets the entity's heading and side 
          *  vectors accordingly
          */
-        public SetHeading(new_heading: Vector2D) {
+        public SetHeading(new_heading: Vector2) {
             //assert((new_heading.LengthSq() - 1.0) < 0.00001);
 
             this.m_vHeading = new_heading;

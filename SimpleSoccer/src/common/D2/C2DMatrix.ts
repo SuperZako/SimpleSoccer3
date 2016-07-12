@@ -65,8 +65,8 @@ namespace SimpleSoccer {
 
 
         //applies a 2D transformation matrix to a std::vector of Vector2Ds
-        //public TransformVector2Ds(vPoint: Vector2D[]) {
-        //    //ListIterator < Vector2D > it = vPoint.listIterator();
+        //public TransformVector2Ds(vPoint: Vector2[]) {
+        //    //ListIterator < Vector2 > it = vPoint.listIterator();
         //    //while (it.hasNext()) {
         //    for (let it of vPoint) {
         //        let tempX = (this.m_Matrix._11 * it.x) + (this.m_Matrix._21 * it.y) + (this.m_Matrix._31);
@@ -76,8 +76,8 @@ namespace SimpleSoccer {
         //    }
         //}
 
-        //applies a 2D transformation matrix to a single Vector2D
-        public TransformVector2Ds(vPoint: Vector2D) {
+        //applies a 2D transformation matrix to a single Vector2
+        public TransformVector2Ds(vPoint: Vector2) {
 
             let tempX = (this.m_Matrix._11 * vPoint.x) + (this.m_Matrix._21 * vPoint.y) + (this.m_Matrix._31);
             let tempY = (this.m_Matrix._12 * vPoint.x) + (this.m_Matrix._22 * vPoint.y) + (this.m_Matrix._32);
@@ -144,7 +144,7 @@ namespace SimpleSoccer {
         }
 
         ////create a rotation matrix from a 2D vector
-        //    public void Rotate(Vector2D fwd, Vector2D side) {
+        //    public void Rotate(Vector2 fwd, Vector2 side) {
         //        Matrix mat = new Matrix();
 
         //        mat._11 = fwd.x; mat._12 = fwd.y;  mat._13 = 0;

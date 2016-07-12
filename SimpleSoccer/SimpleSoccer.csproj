@@ -25,6 +25,7 @@
     <Content Include="app.css" />
     <Content Include="build\out.js" />
     <Content Include="index.html" />
+    <TypeScriptCompile Include="js\THREEx.KeyboardState.ts" />
     <Content Include="src\Applet.java" />
     <TypeScriptCompile Include="src\BaseGameEntity.ts" />
     <TypeScriptCompile Include="src\common\D2\C2DMatrix.ts" />
@@ -39,7 +40,9 @@
     <TypeScriptCompile Include="src\common\Game\EntityFunctionTemplates.ts" />
     <TypeScriptCompile Include="src\common\Game\EntityManager.ts" />
     <TypeScriptCompile Include="src\common\Game\Region.ts" />
+    <TypeScriptCompile Include="src\common\math\MathHelper.ts" />
     <TypeScriptCompile Include="src\common\math\Vector2.ts" />
+    <TypeScriptCompile Include="src\common\math\Vector2Helper.ts" />
     <TypeScriptCompile Include="src\common\Messaging\MessageDispatcher.ts" />
     <TypeScriptCompile Include="src\common\Messaging\Telegram.ts" />
     <TypeScriptCompile Include="src\common\misc\AutoList.ts" />
@@ -114,7 +117,6 @@
   <ItemGroup>
     <Folder Include="css\" />
     <Folder Include="images\" />
-    <Folder Include="js\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

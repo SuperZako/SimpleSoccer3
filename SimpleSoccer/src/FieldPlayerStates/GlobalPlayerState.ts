@@ -8,8 +8,8 @@
 //import static SimpleSoccer.MessageTypes.*;
 //import SimpleSoccer.FieldPlayer;
 //import static SimpleSoccer.ParamLoader.Prm;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
+//import common.D2.Vector2;
+//import static common.D2.Vector2.*;
 //import static common.Debug.DbgConsole.*;
 //import common.FSM.State;
 //import static common.Messaging.MessageDispatcher.*;
@@ -60,7 +60,7 @@ namespace SimpleSoccer {
             switch (telegram.Msg) {
                 case MessageTypes.Msg_ReceiveBall: {
                     //set the target
-                    player.Steering().SetTarget(<Vector2D>telegram.ExtraInfo);
+                    player.Steering().SetTarget(<Vector2>telegram.ExtraInfo);
 
                     //change state 
                     player.ChangeState(ReceiveBall.Instance());

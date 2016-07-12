@@ -9,7 +9,7 @@
  */
 package common.misc;
 
-import common.D2.Vector2D;
+import common.D2.Vector2;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -18,7 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.util.List;
-import static common.D2.Vector2D.*;
+import static common.D2.Vector2.*;
 
 public class Cgdi {
 
@@ -437,7 +437,7 @@ public class Cgdi {
         TextAtPos((int) x, (int) y, s);
     }
 
-    public void TextAtPos(Vector2D pos, String s) {
+    public void TextAtPos(Vector2 pos, String s) {
         TextAtPos((int) pos.x, (int) pos.y, s);
     }
 
@@ -459,7 +459,7 @@ public class Cgdi {
     }
 
     //----------------------------pixels
-    public void DrawDot(Vector2D pos, Color color) {
+    public void DrawDot(Vector2 pos, Color color) {
         DrawDot((int) pos.x, (int) pos.y, color);
     }
 
@@ -469,7 +469,7 @@ public class Cgdi {
     }
 
     //-------------------------Line Drawing
-    public void Line(Vector2D from, Vector2D to) {
+    public void Line(Vector2 from, Vector2 to) {
         Line(from.x, from.y, to.x, to.y);
     }
 
@@ -482,29 +482,29 @@ public class Cgdi {
         Line((int) a, (int) b, (int) x, (int) y);
     }
 
-    public void PolyLine(List<Vector2D> points) {
+    public void PolyLine(List<Vector2> points) {
         //make sure we have at least 2 points
         if (points.size() < 2) {
             return;
         }
         Polygon p = new Polygon();
 
-        for (Vector2D v : points) {
+        for (Vector2 v : points) {
             p.addPoint((int) v.x, (int) v.y);
         }
         m_hdc.setColor(PenColor);
         m_hdc.drawPolygon(p);
     }
 
-    public void LineWithArrow(Vector2D from, Vector2D to, double size) {
-        Vector2D norm = Vec2DNormalize(sub(to, from));
+    public void LineWithArrow(Vector2 from, Vector2 to, double size) {
+        Vector2 norm = Vec2DNormalize(sub(to, from));
 
         //calculate where the arrow is attached
-        Vector2D CrossingPoint = sub(to, mul(norm, size));
+        Vector2 CrossingPoint = sub(to, mul(norm, size));
 
         //calculate the two extra points required to make the arrowhead
-        Vector2D ArrowPoint1 = add(CrossingPoint, (mul(norm.Perp(), 0.4f * size)));
-        Vector2D ArrowPoint2 = add(CrossingPoint, (mul(norm.Perp(), 0.4f * size)));
+        Vector2 ArrowPoint1 = add(CrossingPoint, (mul(norm.Perp(), 0.4f * size)));
+        Vector2 ArrowPoint2 = add(CrossingPoint, (mul(norm.Perp(), 0.4f * size)));
 
         //draw the line
         m_hdc.setColor(PenColor);
@@ -524,7 +524,7 @@ public class Cgdi {
         }
     }
 
-    public void Cross(Vector2D pos, int diameter) {
+    public void Cross(Vector2 pos, int diameter) {
         Line((int) pos.x - diameter, (int) pos.y - diameter, (int) pos.x + diameter, (int) pos.y + diameter);
         Line((int) pos.x - diameter, (int) pos.y + diameter, (int) pos.x + diameter, (int) pos.y - diameter);
     }
@@ -549,10 +549,10 @@ public class Cgdi {
         Rect((int) left, (int) top, (int) right, (int) bot);
     }
 
-    public void ClosedShape(List<Vector2D> points) {
+    public void ClosedShape(List<Vector2> points) {
         Polygon pol = new Polygon();
 
-        for (Vector2D p : points) {
+        for (Vector2 p : points) {
             pol.addPoint((int) p.x, (int) p.y);
         }
         m_hdc.setColor(PenColor);
@@ -563,7 +563,7 @@ public class Cgdi {
         }
     }
 
-    public void Circle(Vector2D pos, double radius) {
+    public void Circle(Vector2 pos, double radius) {
         Circle(pos.x, pos.y, radius);
     }
 

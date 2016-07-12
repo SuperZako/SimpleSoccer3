@@ -10,12 +10,12 @@
  */
 package common.misc;
 
-import common.D2.Vector2D;
+import common.D2.Vector2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class SmootherV2<T extends Vector2D>
+public class SmootherV2<T extends Vector2>
 {
   //this holds the history
   private List<T>  m_History;
@@ -23,7 +23,7 @@ public class SmootherV2<T extends Vector2D>
   private int  m_iNextUpdateSlot;
 
   //an example of the 'zero' value of the type to be smoothed. This
-  //would be something like Vector2D(0,0)
+  //would be something like Vector2(0,0)
   private T   m_ZeroValue;
   
   //to instantiate a Smoother pass it the number of samples you want
@@ -48,7 +48,7 @@ public class SmootherV2<T extends Vector2D>
 
     //now to calculate the average of the history list
     //c++ code make a copy here, I use Zero method instead.
-    //Another approach could be creating public clone() method in Vector2D ...
+    //Another approach could be creating public clone() method in Vector2 ...
     T sum = m_ZeroValue; 
     sum.Zero();
 

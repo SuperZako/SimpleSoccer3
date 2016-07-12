@@ -12,20 +12,6 @@
  * @author Petr (http://www.sallyx.org/)
  */
 
-//package SimpleSoccer;
-
-//import SimpleSoccer.TeamStates.PrepareForKickOff;
-//import common.misc.Cgdi;
-//import common.D2.Vector2D;
-//import common.Game.Region;
-//import common.D2.Wall2D;
-//import java.lang.reflect.Array;
-//import java.util.List;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import static common.misc.Cgdi.gdi;
-//import static common.misc.Stream_Utility_function.ttos;
 namespace SimpleSoccer {
     export class SoccerPitch {
 
@@ -34,7 +20,7 @@ namespace SimpleSoccer {
         //    public static final int 
         public NumRegionsVertical = 3;
         //    private SoccerBall 
-        private m_pBall: SoccerBall;
+        private ball: SoccerBall;
         //    private SoccerTeam 
         private m_pRedTeam: SoccerTeam;
         //    private SoccerTeam
@@ -88,19 +74,19 @@ namespace SimpleSoccer {
 
             // create the goals
             let goalWidth = ParamLoader.GoalWidth;
-            let left = new Vector2D(playingArea.Left(), (cy - goalWidth) / 2);
-            let right = new Vector2D(playingArea.Left(), cy - (cy - goalWidth) / 2);
-            this.m_pRedGoal = new Goal(left, right, new Vector2D(1, 0));
+            let left = new Vector2(playingArea.Left(), (cy - goalWidth) / 2);
+            let right = new Vector2(playingArea.Left(), cy - (cy - goalWidth) / 2);
+            this.m_pRedGoal = new Goal(left, right, new Vector2(1, 0));
 
 
-            left = new Vector2D(this.m_pPlayingArea.Right(), (cy - ParamLoader.GoalWidth) / 2);
-            right = new Vector2D(this.m_pPlayingArea.Right(), cy - (cy - ParamLoader.GoalWidth) / 2);
-            this.m_pBlueGoal = new Goal(left, right, new Vector2D(-1, 0));
+            left = new Vector2(this.m_pPlayingArea.Right(), (cy - ParamLoader.GoalWidth) / 2);
+            right = new Vector2(this.m_pPlayingArea.Right(), cy - (cy - ParamLoader.GoalWidth) / 2);
+            this.m_pBlueGoal = new Goal(left, right, new Vector2(-1, 0));
 
 
             //create the soccer ball
-            let position = new Vector2D(this.m_cxClient / 2.0, this.m_cyClient / 2.0);
-            this.m_pBall = new SoccerBall(position, ParamLoader.BallSize, ParamLoader.BallMass, this.m_vecWalls);
+            let position = new Vector2(this.m_cxClient / 2.0, this.m_cyClient / 2.0);
+            this.ball = new SoccerBall(position, ParamLoader.BallSize, ParamLoader.BallMass, this.m_vecWalls);
 
 
             //create the teams 
@@ -112,10 +98,10 @@ namespace SimpleSoccer {
             this.m_pBlueTeam.SetOpponents(this.m_pRedTeam);
 
             //create the walls
-            let TopLeft = new Vector2D(this.m_pPlayingArea.Left(), this.m_pPlayingArea.Top());
-            let TopRight = new Vector2D(this.m_pPlayingArea.Right(), this.m_pPlayingArea.Top());
-            let BottomRight = new Vector2D(this.m_pPlayingArea.Right(), this.m_pPlayingArea.Bottom());
-            let BottomLeft = new Vector2D(this.m_pPlayingArea.Left(), this.m_pPlayingArea.Bottom());
+            let TopLeft = new Vector2(this.m_pPlayingArea.Left(), this.m_pPlayingArea.Top());
+            let TopRight = new Vector2(this.m_pPlayingArea.Right(), this.m_pPlayingArea.Top());
+            let BottomRight = new Vector2(this.m_pPlayingArea.Right(), this.m_pPlayingArea.Bottom());
+            let BottomLeft = new Vector2(this.m_pPlayingArea.Left(), this.m_pPlayingArea.Bottom());
 
             this.m_vecWalls.push(new Wall2D(BottomLeft, this.m_pRedGoal.RightPost()));
             this.m_vecWalls.push(new Wall2D(this.m_pRedGoal.LeftPost(), TopLeft));
@@ -158,22 +144,22 @@ namespace SimpleSoccer {
             }
 
             //update the balls
-            this.m_pBall.Update();
+            this.ball.Update();
 
             //update the teams
             this.m_pRedTeam.Update();
             this.m_pBlueTeam.Update();
 
             //if a goal has been detected reset the pitch ready for kickoff
-            if (this.m_pBlueGoal.Scored(this.m_pBall) || this.m_pRedGoal.Scored(this.m_pBall)) {
+            if (this.m_pBlueGoal.Scored(this.ball) || this.m_pRedGoal.Scored(this.ball)) {
                 this.m_bGameOn = false;
 
                 //reset the ball                                                      
-                this.m_pBall.PlaceAtPosition(new Vector2D(this.m_cxClient / 2.0, this.m_cyClient / 2.0));
+                this.ball.PlaceAtPosition(new Vector2(this.m_cxClient / 2.0, this.m_cyClient / 2.0));
 
                 //get the teams ready for kickoff
-                this.m_pRedTeam.GetFSM().ChangeState(PrepareForKickOff.Instance());
-                this.m_pBlueTeam.GetFSM().ChangeState(PrepareForKickOff.Instance());
+                this.m_pRedTeam.ChangeState(PrepareForKickOff.Instance());
+                this.m_pBlueTeam.ChangeState(PrepareForKickOff.Instance());
             }
         }
 
@@ -217,7 +203,7 @@ namespace SimpleSoccer {
             //    //the ball
             //    gdi.WhitePen();
             //    gdi.WhiteBrush();
-            this.m_pBall.Render(ctx);
+            this.ball.Render(ctx);
 
             //Render the teams
             this.m_pRedTeam.Render(ctx);
@@ -274,7 +260,7 @@ namespace SimpleSoccer {
         //}
 
         public Ball() {
-            return this.m_pBall;
+            return this.ball;
         }
 
         public GetRegionFromIndex(idx: number) {

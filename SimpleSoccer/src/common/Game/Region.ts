@@ -9,7 +9,7 @@
 
 //import common.misc.Cgdi;
 //import static common.misc.Cgdi.gdi;
-//import common.D2.Vector2D;
+//import common.D2.Vector2;
 //import static common.misc.utils.RandInRange;
 //import static common.misc.Stream_Utility_function.ttos;
 //import static java.lang.Math.*;
@@ -31,7 +31,7 @@ namespace SimpleSoccer {
         protected m_dBottom: number;
         protected m_dWidth: number;
         protected m_dHeight: number;
-        protected m_vCenter: Vector2D;
+        protected m_vCenter: Vector2;
         protected m_iID: number;
 
         //public Region() {
@@ -53,7 +53,7 @@ namespace SimpleSoccer {
             this.m_iID = id;
 
             //calculate center of region
-            this.m_vCenter = new Vector2D((left + right) * 0.5, (top + bottom) * 0.5);
+            this.m_vCenter = new Vector2((left + right) * 0.5, (top + bottom) * 0.5);
 
             this.m_dWidth = Math.abs(right - left);
             this.m_dHeight = Math.abs(bottom - top);
@@ -78,11 +78,11 @@ namespace SimpleSoccer {
         // * returns true if the given position lays inside the region. The
         // * region modifier can be used to contract the region bounderies
         // */
-        //public boolean Inside(Vector2D pos) {
+        //public boolean Inside(Vector2 pos) {
         //    return Inside(pos, region_modifier.normal);
         //}
 
-        public Inside(pos: Vector2D, r = region_modifier.normal) {
+        public Inside(pos: Vector2, r = region_modifier.normal) {
             if (r === region_modifier.normal) {
                 return ((pos.x > this.m_dLeft) && (pos.x < this.m_dRight) && (pos.y > this.m_dTop) && (pos.y < this.m_dBottom));
             } else {
@@ -98,8 +98,8 @@ namespace SimpleSoccer {
         // * @return a vector representing a random location
         // *          within the region
         // */
-        //public Vector2D GetRandomPosition() {
-        //    return new Vector2D(RandInRange(m_dLeft, m_dRight),
+        //public Vector2 GetRandomPosition() {
+        //    return new Vector2(RandInRange(m_dLeft, m_dRight),
         //            RandInRange(m_dTop, m_dBottom));
         //}
 
@@ -137,7 +137,7 @@ namespace SimpleSoccer {
         }
 
         public Center() {
-            return new Vector2D(this.m_vCenter.x, this.m_vCenter.y);
+            return new Vector2(this.m_vCenter.x, this.m_vCenter.y);
         }
 
         //public int ID() {

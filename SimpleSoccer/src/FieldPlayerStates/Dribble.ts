@@ -7,8 +7,8 @@
 //import static SimpleSoccer.DEFINE.*;
 //import SimpleSoccer.FieldPlayer;
 //import static SimpleSoccer.ParamLoader.Prm;
-//import common.D2.Vector2D;
-//import common.D2.Vector2D.*;
+//import common.D2.Vector2;
+//import common.D2.Vector2.*;
 //import static common.D2.Transformation.Vec2DRotateAroundOrigin;
 //import static common.Debug.DbgConsole.*;
 //import common.FSM.State;
@@ -43,7 +43,7 @@ namespace SimpleSoccer {
 
         //@Override
         public Execute(player: FieldPlayer) {
-            let dot = player.Team().HomeGoal().Facing().Dot(player.Heading());
+            let dot = player.Team().HomeGoal().Facing().dot(player.Heading());
 
             //if the ball is between the player and the home goal, it needs to swivel
             // the ball around by doing multiple small kicks and turns until the player 

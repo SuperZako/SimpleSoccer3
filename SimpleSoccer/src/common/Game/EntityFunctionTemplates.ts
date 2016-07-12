@@ -4,8 +4,8 @@
 //package common.Game;
 
 //import SimpleSoccer.BaseGameEntity;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
+//import common.D2.Vector2;
+//import static common.D2.Vector2.*;
 //import static common.D2.geometry.*;
 //import java.util.List;
 //import java.util.ListIterator;
@@ -58,7 +58,7 @@ namespace SimpleSoccer {
     //        curOb.UnTag();
 
     //        //work in distance squared to avoid sqrts
-    //        Vector2D to = sub(curOb.Pos(), entity.Pos());
+    //        Vector2 to = sub(curOb.Pos(), entity.Pos());
 
     //        //the bounding radius of the other is taken into account by adding it 
     //        //to the range
@@ -94,7 +94,7 @@ namespace SimpleSoccer {
             //calculate the distance between the positions of the entities
             let ToEntity = sub(entity.Pos(), it.Pos());
 
-            let DistFromEachOther = ToEntity.Length();
+            let DistFromEachOther = ToEntity.length();
 
             //if this distance is smaller than the sum of their radii then this
             //entity must be moved away in the direction parallel to the

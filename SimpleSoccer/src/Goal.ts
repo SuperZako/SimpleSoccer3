@@ -10,21 +10,21 @@
 namespace SimpleSoccer {
     export class Goal {
 
-        private m_vLeftPost: Vector2D;
-        private m_vRightPost: Vector2D;
+        //private m_vLeftPost: Vector2;
+        //private m_vRightPost: Vector2;
         //a vector representing the facing direction of the goal
-        private m_vFacing: Vector2D;
+        //private m_vFacing: Vector2;
         //the position of the center of the goal line
-        private m_vCenter: Vector2D;
+        private m_vCenter: Vector2;
         //each time Scored() detects a goal this is incremented
-        private m_iNumGoalsScored: number;
+        private m_iNumGoalsScored = 0;
 
-        constructor(left: Vector2D, right: Vector2D, facing: Vector2D) {
-            this.m_vLeftPost = left;
-            this.m_vRightPost = right;
-            this.m_vCenter = div(add(left, right), 2.0);
-            this.m_iNumGoalsScored = 0;
-            this.m_vFacing = facing;
+        constructor(private leftPost: Vector2, private rightPost: Vector2, private facing: Vector2) {
+            //this.m_vLeftPost = left;
+            //this.m_vRightPost = right;
+            this.m_vCenter = div(add(leftPost, rightPost), 2.0);
+            //this.m_iNumGoalsScored = 0;
+            //this.m_vFacing = facing;
         }
 
         /**
@@ -33,7 +33,7 @@ namespace SimpleSoccer {
          * and increments m_iNumGoalsScored
          */
         public Scored(ball: SoccerBall) {
-            if (LineIntersection2D(ball.Pos(), ball.OldPos(), this.m_vLeftPost, this.m_vRightPost)) {
+            if (LineIntersection2D(ball.Pos(), ball.OldPos(), this.leftPost, this.rightPost)) {
                 ++this.m_iNumGoalsScored;
 
                 return true;
@@ -44,21 +44,21 @@ namespace SimpleSoccer {
 
         //-----------------------------------------------------accessor methods
         public Center() {
-            return new Vector2D(this.m_vCenter.x, this.m_vCenter.y);
+            return new Vector2(this.m_vCenter.x, this.m_vCenter.y);
         }
 
         public Facing() {
-            return new Vector2D(this.m_vFacing.x, this.m_vFacing.y);
+            return new Vector2(this.facing.x, this.facing.y);
         }
 
         public LeftPost() {
-            let m_vLeftPost = this.m_vLeftPost;
-            return new Vector2D(m_vLeftPost.x, m_vLeftPost.y);
+            let m_vLeftPost = this.leftPost;
+            return new Vector2(m_vLeftPost.x, m_vLeftPost.y);
         }
 
         public RightPost() {
-            let m_vRightPost = this.m_vRightPost;
-            return new Vector2D(m_vRightPost.x, m_vRightPost.y);
+            let rightPost = this.rightPost;
+            return new Vector2(rightPost.x, rightPost.y);
         }
 
         //public int NumGoalsScored() {

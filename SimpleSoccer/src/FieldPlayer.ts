@@ -1,3 +1,5 @@
+///<reference path='PlayerBase.ts' />
+
 /**
  *   Desc:   Derived from a PlayerBase, this class encapsulates a player
  *           capable of moving around a soccer pitch, kicking, dribbling,
@@ -5,25 +7,7 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer;
 
-//import SimpleSoccer.FieldPlayerStates.GlobalPlayerState;
-//import common.misc.Cgdi;
-//import common.Messaging.Telegram;
-//import common.misc.AutoList;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
-//import static common.D2.Transformation.*;
-//import common.FSM.State;
-//import common.FSM.StateMachine;
-//import static common.Game.EntityFunctionTemplates.EnforceNonPenetrationContraint;
-//import common.Time.Regulator;
-//import static common.misc.Cgdi.gdi;
-//import static common.misc.utils.clamp;
-//import static common.misc.Stream_Utility_function.ttos;
-//import static SimpleSoccer.ParamLoader.Prm;
-
-///<reference path='PlayerBase.ts' />
 
 namespace SimpleSoccer {
     export class FieldPlayer extends PlayerBase {
@@ -37,14 +21,14 @@ namespace SimpleSoccer {
         constructor(home_team: SoccerTeam,
             home_region: number,
             start_state: State<FieldPlayer>,
-            heading: Vector2D,
-            velocity: Vector2D,
+            heading: Vector2,
+            velocity: Vector2,
             mass: number,
             max_force: number,
             max_speed: number,
             max_turn_rate: number,
             scale: number,
-            role: player_role) {
+            role: PlayerRole) {
             super(home_team, home_region, heading, velocity, mass, max_force, max_speed, max_turn_rate, scale, role);
 
             //set up the state machine
@@ -88,7 +72,7 @@ namespace SimpleSoccer {
             if (this.m_pSteering.Force().isZero()) {
                 const BrakingRate = 0.8;
 
-                this.m_vVelocity.mul(BrakingRate);
+                this.m_vVelocity.multiply(BrakingRate);
             }
 
             //the steering force's side component is a force that rotates the 
@@ -103,7 +87,7 @@ namespace SimpleSoccer {
 
             //make sure the velocity vector points in the same direction as
             //the heading vector
-            this.m_vVelocity = mul(this.m_vVelocity.Length(), this.m_vHeading);
+            this.m_vVelocity = mul(this.m_vVelocity.length(), this.m_vHeading);
 
             //and recreate m_vSide
             this.m_vSide = this.m_vHeading.Perp();
@@ -119,7 +103,7 @@ namespace SimpleSoccer {
             //make sure player does not exceed maximum velocity
             this.m_vVelocity.Truncate(this.m_dMaxSpeed);
             //update the position
-            this.m_vPosition.add(this.m_vVelocity);
+            this.position.add(this.m_vVelocity);
 
             //enforce a non-penetration constraint if desired
             if (ParamLoader.bNonPenetrationConstraint) {
@@ -168,7 +152,7 @@ namespace SimpleSoccer {
             //            gdi.TextColor(0, 170, 0);
             //            gdi.TextAtPos(m_vPosition.x, m_vPosition.y - 25,
             //                    new String(m_pStateMachine.GetNameOfCurrentState()));
-            ctx.strokeText(this.m_pStateMachine.GetNameOfCurrentState(), this.m_vPosition.x, this.m_vPosition.y);
+            ctx.strokeText(this.m_pStateMachine.GetNameOfCurrentState(), this.position.x, this.position.y);
             //        }
 
             //        //show IDs
@@ -198,7 +182,7 @@ namespace SimpleSoccer {
         //}
 
         public ChangeState(state: State<FieldPlayer>) {
-            return this.m_pStateMachine.ChangeState(state);
+            this.m_pStateMachine.ChangeState(state);
         }
 
         public isInState(state: State<FieldPlayer>) {

@@ -5,7 +5,7 @@
 
 //import SimpleSoccer.FieldPlayer;
 //import static SimpleSoccer.DEFINE.*;
-//import common.D2.Vector2D;
+//import common.D2.Vector2;
 //import static common.Debug.DbgConsole.*;
 //import common.FSM.State;
 //import common.Messaging.Telegram;
@@ -52,7 +52,7 @@ namespace SimpleSoccer {
             } else {
                 player.Steering().ArriveOff();
 
-                player.SetVelocity(new Vector2D(0, 0));
+                player.SetVelocity(new Vector2(0, 0));
 
                 //the player should keep his eyes on the ball!
                 player.TrackBall();

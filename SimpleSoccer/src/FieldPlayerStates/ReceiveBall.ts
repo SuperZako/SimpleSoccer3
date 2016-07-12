@@ -3,7 +3,7 @@
  */
 //package SimpleSoccer.FieldPlayerStates;
 
-//import common.D2.Vector2D;
+//import common.D2.Vector2;
 //import static SimpleSoccer.DEFINE.*;
 //import static SimpleSoccer.ParamLoader.Prm;
 //import SimpleSoccer.FieldPlayer;
@@ -82,7 +82,7 @@ namespace SimpleSoccer {
                 player.Steering().ArriveOff();
                 player.Steering().PursuitOff();
                 player.TrackBall();
-                player.SetVelocity(new Vector2D(0, 0));
+                player.SetVelocity(new Vector2(0, 0));
             }
         }
 

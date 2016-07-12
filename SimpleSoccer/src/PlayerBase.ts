@@ -7,26 +7,13 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer;
-
-//import java.util.ListIterator;
-//import common.D2.Vector2D;
-//import common.misc.AutoList;
-//import java.util.LinkedList;
-//import java.util.List;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import static SimpleSoccer.MessageTypes.*;
-//import static common.D2.Vector2D.*;
-//import common.Game.Region;
-//import static common.Messaging.MessageDispatcher.*;
-//import static common.misc.utils.*;
-//import static java.lang.Math.abs;
-
 ///<reference path='MovingEntity.ts' />
 
 namespace SimpleSoccer {
-    export enum player_role {
-        goal_keeper, attacker, defender
+    export enum PlayerRole {
+        GoalKeeper,
+        Attacker,
+        Defender
     }
 
     export abstract class PlayerBase extends MovingEntity {
@@ -34,7 +21,7 @@ namespace SimpleSoccer {
 
 
         //this player's role in the team
-        protected m_PlayerRole: player_role;
+        protected playerRole: PlayerRole;
         //a pointer to this player's team
         protected m_pTeam: SoccerTeam;
         //the steering behaviors
@@ -48,22 +35,22 @@ namespace SimpleSoccer {
         protected m_dDistSqToBall: number;
 
         //the vertex buffer
-        protected m_vecPlayerVB = <Vector2D[]>[]; // new LinkedList<Vector2D>();
+        protected m_vecPlayerVB = <Vector2[]>[]; // new LinkedList<Vector2>();
         //the buffer for the transformed vertices
-        protected m_vecPlayerVBTrans = <Vector2D[]>[]; // new LinkedList<Vector2D>();
+        protected m_vecPlayerVBTrans = <Vector2[]>[]; // new LinkedList<Vector2>();
 
         //----------------------------- ctor -------------------------------------
         //------------------------------------------------------------------------
         constructor(home_team: SoccerTeam,
             home_region: number,
-            heading: Vector2D,
-            velocity: Vector2D,
+            heading: Vector2,
+            velocity: Vector2,
             mass: number,
             max_force: number,
             max_speed: number,
             max_turn_rate: number,
             scale: number,
-            role: player_role) {
+            role: PlayerRole) {
 
             super(home_team.Pitch().GetRegionFromIndex(home_region).Center(),
                 scale * 10.0,
@@ -71,21 +58,21 @@ namespace SimpleSoccer {
                 max_speed,
                 heading,
                 mass,
-                new Vector2D(scale, scale),
+                new Vector2(scale, scale),
                 max_turn_rate,
                 max_force);
             this.m_pTeam = home_team;
             this.m_dDistSqToBall = MaxFloat;
             this.m_iHomeRegion = home_region;
             this.m_iDefaultRegion = home_region;
-            this.m_PlayerRole = role;
+            this.playerRole = role;
 
             //setup the vertex buffers and calculate the bounding radius
             let player = [
-                new Vector2D(-3, 8),
-                new Vector2D(3, 10),
-                new Vector2D(3, -10),
-                new Vector2D(-3, -8)
+                new Vector2(-3, 8),
+                new Vector2(3, 10),
+                new Vector2(3, -10),
+                new Vector2(-3, -8)
             ];
             let NumPlayerVerts = player.length;
 
@@ -222,7 +209,7 @@ namespace SimpleSoccer {
          *        of his home region
          */
         public InHomeRegion() {
-            if (this.m_PlayerRole === player_role.goal_keeper) {
+            if (this.playerRole === PlayerRole.GoalKeeper) {
                 return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), Region.normal);
             } else {
                 return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), Region.halfsize);
@@ -260,10 +247,10 @@ namespace SimpleSoccer {
          * @return true if the point specified by 'position' is located in
          * front of the player
          */
-        public PositionInFrontOfPlayer(position: Vector2D) {
+        public PositionInFrontOfPlayer(position: Vector2) {
             let ToSubject = sub(position, this.Pos());
 
-            if (ToSubject.Dot(this.Heading()) > 0) {
+            if (ToSubject.dot(this.Heading()) > 0) {
                 return true;
             } else {
                 return false;
@@ -293,7 +280,7 @@ namespace SimpleSoccer {
         }
 
         public Role() {
-            return this.m_PlayerRole;
+            return this.playerRole;
         }
 
         public DistSqToBall() {

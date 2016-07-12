@@ -10,27 +10,27 @@
 //import java.util.Scanner;
 //import java.io.PrintStream;
 //import java.io.InputStream;
-//import static common.D2.Vector2D.*;
+//import static common.D2.Vector2.*;
 //import static common.misc.Cgdi.gdi;
 namespace SimpleSoccer {
     export class Wall2D {
 
-        protected m_vA = new Vector2D();
-        protected m_vB = new Vector2D();
-        protected m_vN = new Vector2D();
+        protected m_vA = new Vector2();
+        protected m_vB = new Vector2();
+        protected m_vN = new Vector2();
 
 
 
         //public Wall2D() {
         //}
 
-        constructor(A: Vector2D, B: Vector2D) {
+        constructor(A: Vector2, B: Vector2) {
             this.m_vA = A;
             this.m_vB = B;
             this.CalculateNormal();
         }
 
-        //public Wall2D(Vector2D A, Vector2D B, Vector2D N) {
+        //public Wall2D(Vector2 A, Vector2 B, Vector2 N) {
         //    m_vA = A;
         //    m_vB = B;
         //    m_vN = N;
@@ -66,7 +66,7 @@ namespace SimpleSoccer {
             return this.m_vA;
         }
 
-        public SetFrom(v: Vector2D) {
+        public SetFrom(v: Vector2) {
             this.m_vA = v;
             this.CalculateNormal();
         }
@@ -75,7 +75,7 @@ namespace SimpleSoccer {
             return this.m_vB;
         }
 
-        //public void SetTo(Vector2D v) {
+        //public void SetTo(Vector2 v) {
         //    m_vB = v;
         //    CalculateNormal();
         //}
@@ -84,11 +84,11 @@ namespace SimpleSoccer {
             return this.m_vN;
         }
 
-        //public void SetNormal(Vector2D n) {
+        //public void SetNormal(Vector2 n) {
         //    m_vN = n;
         //}
 
-        //public Vector2D Center() {
+        //public Vector2 Center() {
         //    return div(add(m_vA, m_vB), 2.0);
         //}
 
@@ -106,15 +106,15 @@ namespace SimpleSoccer {
         //    x = br.nextDouble();
         //    y = br.nextDouble();
 
-        //    SetFrom(new Vector2D(x, y));
+        //    SetFrom(new Vector2(x, y));
 
         //    x = br.nextDouble();
         //    y = br.nextDouble();
-        //    SetTo(new Vector2D(x, y));
+        //    SetTo(new Vector2(x, y));
 
         //    x = br.nextDouble();
         //    y = br.nextDouble();
-        //    SetNormal(new Vector2D(x, y));
+        //    SetNormal(new Vector2(x, y));
         //}
 
         protected CalculateNormal() {

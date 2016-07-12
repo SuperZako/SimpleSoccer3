@@ -7,7 +7,7 @@
 //package common.D2;
 
 //import java.util.List;
-//import static common.D2.Vector2D.*;
+//import static common.D2.Vector2.*;
 //import common.misc.CppToJava;
 //import java.util.ArrayList;
 namespace SimpleSoccer {
@@ -17,13 +17,13 @@ namespace SimpleSoccer {
     ////  given a std::vector of 2D vectors, a position, orientation and scale,
     ////  this function transforms the 2D vectors into the object's world space
     ////------------------------------------------------------------------------
-    //    public static List<Vector2D> WorldTransform(List<Vector2D> points,
-    //            Vector2D pos,
-    //            Vector2D forward,
-    //            Vector2D side,
-    //            Vector2D scale) {
+    //    public static List<Vector2> WorldTransform(List<Vector2> points,
+    //            Vector2 pos,
+    //            Vector2 forward,
+    //            Vector2 side,
+    //            Vector2 scale) {
     //        //copy the original vertices into the buffer about to be transformed
-    //        List<Vector2D> TranVector2Ds = CppToJava.clone(points);
+    //        List<Vector2> TranVector2Ds = CppToJava.clone(points);
 
     //        //create a transformation matrix
     //        C2DMatrix matTransform = new C2DMatrix();
@@ -49,13 +49,13 @@ namespace SimpleSoccer {
     // *  given a std::vector of 2D vectors, a position and  orientation
     // *  this function transforms the 2D vectors into the object's world space
     // */
-    //    public static List<Vector2D> WorldTransform(List<Vector2D> points,
-    //            Vector2D pos,
-    //            Vector2D forward,
-    //            Vector2D side) {
+    //    public static List<Vector2> WorldTransform(List<Vector2> points,
+    //            Vector2 pos,
+    //            Vector2 forward,
+    //            Vector2 side) {
     //        //copy the original vertices into the buffer about to be transformed
-    //        List<Vector2D> TranVector2Ds = CppToJava.clone(points);
-    //        for(Vector2D v: points) {
+    //        List<Vector2> TranVector2Ds = CppToJava.clone(points);
+    //        for(Vector2 v: points) {
     //            TranVector2Ds.add(v);
     //        }
 
@@ -78,12 +78,12 @@ namespace SimpleSoccer {
     ////
     ////  Transforms a point from the agent's local space into world space
     ////------------------------------------------------------------------------
-    //    public static Vector2D PointToWorldSpace(Vector2D point,
-    //            Vector2D AgentHeading,
-    //            Vector2D AgentSide,
-    //            Vector2D AgentPosition) {
+    //    public static Vector2 PointToWorldSpace(Vector2 point,
+    //            Vector2 AgentHeading,
+    //            Vector2 AgentSide,
+    //            Vector2 AgentPosition) {
     //        //make a copy of the point
-    //        Vector2D TransPoint = new Vector2D(point);
+    //        Vector2 TransPoint = new Vector2(point);
 
     //        //create a transformation matrix
     //        C2DMatrix matTransform = new C2DMatrix();
@@ -104,11 +104,11 @@ namespace SimpleSoccer {
     ////
     ////  Transforms a vector from the agent's local space into world space
     ////------------------------------------------------------------------------
-    //    public static Vector2D VectorToWorldSpace(Vector2D vec,
-    //            Vector2D AgentHeading,
-    //            Vector2D AgentSide) {
+    //    public static Vector2 VectorToWorldSpace(Vector2 vec,
+    //            Vector2 AgentHeading,
+    //            Vector2 AgentSide) {
     //        //make a copy of the point
-    //        Vector2D TransVec = new Vector2D(vec);
+    //        Vector2 TransVec = new Vector2(vec);
 
     //        //create a transformation matrix
     //        C2DMatrix matTransform = new C2DMatrix();
@@ -125,16 +125,16 @@ namespace SimpleSoccer {
     //--------------------- PointToLocalSpace --------------------------------
     //
     //------------------------------------------------------------------------
-    export function PointToLocalSpace(point: Vector2D, AgentHeading: Vector2D, AgentSide: Vector2D, AgentPosition: Vector2D) {
+    export function PointToLocalSpace(point: Vector2, AgentHeading: Vector2, AgentSide: Vector2, AgentPosition: Vector2) {
 
         //make a copy of the point
-        let TransPoint = new Vector2D(point.x, point.y);
+        let TransPoint = new Vector2(point.x, point.y);
 
         //create a transformation matrix
         let matTransform = new C2DMatrix();
 
-        let Tx = -AgentPosition.Dot(AgentHeading);
-        let Ty = -AgentPosition.Dot(AgentSide);
+        let Tx = -AgentPosition.dot(AgentHeading);
+        let Ty = -AgentPosition.dot(AgentSide);
 
         //create the transformation matrix
         matTransform._11(AgentHeading.x); matTransform._12(AgentSide.x);
@@ -150,12 +150,12 @@ namespace SimpleSoccer {
     ////--------------------- VectorToLocalSpace --------------------------------
     ////
     ////------------------------------------------------------------------------
-    //    public static Vector2D VectorToLocalSpace(Vector2D vec,
-    //            Vector2D AgentHeading,
-    //            Vector2D AgentSide) {
+    //    public static Vector2 VectorToLocalSpace(Vector2 vec,
+    //            Vector2 AgentHeading,
+    //            Vector2 AgentSide) {
 
     //        //make a copy of the point
-    //        Vector2D TransPoint = new Vector2D(vec);
+    //        Vector2 TransPoint = new Vector2(vec);
 
     //        //create a transformation matrix
     //        C2DMatrix matTransform = new C2DMatrix();
@@ -174,7 +174,7 @@ namespace SimpleSoccer {
     //
     //  rotates a vector ang rads around the origin
     //-----------------------------------------------------------------------------
-    export function Vec2DRotateAroundOrigin(v: Vector2D, ang: number) {
+    export function Vec2DRotateAroundOrigin(v: Vector2, ang: number) {
         //create a transformation matrix
         let mat = new C2DMatrix();
 
@@ -193,16 +193,16 @@ namespace SimpleSoccer {
     ////  of whiskers radiating away from the origin and with equal distance between
     ////  them. (like the spokes of a wheel clipped to a specific segment size)
     ////----------------------------------------------------------------------------
-    //    public static List<Vector2D> CreateWhiskers(int NumWhiskers,
+    //    public static List<Vector2> CreateWhiskers(int NumWhiskers,
     //            double WhiskerLength,
     //            double fov,
-    //            Vector2D facing,
-    //            Vector2D origin) {
+    //            Vector2 facing,
+    //            Vector2 origin) {
     //        //this is the magnitude of the angle separating each whisker
     //        double SectorSize = fov / (double) (NumWhiskers - 1);
 
-    //        List<Vector2D> whiskers = new ArrayList<Vector2D>(NumWhiskers);
-    //        Vector2D temp;
+    //        List<Vector2> whiskers = new ArrayList<Vector2>(NumWhiskers);
+    //        Vector2 temp;
     //        double angle = -fov * 0.5;
 
     //        for (int w = 0; w < NumWhiskers; ++w) {

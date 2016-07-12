@@ -30,9 +30,9 @@ namespace SimpleSoccer {
     export class SteeringBehaviors {
         //the steering force created by the combined effect of all
         //the selected behaviors
-        private m_vSteeringForce = new Vector2D();
+        private m_vSteeringForce = new Vector2();
         //the current target (usually the ball or predicted ball position)
-        private m_vTarget = new Vector2D();
+        private m_vTarget = new Vector2();
         //the distance the player tries to interpose from the target
         private m_dInterposeDist = 0.0;
         //multipliers. 
@@ -43,7 +43,7 @@ namespace SimpleSoccer {
         private m_iFlags = 0;
 
         //    //a vertex buffer to contain the feelers rqd for dribbling
-        private m_Antenna: Vector2D[] = [];
+        private m_Antenna: Vector2[] = [];
 
         //used by group behaviors to tag neighbours
         private m_bTagged = false;
@@ -57,7 +57,7 @@ namespace SimpleSoccer {
             //this.m_bTagged = false;
             this.m_dViewDistance = ParamLoader.ViewDistance;
             //this.m_dInterposeDist = 0.0;
-            //this.m_Antenna = <Vector2D[]>[];
+            //this.m_Antenna = <Vector2[]>[];
         }
 
         //    @Override
@@ -79,7 +79,7 @@ namespace SimpleSoccer {
             //make sure the force doesn't exceed the vehicles maximum allowable
             this.m_vSteeringForce.Truncate(this.player.MaxForce());
 
-            return new Vector2D(this.m_vSteeringForce.x, this.m_vSteeringForce.y);
+            return new Vector2(this.m_vSteeringForce.x, this.m_vSteeringForce.y);
         }
 
         /**
@@ -87,7 +87,7 @@ namespace SimpleSoccer {
          * with the vehicle heading
          */
         public ForwardComponent() {
-            return this.player.Heading().Dot(this.m_vSteeringForce);
+            return this.player.Heading().dot(this.m_vSteeringForce);
         }
 
         /**
@@ -95,7 +95,7 @@ namespace SimpleSoccer {
          * with the vehicle heading
          */
         public SideComponent() {
-            return this.player.Side().Dot(this.m_vSteeringForce) * this.player.MaxTurnRate();
+            return this.player.Side().dot(this.m_vSteeringForce) * this.player.MaxTurnRate();
         }
 
         public Force() {
@@ -113,11 +113,11 @@ namespace SimpleSoccer {
         //    }
 
         public Target() {
-            return new Vector2D(this.m_vTarget.x, this.m_vTarget.y);
+            return new Vector2(this.m_vTarget.x, this.m_vTarget.y);
         }
 
-        public SetTarget(t: Vector2D) {
-            this.m_vTarget = new Vector2D(t.x, t.y);
+        public SetTarget(t: Vector2) {
+            this.m_vTarget = new Vector2(t.x, t.y);
         }
 
         public InterposeDistance() {
@@ -216,7 +216,7 @@ namespace SimpleSoccer {
        * allign the agent with the target and move the agent in the desired
        * direction
        */
-        private Seek(target: Vector2D) {
+        private Seek(target: Vector2) {
 
             let DesiredVelocity = Vec2DNormalize(mul(this.player.MaxSpeed(), sub(target, this.player.Pos())));
 
@@ -227,11 +227,11 @@ namespace SimpleSoccer {
          * This behavior is similar to seek but it attempts to arrive at the
          *  target with a zero velocity
          */
-        private Arrive(TargetPos: Vector2D, deceleration: Deceleration) {
+        private Arrive(TargetPos: Vector2, deceleration: Deceleration) {
             let ToTarget = sub(TargetPos, this.player.Pos());
 
             //calculate the distance to the target
-            let dist = ToTarget.Length();
+            let dist = ToTarget.length();
 
             if (dist > 0) {
                 //because Deceleration is enumerated as an int, this value is required
@@ -253,7 +253,7 @@ namespace SimpleSoccer {
                 return sub(DesiredVelocity, this.player.Velocity());
             }
 
-            return new Vector2D(0, 0);
+            return new Vector2(0, 0);
         }
 
         /**
@@ -270,7 +270,7 @@ namespace SimpleSoccer {
             let LookAheadTime = 0.0;
 
             if (ball.Speed() !== 0.0) {
-                LookAheadTime = ToBall.Length() / ball.Speed();
+                LookAheadTime = ToBall.length() / ball.Speed();
             }
 
             //calculate where the ball will be at this time in the future
@@ -286,7 +286,7 @@ namespace SimpleSoccer {
          */
         private Separation() {
             //iterate through all the neighbors and calculate the vector from them
-            let SteeringForce = new Vector2D();
+            let SteeringForce = new Vector2();
 
             //List < PlayerBase > AllPlayers = new AutoList<PlayerBase>().GetAllMembers();
             let AllPlayers = PlayerBase.GetAllMembers();
@@ -301,7 +301,7 @@ namespace SimpleSoccer {
 
                     //scale the force inversely proportional to the agents distance  
                     //from its neighbor.
-                    SteeringForce.add(div(Vec2DNormalize(ToAgent), ToAgent.Length()));
+                    SteeringForce.add(div(Vec2DNormalize(ToAgent), ToAgent.length()));
                 }
             }
 
@@ -312,7 +312,7 @@ namespace SimpleSoccer {
          * Given an opponent and an object position this method returns a 
          * force that attempts to position the agent between them
          */
-        private Interpose(ball: SoccerBall, target: Vector2D, DistFromTarget: number) {
+        private Interpose(ball: SoccerBall, target: Vector2, DistFromTarget: number) {
             return this.Arrive(add(target, mul(DistFromTarget, Vec2DNormalize(sub(ball.Pos(), target)))), Deceleration.Normal);
         }
 
@@ -351,9 +351,9 @@ namespace SimpleSoccer {
          *  vehicle has left to apply and then applies that amount of the
          *  force to add.
          */
-        private AccumulateForce(sf: Vector2D, ForceToAdd: Vector2D) {
+        private AccumulateForce(sf: Vector2, ForceToAdd: Vector2) {
             //first calculate how much steering force we have left to use
-            let MagnitudeSoFar = sf.Length();
+            let MagnitudeSoFar = sf.length();
 
             let magnitudeRemaining = this.player.MaxForce() - MagnitudeSoFar;
 
@@ -363,7 +363,7 @@ namespace SimpleSoccer {
             }
 
             //calculate the magnitude of the force we want to add
-            let MagnitudeToAdd = ForceToAdd.Length();
+            let MagnitudeToAdd = ForceToAdd.length();
 
             //now calculate how much of the force we can really add  
             if (MagnitudeToAdd > magnitudeRemaining) {
@@ -384,7 +384,7 @@ namespace SimpleSoccer {
         *  point
         */
         private SumForces() {
-            let force = new Vector2D();
+            let force = new Vector2();
 
             //the soccer players must always tag their neighbors
             this.FindNeighbours();

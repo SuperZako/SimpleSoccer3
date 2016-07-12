@@ -1,23 +1,7 @@
 /**
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer.FieldPlayerStates;
 
-//import common.misc.CppToJava.ObjectRef;
-//import common.Messaging.Telegram;
-//import SimpleSoccer.PlayerBase;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
-//import static SimpleSoccer.DEFINE.*;
-//import SimpleSoccer.FieldPlayer;
-//import static SimpleSoccer.MessageTypes.*;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import static SimpleSoccer.SoccerBall.AddNoiseToKick;
-//import common.FSM.State;
-//import static common.Debug.DbgConsole.*;
-//import static common.Messaging.MessageDispatcher.*;
-//import static common.misc.Stream_Utility_function.ttos;
-//import static common.misc.utils.*;
 namespace SimpleSoccer {
     export class KickBall extends State<FieldPlayer> {
 
@@ -59,7 +43,7 @@ namespace SimpleSoccer {
             //calculate the dot product of the vector pointing to the ball
             //and the player's heading
             let ToBall = sub(player.Ball().Pos(), player.Pos());
-            let dot = player.Heading().Dot(Vec2DNormalize(ToBall));
+            let dot = player.Heading().dot(Vec2DNormalize(ToBall));
 
             //cannot kick the ball if the goalkeeper is in possession or if it is 
             //behind the player or if there is already an assigned receiver. So just
@@ -79,7 +63,7 @@ namespace SimpleSoccer {
 
             //if a shot is possible, this vector will hold the position along the 
             //opponent's goal line the player should aim for.
-            //let BallTarget = new Vector2D();
+            //let BallTarget = new Vector2();
 
             //the dot product is used to adjust the shooting force. The more
             //directly the ball is ahead, the more forceful the kick

@@ -20,7 +20,7 @@ public class Smoother<T extends Number> {
     private List<T> m_History;
     private int m_iNextUpdateSlot;
     //an example of the 'zero' value of the type to be smoothed. This
-    //would be something like Vector2D(0,0)
+    //would be something like Vector2(0,0)
     private T m_ZeroValue;
 
     /**

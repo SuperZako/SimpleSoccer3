@@ -6,7 +6,7 @@
 //package common.D2;
 namespace SimpleSoccer {
     //import java.util.ArrayList;
-    //import static common.D2.Vector2D.*;
+    //import static common.D2.Vector2.*;
     //import static common.misc.utils.*;
     //import static common.misc.CppToJava.*;
     //import static common.D2.Transformation.PointToLocalSpace;
@@ -17,14 +17,14 @@ namespace SimpleSoccer {
      * given a plane and a ray this function determins how far along the ray 
      * an interestion occurs. Returns negative if the ray is parallel
      */
-    export function DistanceToRayPlaneIntersection(RayOrigin: Vector2D,
-        RayHeading: Vector2D,
-        PlanePoint: Vector2D, //any point on the plane
-        PlaneNormal: Vector2D) {
+    export function DistanceToRayPlaneIntersection(RayOrigin: Vector2,
+        RayHeading: Vector2,
+        PlanePoint: Vector2, //any point on the plane
+        PlaneNormal: Vector2) {
 
-        let d = -PlaneNormal.Dot(PlanePoint);
-        let numer = PlaneNormal.Dot(RayOrigin) + d;
-        let denom = PlaneNormal.Dot(RayHeading);
+        let d = -PlaneNormal.dot(PlanePoint);
+        let numer = PlaneNormal.dot(RayOrigin) + d;
+        let denom = PlaneNormal.dot(RayHeading);
 
         // normal is parallel to vector
         if ((denom < 0.000001) && (denom > -0.000001)) {
@@ -42,12 +42,12 @@ namespace SimpleSoccer {
         on_plane,
     }
 
-    export function WhereIsPoint(point: Vector2D,
-        PointOnPlane: Vector2D, //any point on the plane
-        PlaneNormal: Vector2D) {
+    export function WhereIsPoint(point: Vector2,
+        PointOnPlane: Vector2, //any point on the plane
+        PlaneNormal: Vector2) {
         let dir = sub(PointOnPlane, point);
 
-        let d = dir.Dot(PlaneNormal);
+        let d = dir.dot(PlaneNormal);
 
         if (d < -0.000001) {
             return span_type.plane_front;
@@ -62,11 +62,11 @@ namespace SimpleSoccer {
     //    /**
     //     * GetRayCircleIntersec
     //     */
-    //    public static double GetRayCircleIntersect(Vector2D RayOrigin,
-    //            Vector2D RayHeading,
-    //            Vector2D CircleOrigin,
+    //    public static double GetRayCircleIntersect(Vector2 RayOrigin,
+    //            Vector2 RayHeading,
+    //            Vector2 CircleOrigin,
     //            double radius) {
-    //        Vector2D ToCircle = sub(CircleOrigin, RayOrigin);
+    //        Vector2 ToCircle = sub(CircleOrigin, RayOrigin);
     //        double length = ToCircle.Length();
     //        double v = ToCircle.Dot(RayHeading);
     //        double d = radius * radius - (length * length - v * v);
@@ -83,12 +83,12 @@ namespace SimpleSoccer {
     //    /**
     //     *  DoRayCircleIntersect
     //     */
-    //    public static boolean DoRayCircleIntersect(Vector2D RayOrigin,
-    //            Vector2D RayHeading,
-    //            Vector2D CircleOrigin,
+    //    public static boolean DoRayCircleIntersect(Vector2 RayOrigin,
+    //            Vector2 RayHeading,
+    //            Vector2 CircleOrigin,
     //            double radius) {
 
-    //        Vector2D ToCircle = sub(CircleOrigin, RayOrigin);
+    //        Vector2 ToCircle = sub(CircleOrigin, RayOrigin);
     //        double length = ToCircle.Length();
     //        double v = ToCircle.Dot(RayHeading);
     //        double d = radius * radius - (length * length - v * v);
@@ -104,7 +104,7 @@ namespace SimpleSoccer {
      *
      *  Thanks to Dave Eberly for this one.
      */
-    export function GetTangentPoints(C: Vector2D, R: number, P: Vector2D, T1: Vector2D, T2: Vector2D) {
+    export function GetTangentPoints(C: Vector2, R: number, P: Vector2, T1: Vector2, T2: Vector2) {
         let PmC = sub(P, C);
         let SqrLen = PmC.LengthSq();
         let RSqr = R * R;
@@ -128,9 +128,9 @@ namespace SimpleSoccer {
     //    /* given a line segment AB and a point P, this function calculates the 
     //    /*  perpendicular distance between them
     //     */
-    //    public static double DistToLineSegment(Vector2D A,
-    //            Vector2D B,
-    //            Vector2D P) {
+    //    public static double DistToLineSegment(Vector2 A,
+    //            Vector2 B,
+    //            Vector2 P) {
     //        //if the angle is obtuse between PA and AB is obtuse then the closest
     //        //vertex must be A
     //        double dotA = (P.x - A.x) * (B.x - A.x) + (P.y - A.y) * (B.y - A.y);
@@ -148,8 +148,8 @@ namespace SimpleSoccer {
     //        }
 
     //        //calculate the point along AB that is the closest to P
-    //        //Vector2D Point = A + ((B - A) * dotA)/(dotA + dotB);
-    //        Vector2D Point = add(A, (div(mul(sub(B, A), dotA), (dotA + dotB))));
+    //        //Vector2 Point = A + ((B - A) * dotA)/(dotA + dotB);
+    //        Vector2 Point = add(A, (div(mul(sub(B, A), dotA), (dotA + dotB))));
 
     //        //calculate the distance P-Point
     //        return Vec2DDistance(P, Point);
@@ -158,9 +158,9 @@ namespace SimpleSoccer {
     //    /**
     //     *  as above, but avoiding sqrt
     //     */
-    //    public static double DistToLineSegmentSq(Vector2D A,
-    //            Vector2D B,
-    //            Vector2D P) {
+    //    public static double DistToLineSegmentSq(Vector2 A,
+    //            Vector2 B,
+    //            Vector2 P) {
     //        //if the angle is obtuse between PA and AB is obtuse then the closest
     //        //vertex must be A
     //        double dotA = (P.x - A.x) * (B.x - A.x) + (P.y - A.y) * (B.y - A.y);
@@ -178,8 +178,8 @@ namespace SimpleSoccer {
     //        }
 
     //        //calculate the point along AB that is the closest to P
-    //        //Vector2D Point = A + ((B - A) * dotA)/(dotA + dotB);
-    //        Vector2D Point = add(A, (div(mul(sub(B, A), dotA), (dotA + dotB))));
+    //        //Vector2 Point = A + ((B - A) * dotA)/(dotA + dotB);
+    //        Vector2 Point = add(A, (div(mul(sub(B, A), dotA), (dotA + dotB))));
 
     //        //calculate the distance P-Point
     //        return Vec2DDistanceSq(P, Point);
@@ -189,7 +189,7 @@ namespace SimpleSoccer {
      *	Given 2 lines in 2D space AB, CD this returns true if an 
      *	intersection occurs.
      */
-    export function LineIntersection2D(A: Vector2D, B: Vector2D, C: Vector2D, D: Vector2D) {
+    export function LineIntersection2D(A: Vector2, B: Vector2, C: Vector2, D: Vector2) {
         let rTop = (A.y - C.y) * (D.x - C.x) - (A.x - C.x) * (D.y - C.y);
         let sTop = (A.y - C.y) * (B.x - A.x) - (A.x - C.x) * (B.y - A.y);
 
@@ -217,10 +217,10 @@ namespace SimpleSoccer {
     //     *  intersection occurs and sets dist to the distance the intersection
     //     *  occurs along AB
     //     */
-    //    public static boolean LineIntersection2D(Vector2D A,
-    //            Vector2D B,
-    //            Vector2D C,
-    //            Vector2D D,
+    //    public static boolean LineIntersection2D(Vector2 A,
+    //            Vector2 B,
+    //            Vector2 C,
+    //            Vector2 D,
     //            DoubleRef dist) // double &dist
     //    {
 
@@ -258,12 +258,12 @@ namespace SimpleSoccer {
     //     *  occurs along AB. Also sets the 2d vector point to the point of
     //     *  intersection
     //     */
-    //    public static boolean LineIntersection2D(Vector2D A,
-    //            Vector2D B,
-    //            Vector2D C,
-    //            Vector2D D,
+    //    public static boolean LineIntersection2D(Vector2 A,
+    //            Vector2 B,
+    //            Vector2 C,
+    //            Vector2 D,
     //            DoubleRef dist,
-    //            Vector2D point) {
+    //            Vector2 point) {
 
     //        double rTop = (A.y - C.y) * (D.x - C.x) - (A.x - C.x) * (D.y - C.y);
     //        double rBot = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
@@ -295,8 +295,8 @@ namespace SimpleSoccer {
     //    /**
     //     *  tests two polygons for intersection. *Does not check for enclosure*
     //     */
-    //    public static boolean ObjectIntersection2D(ArrayList<Vector2D> object1,
-    //            ArrayList<Vector2D> object2) {
+    //    public static boolean ObjectIntersection2D(ArrayList<Vector2> object1,
+    //            ArrayList<Vector2> object2) {
     //        //test each line segment of object1 against each segment of object2
     //        for (int r = 0; r < object1.size() - 1; ++r) {
     //            for (int t = 0; t < object2.size() - 1; ++t) {
@@ -316,9 +316,9 @@ namespace SimpleSoccer {
     //     *  tests a line segment against a polygon for intersection
     //     *  *Does not check for enclosure*
     //     */
-    //    public static boolean SegmentObjectIntersection2D(final Vector2D A,
-    //            final Vector2D B,
-    //            final ArrayList<Vector2D> object) {
+    //    public static boolean SegmentObjectIntersection2D(final Vector2 A,
+    //            final Vector2 B,
+    //            final ArrayList<Vector2> object) {
     //        //test AB against each segment of object
     //        for (int r = 0; r < object.size() - 1; ++r) {
     //            if (LineIntersection2D(A, B, object.get(r), object.get(r + 1))) {
@@ -347,8 +347,8 @@ namespace SimpleSoccer {
     //    /**
     //     * Returns true if the two circles overlap
     //     */
-    //    public static boolean TwoCirclesOverlapped(Vector2D c1, double r1,
-    //            Vector2D c2, double r2) {
+    //    public static boolean TwoCirclesOverlapped(Vector2 c1, double r1,
+    //            Vector2 c2, double r2) {
     //        double DistBetweenCenters = Math.sqrt((c1.x - c2.x) * (c1.x - c2.x)
     //                + (c1.y - c2.y) * (c1.y - c2.y));
 
@@ -473,9 +473,9 @@ namespace SimpleSoccer {
     //    /**
     //     *  returns true if the point p is within the radius of the given circle
     //     */
-    //    public static boolean PointInCircle(Vector2D Pos,
+    //    public static boolean PointInCircle(Vector2 Pos,
     //            double radius,
-    //            Vector2D p) {
+    //            Vector2 p) {
     //        double DistFromCenterSquared = (sub(p, Pos)).LengthSq();
 
     //        if (DistFromCenterSquared < (radius * radius)) {
@@ -489,9 +489,9 @@ namespace SimpleSoccer {
     //     * returns true if the line segemnt AB intersects with a circle at
     //     *  position P with radius radius
     //     */
-    //    public static boolean LineSegmentCircleIntersection(Vector2D A,
-    //            Vector2D B,
-    //            Vector2D P,
+    //    public static boolean LineSegmentCircleIntersection(Vector2 A,
+    //            Vector2 B,
+    //            Vector2 P,
     //            double radius) {
     //        //first determine the distance from the center of the circle to
     //        //the line segment (working in distance squared space)
@@ -511,16 +511,16 @@ namespace SimpleSoccer {
     //     *
     //     *  returns false if no intersection point is found
     //     */
-    //    public static boolean GetLineSegmentCircleClosestIntersectionPoint(Vector2D A,
-    //            Vector2D B,
-    //            Vector2D pos,
+    //    public static boolean GetLineSegmentCircleClosestIntersectionPoint(Vector2 A,
+    //            Vector2 B,
+    //            Vector2 pos,
     //            double radius,
-    //            Vector2D IntersectionPoint) {
-    //        Vector2D toBNorm = Vec2DNormalize(sub(B, A));
+    //            Vector2 IntersectionPoint) {
+    //        Vector2 toBNorm = Vec2DNormalize(sub(B, A));
 
     //        //move the circle into the local space defined by the vector B-A with origin
     //        //at A
-    //        Vector2D LocalPos = PointToLocalSpace(pos, toBNorm, toBNorm.Perp(), A);
+    //        Vector2 LocalPos = PointToLocalSpace(pos, toBNorm, toBNorm.Perp(), A);
 
     //        boolean ipFound = false;
 

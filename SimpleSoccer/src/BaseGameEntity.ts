@@ -1,14 +1,11 @@
-///**
-// * Desc: Base class to define a common interface for all game
-// *       entities
-// * 
-// * @author Petr (http://www.sallyx.org/)
-// */
-//package SimpleSoccer;
+// <reference path="./common/math/Vector2.ts" />
 
-//import common.D2.Vector2D;
-//import common.Messaging.Telegram;
-//import static common.misc.utils.*;
+/**
+ * Desc: Base class to define a common interface for all game
+ *       entities
+ * 
+ * @author Petr (http://www.sallyx.org/)
+ */
 
 namespace SimpleSoccer {
     export abstract class BaseGameEntity {
@@ -18,30 +15,23 @@ namespace SimpleSoccer {
         private static m_iNextValidID = 0;
 
         //its location in the environment
-        protected m_vPosition = new Vector2D();
-        protected m_vScale = new Vector2D();
+        protected position = new Vector2();
+        protected scale = Vector2.One;
         //the magnitude of this object's bounding radius
-        protected m_dBoundingRadius: number;
-
-
+        protected m_dBoundingRadius = 0.0;
 
         //each entity has a unique ID
         private m_ID: number;
         //every entity has a type associated with it (health, troll, ammo etc)
-        private m_iType: number;
+        private m_iType = BaseGameEntity.default_entity_type;
         //    //this is a generic flag. 
-        private m_bTag: boolean;
+        private m_bTag = false;
         //    //this is the next valid ID. Each time a BaseGameEntity is instantiated
         //    //this value is updated
 
         //------------------------------ ctor -----------------------------------------
-        constructor(ID: number) {
-            this.m_dBoundingRadius = 0.0;
-            this.m_vScale = new Vector2D(1.0, 1.0);
-            this.m_iType = BaseGameEntity.default_entity_type;
-            this.m_bTag = false;
-
-            this.SetID(ID);
+        constructor(id: number) {
+            this.SetID(id);
         }
 
         // use this to grab the next valid ID
@@ -60,9 +50,7 @@ namespace SimpleSoccer {
 
         public abstract Render(ctx: CanvasRenderingContext2D): void;
 
-        public abstract HandleMessage(msg: Telegram): boolean; //{
-        //return false;
-        //}
+        public abstract HandleMessage(msg: Telegram): boolean;
 
         //    //entities should be able to read/write their data to a stream
         //    //virtual void Write(std::ostream&  os)const{}
@@ -75,11 +63,11 @@ namespace SimpleSoccer {
         //    }
 
         public Pos() {
-            return new Vector2D(this.m_vPosition.x, this.m_vPosition.y);
+            return new Vector2(this.position.x, this.position.y);
         }
 
-        public SetPos(new_pos: Vector2D) {
-            this.m_vPosition = new Vector2D(new_pos.x, new_pos.y);
+        public SetPos(new_pos: Vector2) {
+            this.position = new Vector2(new_pos.x, new_pos.y);
         }
 
         public BRadius() {
@@ -106,18 +94,18 @@ namespace SimpleSoccer {
         //        m_bTag = false;
         //    }
 
-        //    public Vector2D Scale() {
-        //        return new Vector2D(m_vScale);
+        //    public Vector2 Scale() {
+        //        return new Vector2(m_vScale);
         //    }
 
-        //    public void SetScale(Vector2D val) {
+        //    public void SetScale(Vector2 val) {
         //        m_dBoundingRadius *= MaxOf(val.x, val.y) / MaxOf(m_vScale.x, m_vScale.y);
-        //        m_vScale = new Vector2D(val);
+        //        m_vScale = new Vector2(val);
         //    }
 
         //    public void SetScale(double val) {
         //        m_dBoundingRadius *= (val / MaxOf(m_vScale.x, m_vScale.y));
-        //        m_vScale = new Vector2D(val, val);
+        //        m_vScale = new Vector2(val, val);
         //    }
 
         //    public int EntityType() {

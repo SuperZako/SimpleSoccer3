@@ -21,39 +21,31 @@ namespace SimpleSoccer {
         //private color: TeamColor;
 
         //pointers to the team members
-        private m_Players = <PlayerBase[]>[]; // new Array<PlayerBase>(5);
+        private players = <PlayerBase[]>[]; // new Array<PlayerBase>(5);
         //a pointer to the soccer pitch
-        private m_pPitch: SoccerPitch;
+        //private m_pPitch: SoccerPitch;
+
         //pointers to the goals
-        private m_pOpponentsGoal: Goal;
-        private m_pHomeGoal: Goal;
+        //private m_pOpponentsGoal: Goal;
+        //private m_pHomeGoal: Goal;
+
         //a pointer to the opposing team
-        private m_pOpponents: SoccerTeam;
+        private m_pOpponents: SoccerTeam = null;
         //pointers to 'key' players
-        private m_pControllingPlayer: PlayerBase;
-        private m_pSupportingPlayer: PlayerBase;
-        private m_pReceivingPlayer: PlayerBase;
-        private m_pPlayerClosestToBall: PlayerBase;
+        private m_pControllingPlayer: PlayerBase = null;
+        private m_pSupportingPlayer: PlayerBase = null;
+        private m_pReceivingPlayer: PlayerBase = null;
+        private m_pPlayerClosestToBall: PlayerBase = null;
         //the squared distance the closest player is from the ball
-        private m_dDistSqToBallOfClosestPlayer: number;
+        private m_dDistSqToBallOfClosestPlayer = 0.0;
         //players use this to determine strategic positions on the playing field
         private m_pSupportSpotCalc: SupportSpotCalculator;
 
 
 
         //----------------------------- ctor -------------------------------------
-        //
-        //------------------------------------------------------------------------
-        constructor(home_goal: Goal, opponents_goal: Goal, pitch: SoccerPitch, private color: TeamColor) {
-            this.m_pOpponentsGoal = opponents_goal;
-            this.m_pHomeGoal = home_goal;
-            this.m_pOpponents = null;
-            this.m_pPitch = pitch;
-            this.m_dDistSqToBallOfClosestPlayer = 0.0;
-            this.m_pSupportingPlayer = null;
-            this.m_pReceivingPlayer = null;
-            this.m_pControllingPlayer = null;
-            this.m_pPlayerClosestToBall = null;
+        constructor(private homeGoal: Goal, private opponentsGoal: Goal, private pitch: SoccerPitch, private color: TeamColor) {
+
 
             //setup the state machine
             this.stateMachine = new StateMachine<SoccerTeam>(this);
@@ -66,10 +58,8 @@ namespace SimpleSoccer {
             this.CreatePlayers();
 
             //set default steering behaviors
-            //ListIterator < PlayerBase > it = m_Players.listIterator();
-            //while (it.hasNext()) {
-            for (let it of this.m_Players) {
-                it.Steering().SeparationOn();
+            for (let player of this.players) {
+                player.Steering().SeparationOn();
             }
 
             //create the sweet spot calculator
@@ -103,7 +93,7 @@ namespace SimpleSoccer {
         public Render(ctx: CanvasRenderingContext2D) {
             //ListIterator < PlayerBase > it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 it.Render(ctx);
             }
 
@@ -184,7 +174,7 @@ namespace SimpleSoccer {
             //now update each player
             //ListIterator<PlayerBase> it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 it.Update();
             }
 
@@ -198,9 +188,9 @@ namespace SimpleSoccer {
         public ReturnAllFieldPlayersToHome() {
             //ListIterator<PlayerBase> it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 //PlayerBase cur = it.next();
-                if (it.Role() !== player_role.goal_keeper) {
+                if (it.Role() !== PlayerRole.GoalKeeper) {
                     MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, 1, it.ID(), MessageTypes.Msg_GoHome, null);
                 }
             }
@@ -218,11 +208,11 @@ namespace SimpleSoccer {
          * to a normalized vector pointing in the direction the shot should be
          * made. Else returns false and sets heading to a zero vector
          */
-        //    public boolean CanShoot(Vector2D BallPos, double power) {
-        //        return CanShoot(BallPos, power, new Vector2D());
+        //    public boolean CanShoot(Vector2 BallPos, double power) {
+        //        return CanShoot(BallPos, power, new Vector2());
         //    }
-        public CanShoot(BallPos: Vector2D, power: number) {
-            let ShotTarget = new Vector2D();
+        public CanShoot(BallPos: Vector2, power: number) {
+            let ShotTarget = new Vector2();
             //the number of randomly created shot targets this method will test 
             let NumAttempts = ParamLoader.NumAttemptsToFindValidStrike;
             while (NumAttempts-- > 0) {
@@ -271,7 +261,7 @@ namespace SimpleSoccer {
             let finded = false;
             let result = {
                 receiver: <PlayerBase>null,
-                PassTarget: <Vector2D>null
+                PassTarget: <Vector2>null
             };
             //iterate through all this player's team members and calculate which
             //one is in a position to be passed the ball 
@@ -294,7 +284,7 @@ namespace SimpleSoccer {
                             result.receiver = it;
 
                             //and the target
-                            result.PassTarget = new Vector2D(Target.x, Target.y);
+                            result.PassTarget = new Vector2(Target.x, Target.y);
 
                             finded = true;
                         }
@@ -318,7 +308,7 @@ namespace SimpleSoccer {
          */
         public GetBestPassToReceiver(passer: PlayerBase, receiver: PlayerBase, power: number) {
             //assert(PassTarget != null);
-            let PassTarget: Vector2D;
+            let PassTarget: Vector2;
             //first, calculate how much time it will take for the ball to reach 
             //this receiver, if the receiver was to remain motionless 
             let time = this.Pitch().Ball().TimeToCoverDistance(this.Pitch().Ball().Pos(), receiver.Pos(), power);
@@ -338,8 +328,8 @@ namespace SimpleSoccer {
 
             //now calculate the pass targets which are positioned at the intercepts
             //of the tangents from the ball to the receiver's range circle.
-            let ip1 = new Vector2D();
-            let ip2 = new Vector2D();
+            let ip1 = new Vector2();
+            let ip2 = new Vector2();
 
             GetTangentPoints(receiver.Pos(), InterceptRange, this.Pitch().Ball().Pos(), ip1, ip2);
 
@@ -363,7 +353,7 @@ namespace SimpleSoccer {
                     && this.Pitch().PlayingArea().Inside(Passes[pass])
                     && this.isPassSafeFromAllOpponents(this.Pitch().Ball().Pos(), Passes[pass], receiver, power)) {
                     ClosestSoFar = dist;
-                    PassTarget = new Vector2D(Passes[pass].x, Passes[pass].y);
+                    PassTarget = new Vector2(Passes[pass].x, Passes[pass].y);
                     bResult = true;
                 }
             }
@@ -376,7 +366,7 @@ namespace SimpleSoccer {
          * test if a pass from positions 'from' to 'target' kicked with force 
          * 'PassingForce'can be intercepted by an opposing player
          */
-        public isPassSafeFromOpponent(from: Vector2D, target: Vector2D, receiver: PlayerBase, opp: PlayerBase, PassingForce: number) {
+        public isPassSafeFromOpponent(from: Vector2, target: Vector2, receiver: PlayerBase, opp: PlayerBase, PassingForce: number) {
             //move the opponent into local space.
             let ToTarget = sub(target, from);
             let ToTargetNormalized = Vec2DNormalize(ToTarget);
@@ -407,7 +397,7 @@ namespace SimpleSoccer {
 
             //calculate how long it takes the ball to cover the distance to the 
             //position orthogonal to the opponents position
-            let TimeForBall = this.Pitch().Ball().TimeToCoverDistance(new Vector2D(0, 0), new Vector2D(LocalPosOpp.x, 0), PassingForce);
+            let TimeForBall = this.Pitch().Ball().TimeToCoverDistance(new Vector2(0, 0), new Vector2(LocalPosOpp.x, 0), PassingForce);
 
             //now calculate how far the opponent can run in this time
             let reach = opp.MaxSpeed() * TimeForBall + this.Pitch().Ball().BRadius() + opp.BRadius();
@@ -427,7 +417,7 @@ namespace SimpleSoccer {
          * of the opposing team. Returns true if the pass can be made without
          * getting intercepted
          */
-        public isPassSafeFromAllOpponents(from: Vector2D, target: Vector2D, receiver: PlayerBase, PassingForce: number) {
+        public isPassSafeFromAllOpponents(from: Vector2, target: Vector2, receiver: PlayerBase, PassingForce: number) {
             //ListIterator<PlayerBase> opp = Opponents().Members().listIterator();
             //while (opp.hasNext()) {
             for (let opp of this.Opponents().Members()) {
@@ -445,7 +435,7 @@ namespace SimpleSoccer {
          * returns true if an opposing player is within the radius of the position
          * given as a par ameter
          */
-        public isOpponentWithinRadius(pos: Vector2D, rad: number) {
+        public isOpponentWithinRadius(pos: Vector2, rad: number) {
             //ListIterator<PlayerBase> it = Opponents().Members().listIterator();
             //while (it.hasNext()) {
             for (let it of this.Opponents().Members()) {
@@ -487,21 +477,18 @@ namespace SimpleSoccer {
 
             let BestPlayer: PlayerBase = null;
 
-            //ListIterator < PlayerBase > it = m_Players.listIterator();
-            //while (it.hasNext()) {
-            for (let it of this.m_Players) {
-                //PlayerBase cur = it.next();
+            for (let player of this.players) {
                 //only attackers utilize the BestSupportingSpot
-                if ((it.Role() === player_role.attacker) && (it !== this.m_pControllingPlayer)) {
+                if ((player.Role() === PlayerRole.Attacker) && (player !== this.m_pControllingPlayer)) {
                     //calculate the dist. Use the squared value to avoid sqrt
-                    let dist = Vec2DDistanceSq(it.Pos(), this.m_pSupportSpotCalc.GetBestSupportingSpot());
+                    let dist = Vec2DDistanceSq(player.Pos(), this.m_pSupportSpotCalc.GetBestSupportingSpot());
 
                     //if the distance is the closest so far and the player is not a
                     //goalkeeper and the player is not the one currently controlling
                     //the ball, keep a record of this player
                     if ((dist < ClosestSoFar)) {
                         ClosestSoFar = dist;
-                        BestPlayer = it;
+                        BestPlayer = player;
                     }
                 }
             }
@@ -510,23 +497,27 @@ namespace SimpleSoccer {
         }
 
         public Members() {
-            return this.m_Players;
+            return this.players;
         }
 
-        public GetFSM() {
-            return this.stateMachine;
+        //public GetFSM() {
+        //    return this.stateMachine;
+        //}
+
+        public ChangeState(state: State<SoccerTeam>) {
+            this.stateMachine.ChangeState(state);
         }
 
         public HomeGoal() {
-            return this.m_pHomeGoal;
+            return this.homeGoal;
         }
 
         public OpponentsGoal() {
-            return this.m_pOpponentsGoal;
+            return this.opponentsGoal;
         }
 
         public Pitch() {
-            return this.m_pPitch;
+            return this.pitch;
         }
 
         public Opponents() {
@@ -555,7 +546,7 @@ namespace SimpleSoccer {
 
         public GetSupportSpot() {
             let v = this.m_pSupportSpotCalc.GetBestSupportingSpot();
-            return new Vector2D(v.x, v.y);
+            return new Vector2(v.x, v.y);
         }
 
         public SupportingPlayer() {
@@ -613,7 +604,7 @@ namespace SimpleSoccer {
         public SetPlayerHomeRegion(plyr: number, region: number) {
             //assert ((plyr >= 0) && (plyr < (int) m_Players.size()));
 
-            this.m_Players[plyr].SetHomeRegion(region);
+            this.players[plyr].SetHomeRegion(region);
         }
 
         public DetermineBestSupportingPosition() {
@@ -626,9 +617,9 @@ namespace SimpleSoccer {
         public UpdateTargetsOfWaitingPlayers() {
             //ListIterator<PlayerBase> it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 //PlayerBase cur = it.next();
-                if (it.Role() !== player_role.goal_keeper) {
+                if (it.Role() !== PlayerRole.GoalKeeper) {
                     //cast to a field player
                     let plyr = <FieldPlayer>it;
 
@@ -645,7 +636,7 @@ namespace SimpleSoccer {
         public AllPlayersAtHome() {
             //ListIterator<PlayerBase> it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 if (it.InHomeRegion() === false) {
                     return false;
                 }
@@ -658,14 +649,14 @@ namespace SimpleSoccer {
          * creates all the players for this team
          */
         private CreatePlayers() {
-            let m_Players = this.m_Players;
+            let m_Players = this.players;
             if (this.isBlue()) {
                 //goalkeeper
                 m_Players.push(new GoalKeeper(this,
                     1,
                     TendGoal.Instance(),
-                    new Vector2D(0, 1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, 1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
@@ -676,62 +667,62 @@ namespace SimpleSoccer {
                 m_Players.push(new FieldPlayer(this,
                     6,
                     Wait.Instance(),
-                    new Vector2D(0, 1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, 1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.attacker));
+                    PlayerRole.Attacker));
 
 
 
                 m_Players.push(new FieldPlayer(this,
                     8,
                     Wait.Instance(),
-                    new Vector2D(0, 1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, 1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.attacker));
+                    PlayerRole.Attacker));
 
 
                 m_Players.push(new FieldPlayer(this,
                     3,
                     Wait.Instance(),
-                    new Vector2D(0, 1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, 1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.defender));
+                    PlayerRole.Defender));
 
 
                 m_Players.push(new FieldPlayer(this,
                     5,
                     Wait.Instance(),
-                    new Vector2D(0, 1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, 1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.defender));
+                    PlayerRole.Defender));
 
             } else {
                 //goalkeeper
                 m_Players.push(new GoalKeeper(this,
                     16,
                     TendGoal.Instance(),
-                    new Vector2D(0, -1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, -1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
@@ -743,59 +734,59 @@ namespace SimpleSoccer {
                 m_Players.push(new FieldPlayer(this,
                     9,
                     Wait.Instance(),
-                    new Vector2D(0, -1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, -1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.attacker));
+                    PlayerRole.Attacker));
 
                 m_Players.push(new FieldPlayer(this,
                     11,
                     Wait.Instance(),
-                    new Vector2D(0, -1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, -1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.attacker));
+                    PlayerRole.Attacker));
 
 
                 m_Players.push(new FieldPlayer(this,
                     12,
                     Wait.Instance(),
-                    new Vector2D(0, -1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, -1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.defender));
+                    PlayerRole.Defender));
 
 
                 m_Players.push(new FieldPlayer(this,
                     14,
                     Wait.Instance(),
-                    new Vector2D(0, -1),
-                    new Vector2D(0.0, 0.0),
+                    new Vector2(0, -1),
+                    new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
                     ParamLoader.PlayerMaxTurnRate,
                     ParamLoader.PlayerScale,
-                    player_role.defender));
+                    PlayerRole.Defender));
 
             }
 
             //register the players with the entity manager
             //ListIterator < PlayerBase > it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 EntityManager.EntityMgr.RegisterEntity(it);
             }
         }
@@ -809,7 +800,7 @@ namespace SimpleSoccer {
 
             //ListIterator < PlayerBase > it = m_Players.listIterator();
             //while (it.hasNext()) {
-            for (let it of this.m_Players) {
+            for (let it of this.players) {
                 //PlayerBase cur = it.next();
                 //calculate the dist. Use the squared value to avoid sqrt
                 let dist = Vec2DDistanceSq(it.Pos(), this.Pitch().Ball().Pos());

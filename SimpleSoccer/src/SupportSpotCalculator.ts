@@ -7,7 +7,7 @@
 namespace SimpleSoccer {
     //a data structure to hold the values and positions of each spot
     class SupportSpot {
-        constructor(public position: Vector2D, public score: number) {
+        constructor(public position: Vector2, public score: number) {
         }
     }
 
@@ -37,9 +37,9 @@ namespace SimpleSoccer {
             for (let x = 0; x < (numX / 2) - 1; ++x) {
                 for (let y = 0; y < numY; ++y) {
                     if (team.isBlue()) {
-                        this.spots.push(new SupportSpot(new Vector2D(left + x * SliceX, top + y * SliceY), 0.0));
+                        this.spots.push(new SupportSpot(new Vector2(left + x * SliceX, top + y * SliceY), 0.0));
                     } else {
-                        this.spots.push(new SupportSpot(new Vector2D(right - x * SliceX, top + y * SliceY), 0.0));
+                        this.spots.push(new SupportSpot(new Vector2(right - x * SliceX, top + y * SliceY), 0.0));
                     }
                 }
             }

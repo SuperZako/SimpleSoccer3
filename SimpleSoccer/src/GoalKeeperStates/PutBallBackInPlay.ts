@@ -7,8 +7,8 @@
 //import static SimpleSoccer.ParamLoader.Prm;
 //import static SimpleSoccer.MessageTypes.*;
 //import SimpleSoccer.PlayerBase;
-//import common.D2.Vector2D;
-//import static common.D2.Vector2D.*;
+//import common.D2.Vector2;
+//import static common.D2.Vector2.*;
 //import common.FSM.State;
 //import common.Messaging.Telegram;
 //import static common.Messaging.MessageDispatcher.*;
@@ -45,7 +45,7 @@ namespace SimpleSoccer {
         //@Override
         public Execute(keeper: GoalKeeper) {
 
-            //let BallTarget = new Vector2D();
+            //let BallTarget = new Vector2();
 
             //ObjectRef < PlayerBase > receiverRef = new ObjectRef<PlayerBase>(receiver);
             //let receiverRef = receiver;
@@ -70,7 +70,7 @@ namespace SimpleSoccer {
                 return;
             }
 
-            keeper.SetVelocity(new Vector2D());
+            keeper.SetVelocity(new Vector2());
         }
 
         //@Override
