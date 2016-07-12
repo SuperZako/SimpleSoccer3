@@ -22,6 +22,14 @@ namespace SimpleSoccer {
         //        y = 0.0;
         //    }
 
+        static UnitX() {
+            return new Vector2D(1, 0);
+        }
+
+        static UnitY() {
+            return new Vector2D(0, 1);
+        }
+
         constructor(public x = 0, public y = 0) {
 
         }

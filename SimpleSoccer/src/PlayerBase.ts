@@ -32,9 +32,7 @@ namespace SimpleSoccer {
     export abstract class PlayerBase extends MovingEntity {
         private static m_Members = <PlayerBase[]>[]
 
-        public static GetAllMembers() {
-            return this.m_Members;
-        }
+
         //this player's role in the team
         protected m_PlayerRole: player_role;
         //a pointer to this player's team
@@ -50,9 +48,9 @@ namespace SimpleSoccer {
         protected m_dDistSqToBall: number;
 
         //the vertex buffer
-        protected m_vecPlayerVB = <Vector2D[]>[];//new LinkedList<Vector2D>();
+        protected m_vecPlayerVB = <Vector2D[]>[]; // new LinkedList<Vector2D>();
         //the buffer for the transformed vertices
-        protected m_vecPlayerVBTrans = <Vector2D[]>[];// new LinkedList<Vector2D>();
+        protected m_vecPlayerVBTrans = <Vector2D[]>[]; // new LinkedList<Vector2D>();
 
         //----------------------------- ctor -------------------------------------
         //------------------------------------------------------------------------
@@ -114,6 +112,10 @@ namespace SimpleSoccer {
             PlayerBase.m_Members.push(this);
         }
 
+        public static GetAllMembers() {
+            return this.m_Members;
+        }
+
         //    @Override
         //    protected void finalize() throws Throwable {
         //        super.finalize();
@@ -168,7 +170,7 @@ namespace SimpleSoccer {
             if (this.Team().SupportingPlayer() == null) {
                 let BestSupportPly = this.Team().DetermineBestSupportingAttacker();
                 this.Team().SetSupportingPlayer(BestSupportPly);
-                MessageDispatcher.Dispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_SupportAttacker, null);
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_SupportAttacker, null);
             }
 
             let BestSupportPly = this.Team().DetermineBestSupportingAttacker();
@@ -176,15 +178,15 @@ namespace SimpleSoccer {
             //if the best player available to support the attacker changes, update
             //the pointers and send messages to the relevant players to update their
             //states
-            if (BestSupportPly != null && (BestSupportPly != this.Team().SupportingPlayer())) {
+            if (BestSupportPly !== null && (BestSupportPly !== this.Team().SupportingPlayer())) {
 
-                if (this.Team().SupportingPlayer() != null) {
-                    MessageDispatcher.Dispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_GoHome, null);
+                if (this.Team().SupportingPlayer() !== null) {
+                    MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_GoHome, null);
                 }
 
                 this.Team().SetSupportingPlayer(BestSupportPly);
 
-                MessageDispatcher.Dispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_SupportAttacker, null);
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, this.ID(), this.Team().SupportingPlayer().ID(), MessageTypes.Msg_SupportAttacker, null);
             }
         }
 
@@ -214,7 +216,7 @@ namespace SimpleSoccer {
          *        of his home region
          */
         public InHomeRegion() {
-            if (this.m_PlayerRole == player_role.goal_keeper) {
+            if (this.m_PlayerRole === player_role.goal_keeper) {
                 return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), Region.normal);
             } else {
                 return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), Region.halfsize);
@@ -242,7 +244,7 @@ namespace SimpleSoccer {
          * @return true if the player is the closest player in his team to the ball
          */
         public isClosestTeamMemberToBall() {
-            return this.Team().PlayerClosestToBall() == this;
+            return this.Team().PlayerClosestToBall() === this;
         }
 
         /**
@@ -271,7 +273,7 @@ namespace SimpleSoccer {
          * @return true if this player is the controlling player
          */
         public isControllingPlayer() {
-            return this.Team().ControllingPlayer() == this;
+            return this.Team().ControllingPlayer() === this;
         }
 
         /** 

@@ -25,7 +25,7 @@ namespace SimpleSoccer {
         //    //define(SHOW_MESSAGING_INFO);
         //}
         ////to make life easier...
-        static Dispatcher = new MessageDispatcher();
+        //static Dispatcher = new MessageDispatcher();
         ////to make code easier to read
         //public static final double SEND_MSG_IMMEDIATELY = 0.0;
         //public static final int NO_ADDITIONAL_INFO = 0;
@@ -34,14 +34,14 @@ namespace SimpleSoccer {
         ////because of the benefit of automatic sorting and avoidance
         ////of duplicates. Messages are sorted by their dispatch time.
         //private TreeSet<Telegram> PriorityQ = new TreeSet<Telegram>();
-        PriorityQ: Telegram[] = [];
+        static PriorityQ: Telegram[] = [];
 
         /** 
          * this method is utilized by DispatchMsg or DispatchDelayedMessages.
          * This method calls the message handling member function of the receiving
          * entity, pReceiver, with the newly created telegram
          */
-        private Discharge(pReceiver: BaseGameEntity, telegram: Telegram) {
+        static Discharge(pReceiver: BaseGameEntity, telegram: Telegram) {
             if (!pReceiver.HandleMessage(telegram)) {
                 //telegram could not be handled
                 //if (def(SHOW_MESSAGING_INFO)) {
@@ -79,7 +79,7 @@ namespace SimpleSoccer {
         //    DispatchMsg(delay, sender, receiver, msg, null);
         //}
 
-        public DispatchMsg(delay: number, sender: number, receiver: number, msg: MessageTypes, AdditionalInfo: Object) {
+        static DispatchMsg(delay: number, sender: number, receiver: number, msg: MessageTypes, AdditionalInfo: Object) {
 
             //get a pointer to the receiver
             let pReceiver = EntityManager.EntityMgr.GetEntityFromID(receiver);

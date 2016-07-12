@@ -127,7 +127,7 @@ namespace SimpleSoccer {
                     //}
 
                     //let the receiver know a pass is coming 
-                    MessageDispatcher.Dispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, player.ID(), receiver.ID(), MessageTypes.Msg_ReceiveBall, receiver.Pos());
+                    MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, player.ID(), receiver.ID(), MessageTypes.Msg_ReceiveBall, receiver.Pos());
 
 
 

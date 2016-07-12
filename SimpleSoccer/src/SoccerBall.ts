@@ -23,29 +23,45 @@
 namespace SimpleSoccer {
     export class SoccerBall extends MovingEntity {
 
-        ////keeps a record of the ball's position at the last update
+        // keeps a record of the ball's position at the last update
         private m_vOldPos: Vector2D;
-        ////a local reference to the Walls that make up the pitch boundary
+        // a local reference to the Walls that make up the pitch boundary
         private m_PitchBoundary: Wall2D[];
 
         public constructor(pos: Vector2D, BallSize: number, mass: number, PitchBoundary: Wall2D[]) {
 
-            //set up the base class
+            // set up the base class
             super(pos, BallSize, new Vector2D(0, 0),
-                -1.0, //max speed - unused
+                -1.0, // max speed - unused
                 new Vector2D(0, 1),
                 mass,
-                new Vector2D(1.0, 1.0), //scale     - unused
-                0, //turn rate - unused
-                0);                  //max force - unused
+                new Vector2D(1.0, 1.0), // scale     - unused
+                0, // turn rate - unused
+                0);                  // max force - unused
             this.m_PitchBoundary = PitchBoundary;
+        }
+
+        /**
+         *  this can be used to vary the accuracy of a player's kick. Just call it 
+         *  prior to kicking the ball using the ball's position and the ball target as
+         *  parameters.
+        */
+        public static AddNoiseToKick(BallPos: Vector2D, BallTarget: Vector2D) {
+
+            let displacement = (Pi - Pi * ParamLoader.PlayerKickingAccuracy) * RandInRange(-1, 1); // RandomClamped();
+
+            let toTarget = sub(BallTarget, BallPos);
+
+            Vec2DRotateAroundOrigin(toTarget, displacement);
+
+            return add(toTarget, BallPos);
         }
 
         /**
          * tests to see if the ball has collided with a ball and reflects 
          * the ball's velocity accordingly
          */
-        TestCollisionWithWalls(walls: Wall2D[]) {
+        public TestCollisionWithWalls(walls: Wall2D[]) {
             //test ball against each wall, find out which is closest
             let idxClosest = -1;
 
@@ -61,6 +77,7 @@ namespace SimpleSoccer {
              * If it does then store the index into the closest intersecting wall
              */
             for (let w = 0; w < walls.length; ++w) {
+                let wall = walls[w];
                 //assuming a collision if the ball continued on its current heading 
                 //calculate the point on the ball that would hit the wall. This is 
                 //simply the wall's normal(inversed) multiplied by the ball's radius
@@ -68,8 +85,8 @@ namespace SimpleSoccer {
                 let ThisCollisionPoint = sub(this.Pos(), (mul(this.BRadius(), walls[w].Normal())));
 
                 //calculate exactly where the collision point will hit the plane    
-                if (WhereIsPoint(ThisCollisionPoint, walls[w].From(), walls[w].Normal()) == span_type.plane_backside) {
-                    let DistToWall = DistanceToRayPlaneIntersection(ThisCollisionPoint, walls[w].Normal(), walls[w].From(), walls[w].Normal());
+                if (WhereIsPoint(ThisCollisionPoint, walls[w].From(), walls[w].Normal()) === span_type.plane_backside) {
+                    let DistToWall = DistanceToRayPlaneIntersection(ThisCollisionPoint, wall.Normal(), wall.From(), wall.Normal());
 
                     IntersectionPoint = add(ThisCollisionPoint, (mul(DistToWall, walls[w].Normal())));
 
@@ -83,7 +100,11 @@ namespace SimpleSoccer {
                 //segment
                 let OnLineSegment = false;
 
-                if (LineIntersection2D(walls[w].From(), walls[w].To(), sub(ThisCollisionPoint, mul(20.0, walls[w].Normal())), add(ThisCollisionPoint, mul(20.0, walls[w].Normal())))) {
+                let a = wall.From();
+                let b = wall.To();
+                let c = sub(ThisCollisionPoint, mul(20.0, wall.Normal()));
+                let d = add(ThisCollisionPoint, mul(20.0, wall.Normal()));
+                if (LineIntersection2D(a, b, c, d)) {
 
                     OnLineSegment = true;
                 }
@@ -150,7 +171,7 @@ namespace SimpleSoccer {
 
             //    gdi.Circle(m_vPosition, m_dBoundingRadius);
             ctx.beginPath();
-            ctx.fillStyle = 'black';
+            ctx.fillStyle = "black";
             ctx.arc(this.m_vPosition.x, this.m_vPosition.y, this.m_dBoundingRadius, 0, Math.PI * 2, false);
             ctx.fill();
             //    /*
@@ -267,20 +288,6 @@ namespace SimpleSoccer {
             this.m_vVelocity.Zero();
         }
 
-        /**
-         *  this can be used to vary the accuracy of a player's kick. Just call it 
-         *  prior to kicking the ball using the ball's position and the ball target as
-         *  parameters.
-         */
-        public static AddNoiseToKick(BallPos: Vector2D, BallTarget: Vector2D) {
 
-            let displacement = (Pi - Pi * ParamLoader.PlayerKickingAccuracy) * RandInRange(-1,1);//RandomClamped();
-
-            let toTarget = sub(BallTarget, BallPos);
-
-            Vec2DRotateAroundOrigin(toTarget, displacement);
-
-            return add(toTarget, BallPos);
-        }
     }
 }

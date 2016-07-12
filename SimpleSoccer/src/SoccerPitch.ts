@@ -37,76 +37,64 @@ namespace SimpleSoccer {
         private m_pRedGoal: Goal;
         private m_pBlueGoal: Goal;
 
-        //container for the boundary walls
-        private m_vecWalls: Wall2D[] = [];//new ArrayList<Wall2D>();
+        // container for the boundary walls
+        private m_vecWalls: Wall2D[] = []; // new ArrayList<Wall2D>();
 
-        //defines the dimensions of the playing area
+        // defines the dimensions of the playing area
         private m_pPlayingArea: Region;
 
-        //the playing field is broken up into regions that the team
-        //can make use of to implement strategies.
+        // the playing field is broken up into regions that the team
+        // can make use of to implement strategies.
         private m_Regions: Region[];
 
-        //true if a goal keeper has possession
+        // true if a goal keeper has possession
         private m_bGoalKeeperHasBall: boolean;
 
-        //true if the game is in play. Set to false whenever the players
-        //are getting ready for kickoff
+        // true if the game is in play. Set to false whenever the players
+        // are getting ready for kickoff
         private m_bGameOn: boolean;
-        //set true to pause the motion
+        // set true to pause the motion
         private m_bPaused: boolean;
-        //local copy of client window dimensions
+        // local copy of client window dimensions
         private m_cxClient: number;
         private m_cyClient: number;
 
 
-        /**
-         ** this instantiates the regions the players utilize to  position
-         ** themselves
-         */
-        private CreateRegions(width: number, height: number) {
-            //index into the vector
-            let m_Regions = this.m_Regions;
-            let idx = m_Regions.length - 1;
-
-            for (let col = 0; col < this.NumRegionsHorizontal; ++col) {
-                for (let row = 0; row < this.NumRegionsVertical; ++row) {
-                    m_Regions[idx] = new Region(
-                        this.PlayingArea().Left() + col * width,
-                        this.PlayingArea().Top() + row * height,
-                        this.PlayingArea().Left() + (col + 1) * width,
-                        this.PlayingArea().Top() + (row + 1) * height,
-                        idx);
-                    --idx;
-                }
-            }
-        }
 
         //------------------------------- ctor -----------------------------------
-        //------------------------------------------------------------------------
         constructor(cx: number, cy: number) {
             this.m_cxClient = cx;
             this.m_cyClient = cy;
             this.m_bPaused = false;
             this.m_bGoalKeeperHasBall = false;
-            this.m_Regions = new Array(this.NumRegionsHorizontal * this.NumRegionsVertical);
+
+            let NumRegionsHorizontal = this.NumRegionsHorizontal;
+            let NumRegionsVertical = this.NumRegionsVertical;
+            this.m_Regions = new Array(NumRegionsHorizontal * NumRegionsVertical);
+
             this.m_bGameOn = true;
-            //define the playing area
+            // define the playing area
             this.m_pPlayingArea = new Region(20, 20, cx - 20, cy - 20);
+            let playingArea = this.m_pPlayingArea;
 
-            //create the regions  
-            this.CreateRegions(this.PlayingArea().Width() / this.NumRegionsHorizontal, this.PlayingArea().Height() / this.NumRegionsVertical);
+            // create the regions  
+            this.CreateRegions(playingArea.Width() / NumRegionsHorizontal, playingArea.Height() / NumRegionsVertical);
 
-            //create the goals
-            this.m_pRedGoal = new Goal(new Vector2D(this.m_pPlayingArea.Left(), (cy - ParamLoader.GoalWidth) / 2), new Vector2D(this.m_pPlayingArea.Left(), cy - (cy - ParamLoader.GoalWidth) / 2), new Vector2D(1, 0));
+            // create the goals
+            let goalWidth = ParamLoader.GoalWidth;
+            let left = new Vector2D(playingArea.Left(), (cy - goalWidth) / 2);
+            let right = new Vector2D(playingArea.Left(), cy - (cy - goalWidth) / 2);
+            this.m_pRedGoal = new Goal(left, right, new Vector2D(1, 0));
 
 
-
-            this.m_pBlueGoal = new Goal(new Vector2D(this.m_pPlayingArea.Right(), (cy - ParamLoader.GoalWidth) / 2), new Vector2D(this.m_pPlayingArea.Right(), cy - (cy - ParamLoader.GoalWidth) / 2), new Vector2D(-1, 0));
+            left = new Vector2D(this.m_pPlayingArea.Right(), (cy - ParamLoader.GoalWidth) / 2);
+            right = new Vector2D(this.m_pPlayingArea.Right(), cy - (cy - ParamLoader.GoalWidth) / 2);
+            this.m_pBlueGoal = new Goal(left, right, new Vector2D(-1, 0));
 
 
             //create the soccer ball
-            this.m_pBall = new SoccerBall(new Vector2D(this.m_cxClient / 2.0, this.m_cyClient / 2.0), ParamLoader.BallSize, ParamLoader.BallMass, this.m_vecWalls);
+            let position = new Vector2D(this.m_cxClient / 2.0, this.m_cyClient / 2.0);
+            this.m_pBall = new SoccerBall(position, ParamLoader.BallSize, ParamLoader.BallMass, this.m_vecWalls);
 
 
             //create the teams 
@@ -190,7 +178,7 @@ namespace SimpleSoccer {
             //    gdi.DarkGreenPen();
             //    gdi.DarkGreenBrush();
             //    gdi.Rect(0, 0, m_cxClient, m_cyClient);
-            ctx.fillStyle = 'rgb(0, 100, 0)';
+            ctx.fillStyle = "rgb(0, 100, 0)";
             ctx.fillRect(0, 0, this.m_cxClient, this.m_cyClient);
 
             //    //render regions
@@ -205,7 +193,7 @@ namespace SimpleSoccer {
             //    gdi.RedPen();
             //    gdi.Rect(m_pPlayingArea.Left(), (m_cyClient - Prm.GoalWidth) / 2, m_pPlayingArea.Left() + 40,
             //        m_cyClient - (m_cyClient - Prm.GoalWidth) / 2);
-            ctx.strokeStyle = 'rgb(255, 0, 0)';
+            ctx.strokeStyle = "rgb(255, 0, 0)";
             ctx.strokeRect(this.m_pPlayingArea.Left(), (this.m_cyClient - ParamLoader.GoalWidth) / 2, 40, ParamLoader.GoalWidth);
 
             //    gdi.BluePen();
@@ -279,7 +267,7 @@ namespace SimpleSoccer {
         //    return m_vecWalls;
         //}
 
-        Ball() {
+        public Ball() {
             return this.m_pBall;
         }
 
@@ -299,5 +287,28 @@ namespace SimpleSoccer {
         public SetGameOff() {
             this.m_bGameOn = false;
         }
+
+        /**
+         ** this instantiates the regions the players utilize to  position
+         ** themselves
+        */
+        private CreateRegions(width: number, height: number) {
+            //index into the vector
+            let m_Regions = this.m_Regions;
+            let idx = m_Regions.length - 1;
+
+            for (let col = 0; col < this.NumRegionsHorizontal; ++col) {
+                for (let row = 0; row < this.NumRegionsVertical; ++row) {
+                    m_Regions[idx] = new Region(
+                        this.PlayingArea().Left() + col * width,
+                        this.PlayingArea().Top() + row * height,
+                        this.PlayingArea().Left() + (col + 1) * width,
+                        this.PlayingArea().Top() + (row + 1) * height,
+                        idx);
+                    --idx;
+                }
+            }
+        }
+
     }
 }

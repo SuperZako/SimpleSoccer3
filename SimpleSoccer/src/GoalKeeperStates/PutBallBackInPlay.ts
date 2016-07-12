@@ -59,7 +59,7 @@ namespace SimpleSoccer {
                 keeper.Pitch().SetGoalKeeperHasBall(false);
 
                 //let the receiving player know the ball's comin' at him
-                MessageDispatcher.Dispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, keeper.ID(), result.receiver.ID(), MessageTypes.Msg_ReceiveBall, result.PassTarget);
+                MessageDispatcher.DispatchMsg(SEND_MSG_IMMEDIATELY, keeper.ID(), result.receiver.ID(), MessageTypes.Msg_ReceiveBall, result.PassTarget);
 
                 //go back to tending the goal   
                 keeper.GetFSM().ChangeState(TendGoal.Instance());

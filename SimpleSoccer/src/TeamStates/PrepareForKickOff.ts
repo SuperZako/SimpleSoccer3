@@ -9,21 +9,23 @@
 namespace SimpleSoccer {
     export class PrepareForKickOff extends State<SoccerTeam> {
 
-
-        public getName() {
-            return "PrepareForKickOff";
-        }
         private static instance = new PrepareForKickOff();
 
-        //private PrepareForKickOff() {
-        //}
+        constructor() { super(); }
 
-        //this is a singleton
         public static Instance() {
             return this.instance;
         }
 
-        //@Override
+        public getName() {
+            return "PrepareForKickOff";
+        }
+
+
+        // private PrepareForKickOff() {
+        // }
+
+        // @Override
         public Enter(team: SoccerTeam) {
             //reset key player pointers
             team.SetControllingPlayer(null);
@@ -52,5 +54,7 @@ namespace SimpleSoccer {
         public OnMessage(e: SoccerTeam, t: Telegram) {
             return false;
         }
+
+
     }
 }

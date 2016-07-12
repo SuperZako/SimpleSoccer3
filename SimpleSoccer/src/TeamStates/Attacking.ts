@@ -12,20 +12,19 @@
 namespace SimpleSoccer {
     export class Attacking extends State<SoccerTeam> {
 
-        public getName() {
-            return "Attacking";
-        }
         private static instance = new Attacking();
 
-        //private Attacking() {
-        //}
+        constructor() { super(); }
 
-        //this is a singleton
+        // this is a singleton
         public static Instance() {
             return this.instance;
         }
+        public getName() {
+            return "Attacking";
+        }
 
-        //@Override
+        // @Override
         public Enter(team: SoccerTeam) {
             //if (def(DEBUG_TEAM_STATES)) {
             //    debug_con.print(team.Name()).print(" entering Attacking state").print("");
@@ -36,7 +35,7 @@ namespace SimpleSoccer {
             const RedRegions = [16, 3, 5, 9, 13];
 
             //set up the player's home regions
-            if (team.Color() == SoccerTeam.blue) {
+            if (team.Color() === SoccerTeam.blue) {
                 ChangePlayerHomeRegions(team, BlueRegions);
             } else {
                 ChangePlayerHomeRegions(team, RedRegions);
@@ -48,7 +47,7 @@ namespace SimpleSoccer {
             team.UpdateTargetsOfWaitingPlayers();
         }
 
-        //@Override
+        // @Override
         public Execute(team: SoccerTeam) {
             //if this team is no longer in control change states
             if (!team.InControl()) {
@@ -60,13 +59,13 @@ namespace SimpleSoccer {
             team.DetermineBestSupportingPosition();
         }
 
-        //@Override
+        // @Override
         public Exit(team: SoccerTeam) {
             //there is no supporting player for defense
             team.SetSupportingPlayer(null);
         }
 
-        //@Override
+        // @Override
         public OnMessage(e: SoccerTeam, t: Telegram) {
             return false;
         }

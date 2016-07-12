@@ -21,8 +21,8 @@ namespace SimpleSoccer {
     //a data structure to hold the values and positions of each spot
     class SupportSpot {
 
-        m_vPos: Vector2D;
-        m_dScore: number;
+        public m_vPos: Vector2D;
+        public m_dScore: number;
 
         constructor(pos: Vector2D, value: number) {
             this.m_vPos = new Vector2D(pos.x, pos.y);
@@ -35,7 +35,7 @@ namespace SimpleSoccer {
 
 
         private m_pTeam: SoccerTeam;
-        private m_Spots = <SupportSpot[]>[];// new ArrayList<SupportSpot>();
+        private m_Spots = <SupportSpot[]>[]; // new ArrayList<SupportSpot>();
         //a pointer to the highest valued spot from the last update
         private m_pBestSupportingSpot: SupportSpot;
         //this will regulate how often the spots are calculated (default is
@@ -43,7 +43,6 @@ namespace SimpleSoccer {
         private m_pRegulator: Regulator;
 
         //------------------------------- ctor ----------------------------------------
-        //-----------------------------------------------------------------------------
          constructor(numX: number, numY: number, team: SoccerTeam) {
             this.m_pBestSupportingSpot = null;
             this.m_pTeam = team;
@@ -62,7 +61,7 @@ namespace SimpleSoccer {
 
             for (let x = 0; x < (numX / 2) - 1; ++x) {
                 for (let y = 0; y < numY; ++y) {
-                    if (this.m_pTeam.Color() == SoccerTeam.blue) {
+                    if (this.m_pTeam.Color() === SoccerTeam.blue) {
                         this.m_Spots.push(new SupportSpot(new Vector2D(left + x * SliceX, top + y * SliceY), 0.0));
                     } else {
                         this.m_Spots.push(new SupportSpot(new Vector2D(right - x * SliceX, top + y * SliceY), 0.0));

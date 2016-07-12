@@ -1,4 +1,6 @@
-﻿let soccerPitch = new SimpleSoccer.SoccerPitch(SimpleSoccer.WindowWidth, SimpleSoccer.WindowHeight);
+﻿/// <reference path="./src/SoccerPitch.ts" />
+
+let soccerPitch = new SimpleSoccer.SoccerPitch(SimpleSoccer.WindowWidth, SimpleSoccer.WindowHeight);
 /* canvas要素のノードオブジェクト */
 let canvas: HTMLCanvasElement;
 

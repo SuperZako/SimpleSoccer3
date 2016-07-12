@@ -103,6 +103,7 @@
     <Content Include="src\Params.ini" />
     <Content Include="src\README" />
     <Content Include="build\out.js.map" />
+    <Content Include="tslint.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
