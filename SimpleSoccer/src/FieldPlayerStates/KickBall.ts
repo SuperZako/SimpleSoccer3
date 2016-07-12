@@ -137,11 +137,12 @@ namespace SimpleSoccer {
                 player.FindSupport();
 
                 return;
-            } else { // cannot shoot or pass, so dribble the ball upfield
-                player.FindSupport();
-
-                player.ChangeState(Dribble.Instance());
             }
+            // cannot shoot or pass, so dribble the ball upfield
+            player.FindSupport();
+
+            player.ChangeState(Dribble.Instance());
+
         }
 
         //@Override

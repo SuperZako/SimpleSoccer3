@@ -18,8 +18,6 @@ namespace SimpleSoccer {
 
     export const Pi = Math.PI;
     export const TwoPi = Math.PI * 2;
-    export const HalfPi = Math.PI / 2;
-    export const QuarterPi = Math.PI / 4;
 
     //compares two real numbers. Returns true if they are equal
     export function isEqual(a: number, b: number) {

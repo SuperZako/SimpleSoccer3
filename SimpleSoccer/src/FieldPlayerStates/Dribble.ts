@@ -1,18 +1,6 @@
 /**
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer.FieldPlayerStates;
-
-//import common.Messaging.Telegram;
-//import static SimpleSoccer.DEFINE.*;
-//import SimpleSoccer.FieldPlayer;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import common.D2.Vector2;
-//import common.D2.Vector2.*;
-//import static common.D2.Transformation.Vec2DRotateAroundOrigin;
-//import static common.Debug.DbgConsole.*;
-//import common.FSM.State;
-//import static common.misc.utils.QuarterPi;
 namespace SimpleSoccer {
     export class Dribble extends State<FieldPlayer> {
 
@@ -56,7 +44,7 @@ namespace SimpleSoccer {
                 //calculate the sign (+/-) of the angle between the player heading and the 
                 //facing direction of the goal so that the player rotates around in the 
                 //correct direction
-                let angle = QuarterPi * -1 * player.Team().HomeGoal().Facing().Sign(player.Heading());
+                let angle = MathHelper.PiOver4 * -1 * player.Team().HomeGoal().Facing().Sign(player.Heading());
 
                 Vec2DRotateAroundOrigin(direction, angle);
 
