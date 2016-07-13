@@ -3,9 +3,8 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
-//package SimpleSoccer.TeamStates;
+/// <reference path="../SoccerTeam.ts" />
 
-//import SimpleSoccer.SoccerTeam;
 namespace SimpleSoccer {
     //export class TeamStates {
 

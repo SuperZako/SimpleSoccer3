@@ -1,4 +1,7 @@
-﻿/// <reference path="./src/SoccerPitch.ts" />
+﻿/// <reference path="./src/THREEx/THREEx.KeyboardState.ts" />
+/// <reference path="./src/SoccerPitch.ts" />
+
+var keyboard = new THREEx.KeyboardState();
 
 let soccerPitch = new SimpleSoccer.SoccerPitch(SimpleSoccer.WindowWidth, SimpleSoccer.WindowHeight);
 /* canvas要素のノードオブジェクト */
@@ -16,6 +19,10 @@ function animationLoop() {
     soccerPitch.Render(ctx);
 
     requestAnimationFrame(animationLoop);
+
+    if (keyboard.pressed("up")) {
+        console.log("PressKey: Up");
+    }
 }
 
 window.onload = () => {

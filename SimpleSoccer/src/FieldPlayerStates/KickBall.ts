@@ -42,13 +42,13 @@ namespace SimpleSoccer {
         public Execute(player: FieldPlayer) {
             //calculate the dot product of the vector pointing to the ball
             //and the player's heading
-            let ToBall = sub(player.Ball().Pos(), player.Pos());
+            let ToBall = Vector2.subtract(player.Ball().Pos(), player.Pos());
             let dot = player.Heading().dot(Vec2DNormalize(ToBall));
 
             //cannot kick the ball if the goalkeeper is in possession or if it is 
             //behind the player or if there is already an assigned receiver. So just
             //continue chasing the ball
-            if (player.Team().Receiver() != null || player.Pitch().GoalKeeperHasBall() || (dot < 0)) {
+            if (player.Team().Receiver() !== null || player.Pitch().GoalKeeperHasBall() || (dot < 0)) {
                 //if (def(PLAYER_STATE_INFO_ON)) {
                 //    debug_con.print("Goaly has ball / ball behind player").print("");
                 console.log("Goaly has ball / ball behind player");
@@ -84,7 +84,7 @@ namespace SimpleSoccer {
                 let BallTarget = SoccerBall.AddNoiseToKick(player.Ball().Pos(), ShotTarget);
 
                 //this is the direction the ball will be kicked in
-                let KickDirection = sub(BallTarget, player.Ball().Pos());
+                let KickDirection = Vector2.subtract(BallTarget, player.Ball().Pos());
 
                 player.Ball().Kick(KickDirection, power);
 
@@ -104,8 +104,6 @@ namespace SimpleSoccer {
 
             power = ParamLoader.MaxPassingForce * dot;
 
-            //ObjectRef < PlayerBase > receiverRef = new ObjectRef<PlayerBase>();
-            //let receiverRef: PlayerBase = null;
             //test if there are any potential candidates available to receive a pass
             let result = player.Team().FindPass(player, power, ParamLoader.MinPassDistance);
             if (player.isThreatened() && result.receiver) {
@@ -113,7 +111,7 @@ namespace SimpleSoccer {
                 //add some noise to the kick
                 let BallTarget = SoccerBall.AddNoiseToKick(player.Ball().Pos(), result.PassTarget);
 
-                let KickDirection = sub(BallTarget, player.Ball().Pos());
+                let KickDirection = Vector2.subtract(BallTarget, player.Ball().Pos());
 
                 player.Ball().Kick(KickDirection, power);
 

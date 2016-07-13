@@ -92,7 +92,7 @@ namespace SimpleSoccer {
             }
 
             //calculate the distance between the positions of the entities
-            let ToEntity = sub(entity.Pos(), it.Pos());
+            let ToEntity = Vector2.subtract(entity.Pos(), it.Pos());
 
             let DistFromEachOther = ToEntity.length();
 
@@ -103,7 +103,7 @@ namespace SimpleSoccer {
 
             if (AmountOfOverLap >= 0) {
                 //move the entity a distance away equivalent to the amount of overlap.
-                entity.SetPos(add(entity.Pos(), mul(AmountOfOverLap, div(ToEntity, DistFromEachOther))));
+                entity.SetPos(Vector2.add(entity.Pos(), Vector2.multiply(AmountOfOverLap, Vector2.divide(ToEntity, DistFromEachOther))));
             }
         }//next entity
     }

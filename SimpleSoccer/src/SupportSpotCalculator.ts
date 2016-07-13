@@ -1,3 +1,6 @@
+
+/// <reference path="./common/Time/Regulator.ts" />
+
 /**
  *  Desc:   Class to determine the best spots for a suppoting soccer
  *          player to move to.

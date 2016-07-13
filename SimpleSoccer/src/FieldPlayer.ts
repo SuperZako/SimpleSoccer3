@@ -1,4 +1,6 @@
-///<reference path='PlayerBase.ts' />
+/// <reference path="./FieldPlayerStates/GlobalPlayerState.ts" />
+
+/// <reference path="./PlayerBase.ts" />
 
 /**
  *   Desc:   Derived from a PlayerBase, this class encapsulates a player
@@ -87,7 +89,7 @@ namespace SimpleSoccer {
 
             //make sure the velocity vector points in the same direction as
             //the heading vector
-            this.m_vVelocity = mul(this.m_vVelocity.length(), this.m_vHeading);
+            this.m_vVelocity = Vector2.multiply(this.m_vVelocity.length(), this.m_vHeading);
 
             //and recreate m_vSide
             this.m_vSide = this.m_vHeading.Perp();
@@ -96,7 +98,7 @@ namespace SimpleSoccer {
             //now to calculate the acceleration due to the force exerted by
             //the forward component of the steering force in the direction
             //of the player's heading
-            let accel = mul(this.m_pSteering.ForwardComponent() / this.m_dMass, this.m_vHeading);
+            let accel = Vector2.multiply(this.m_pSteering.ForwardComponent() / this.m_dMass, this.m_vHeading);
 
             this.m_vVelocity.add(accel);
 

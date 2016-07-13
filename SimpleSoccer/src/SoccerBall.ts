@@ -41,11 +41,11 @@ namespace SimpleSoccer {
 
             let displacement = (Pi - Pi * ParamLoader.PlayerKickingAccuracy) * RandInRange(-1, 1); // RandomClamped();
 
-            let toTarget = sub(BallTarget, BallPos);
+            let toTarget = Vector2.subtract(BallTarget, BallPos);
 
             Vec2DRotateAroundOrigin(toTarget, displacement);
 
-            return add(toTarget, BallPos);
+            return Vector2.add(toTarget, BallPos);
         }
 
         /**
@@ -73,18 +73,18 @@ namespace SimpleSoccer {
                 //calculate the point on the ball that would hit the wall. This is 
                 //simply the wall's normal(inversed) multiplied by the ball's radius
                 //and added to the balls center (its position)
-                let ThisCollisionPoint = sub(this.Pos(), (mul(this.BRadius(), walls[w].Normal())));
+                let ThisCollisionPoint = Vector2.subtract(this.Pos(), (Vector2.multiply(this.BRadius(), walls[w].Normal())));
 
                 //calculate exactly where the collision point will hit the plane    
                 if (WhereIsPoint(ThisCollisionPoint, walls[w].From(), walls[w].Normal()) === span_type.plane_backside) {
                     let DistToWall = DistanceToRayPlaneIntersection(ThisCollisionPoint, wall.Normal(), wall.From(), wall.Normal());
 
-                    IntersectionPoint = add(ThisCollisionPoint, (mul(DistToWall, walls[w].Normal())));
+                    IntersectionPoint = Vector2.add(ThisCollisionPoint, (Vector2.multiply(DistToWall, walls[w].Normal())));
 
                 } else {
                     let DistToWall = DistanceToRayPlaneIntersection(ThisCollisionPoint, VelNormal, walls[w].From(), walls[w].Normal());
 
-                    IntersectionPoint = add(ThisCollisionPoint, (mul(DistToWall, VelNormal)));
+                    IntersectionPoint = Vector2.add(ThisCollisionPoint, (Vector2.multiply(DistToWall, VelNormal)));
                 }
 
                 //check to make sure the intersection point is actually on the line
@@ -93,8 +93,8 @@ namespace SimpleSoccer {
 
                 let a = wall.From();
                 let b = wall.To();
-                let c = sub(ThisCollisionPoint, mul(20.0, wall.Normal()));
-                let d = add(ThisCollisionPoint, mul(20.0, wall.Normal()));
+                let c = Vector2.subtract(ThisCollisionPoint, Vector2.multiply(20.0, wall.Normal()));
+                let d = Vector2.add(ThisCollisionPoint, Vector2.multiply(20.0, wall.Normal()));
                 if (LineIntersection2D(a, b, c, d)) {
 
                     OnLineSegment = true;
@@ -144,7 +144,7 @@ namespace SimpleSoccer {
             //Simulate Prm.Friction. Make sure the speed is positive 
             //first though
             if (this.m_vVelocity.LengthSq() > ParamLoader.Friction * ParamLoader.Friction) {
-                this.m_vVelocity.add(mul(ParamLoader.Friction, Vec2DNormalize(this.m_vVelocity)));
+                this.m_vVelocity.add(Vector2.multiply(ParamLoader.Friction, Vec2DNormalize(this.m_vVelocity)));
                 this.position.add(this.m_vVelocity);
 
 
@@ -189,7 +189,7 @@ namespace SimpleSoccer {
             direction.Normalize();
 
             //calculate the acceleration
-            let acceleration = div(mul(force, direction), this.m_dMass);
+            let acceleration = Vector2.divide(Vector2.multiply(force, direction), this.m_dMass);
 
             //update the velocity
             this.m_vVelocity = acceleration;
@@ -241,17 +241,17 @@ namespace SimpleSoccer {
             //u=start velocity
 
             //calculate the ut term, which is a vector
-            let ut = mul(time, this.m_vVelocity);
+            let ut = Vector2.multiply(time, this.m_vVelocity);
 
             //calculate the 1/2at^2 term, which is scalar
             let half_a_t_squared = 0.5 * ParamLoader.Friction * time * time;
 
             //turn the scalar quantity into a vector by multiplying the value with
             //the normalized velocity vector (because that gives the direction)
-            let ScalarToVector = mul(half_a_t_squared, Vec2DNormalize(this.m_vVelocity));
+            let ScalarToVector = Vector2.multiply(half_a_t_squared, Vec2DNormalize(this.m_vVelocity));
 
             //the predicted position is the balls position plus these two terms
-            return add(this.Pos(), ut).add(ScalarToVector);
+            return Vector2.add(this.Pos(), ut).add(ScalarToVector);
         }
 
         /**

@@ -21,11 +21,6 @@ namespace SimpleSoccer {
         public constructor(private owner: entity_type) {
         }
 
-        //@Override
-        protected finalize() {
-            //    super.finalize();
-        }
-
         //use these methods to initialize the FSM
         public SetCurrentState(s: State<entity_type>) {
             this.m_pCurrentState = s;
@@ -117,6 +112,11 @@ namespace SimpleSoccer {
             //    return s[s.length - 1];
             //}
             return this.m_pCurrentState.getName();
+        }
+
+        //@Override
+        protected finalize() {
+            //    super.finalize();
         }
     }
 }

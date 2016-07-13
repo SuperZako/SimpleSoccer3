@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference path="./MathHelper.ts" />
+
 class Vector2 {
     public static clockwise = 1;
     public static anticlockwise = -1;
@@ -10,7 +11,6 @@ class Vector2 {
     public static get One() {
         return new Vector2(1, 1);
     }
-
 
     // 	Returns the unit vector for the x-axis.
     public static get UnitX() {
@@ -25,6 +25,30 @@ class Vector2 {
     // Returns a Vector2 with all of its components set to zero.
     public static get Zero() {
         return new Vector2(0, 0);
+    }
+
+
+    //overload the + operator
+    public static add(lhs: Vector2, rhs: Vector2) {
+        let x = lhs.x + rhs.x;
+        let y = lhs.y + rhs.y;
+        return new Vector2(x, y);
+    }
+
+    //overload the - operator
+    public static subtract(lhs: Vector2, rhs: Vector2) {
+        let x = lhs.x - rhs.x;
+        let y = lhs.y - rhs.y;
+        return new Vector2(x, y);
+    }
+
+    public static multiply(lhs: number, rhs: Vector2) {
+        return new Vector2(lhs * rhs.x, lhs * rhs.y);
+    }
+
+    //overload the / operator
+    public static divide(lhs: Vector2, rhs: number) {
+        return new Vector2(lhs.x / rhs, lhs.y / rhs);
     }
 
     public set(v: Vector2) {
@@ -65,11 +89,11 @@ class Vector2 {
      *   normalizes a 2D Vector
      */
     public Normalize() {
-        let vector_length = this.length();
+        let length = this.length();
 
-        if (vector_length > MathHelper.EpsilonDouble) {
-            this.x /= vector_length;
-            this.y /= vector_length;
+        if (length > MathHelper.EpsilonDouble) {
+            this.x /= length;
+            this.y /= length;
         }
     }
 
@@ -165,6 +189,8 @@ class Vector2 {
 
         return this;
     }
+
+
 
     //    public Vector2 sub(Vector2 rhs) {
     //        x -= rhs.x;
@@ -372,15 +398,15 @@ class Vector2 {
     //    }
 }
 
-//------------------------------------------------------------------------non member functions
+//-------non member functions
 function Vec2DNormalize(v: Vector2) {
     let vec = new Vector2(v.x, v.y);
 
-    let vector_length = vec.length();
+    let length = vec.length();
 
-    if (vector_length > MathHelper.EpsilonDouble) {
-        vec.x /= vector_length;
-        vec.y /= vector_length;
+    if (length > MathHelper.EpsilonDouble) {
+        vec.x /= length;
+        vec.y /= length;
     }
 
     return vec;
@@ -400,37 +426,4 @@ function Vec2DDistanceSq(v1: Vector2, v2: Vector2) {
     let xSeparation = v2.x - v1.x;
 
     return ySeparation * ySeparation + xSeparation * xSeparation;
-}
-
-
-//overload the + operator
-function add(lhs: Vector2, rhs: Vector2) {
-    let result = new Vector2(lhs.x, lhs.y);
-    result.x += rhs.x;
-    result.y += rhs.y;
-
-    return result;
-}
-
-//overload the - operator
-function sub(lhs: Vector2, rhs: Vector2) {
-    let result = new Vector2(lhs.x, lhs.y);
-    result.x -= rhs.x;
-    result.y -= rhs.y;
-
-    return result;
-}
-
-function mul(lhs: number, rhs: Vector2) {
-    let result = new Vector2(rhs.x, rhs.y);
-    result.multiply(lhs);
-    return result;
-}
-//overload the / operator
-function div(lhs: Vector2, val: number) {
-    let result = new Vector2(lhs.x, lhs.y);
-    result.x /= val;
-    result.y /= val;
-
-    return result;
 }

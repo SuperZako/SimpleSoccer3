@@ -1,11 +1,27 @@
-///**
-// *  Desc:   class to define a team of soccer playing agents. A SoccerTeam
-// *          contains several field players and one goalkeeper. A SoccerTeam
-// *          is implemented as a finite state machine and has states for
-// *          attacking, defending, and KickOff.
-// * 
-// * @author Petr (http://www.sallyx.org/)
-// */
+/// <reference path="./common/FSM/StateMachine.ts" />
+/// <reference path="./common/FSM/State.ts" />
+
+/// <reference path="./common/Game/EntityManager.ts" />
+
+/// <reference path="./TeamStates/Defending.ts" />
+
+/// <reference path="./FieldPlayerStates/Wait.ts" />
+
+/// <reference path="./GoalKeeperStates/TendGoal.ts" />
+
+/// <reference path="./PlayerBase.ts" />
+/// <reference path="./FieldPlayer.ts" />
+/// <reference path="./GoalKeeper.ts" />
+/// <reference path="./SupportSpotCalculator.ts" />
+
+/**
+ *  Desc:   class to define a team of soccer playing agents. A SoccerTeam
+ *          contains several field players and one goalkeeper. A SoccerTeam
+ *          is implemented as a finite state machine and has states for
+ *          attacking, defending, and KickOff.
+ * 
+ * @author Petr (http://www.sallyx.org/)
+ */
 
 namespace SimpleSoccer {
     export enum TeamColor {
@@ -21,7 +37,7 @@ namespace SimpleSoccer {
         //private color: TeamColor;
 
         //pointers to the team members
-        private players = <PlayerBase[]>[]; // new Array<PlayerBase>(5);
+        private players: PlayerBase[] = []; // new Array<PlayerBase>(5);
         //a pointer to the soccer pitch
         //private m_pPitch: SoccerPitch;
 
@@ -252,10 +268,6 @@ namespace SimpleSoccer {
          * returned in the  reference 'PassTarget'
          */
         public FindPass(passer: PlayerBase, power: number, MinPassingDistance: number) {
-            //assert(receiver != null);
-            //assert(PassTarget != null);
-            //ListIterator < PlayerBase > it = Members().listIterator();
-
             let ClosestToGoalSoFar = MaxFloat;
             //let receiver = <PlayerBase>null;
             let finded = false;
@@ -265,9 +277,7 @@ namespace SimpleSoccer {
             };
             //iterate through all this player's team members and calculate which
             //one is in a position to be passed the ball 
-            //while (it.hasNext()) {
             for (let it of this.Members()) {
-                //PlayerBase curPlyr = it.next();
                 //make sure the potential receiver being examined is not this player
                 //and that it is further away than the minimum pass distance
                 if ((it !== passer) && (Vec2DDistanceSq(passer.Pos(), it.Pos()) > MinPassingDistance * MinPassingDistance)) {
@@ -307,7 +317,6 @@ namespace SimpleSoccer {
          *  opponent's goal area.
          */
         public GetBestPassToReceiver(passer: PlayerBase, receiver: PlayerBase, power: number) {
-            //assert(PassTarget != null);
             let PassTarget: Vector2;
             //first, calculate how much time it will take for the ball to reach 
             //this receiver, if the receiver was to remain motionless 
@@ -368,7 +377,7 @@ namespace SimpleSoccer {
          */
         public isPassSafeFromOpponent(from: Vector2, target: Vector2, receiver: PlayerBase, opp: PlayerBase, PassingForce: number) {
             //move the opponent into local space.
-            let ToTarget = sub(target, from);
+            let ToTarget = Vector2.subtract(target, from);
             let ToTargetNormalized = Vec2DNormalize(ToTarget);
 
             let LocalPosOpp = PointToLocalSpace(opp.Pos(), ToTargetNormalized, ToTargetNormalized.Perp(), from);
@@ -652,11 +661,7 @@ namespace SimpleSoccer {
             let m_Players = this.players;
             if (this.isBlue()) {
                 //goalkeeper
-                m_Players.push(new GoalKeeper(this,
-                    1,
-                    TendGoal.Instance(),
-                    new Vector2(0, 1),
-                    new Vector2(0.0, 0.0),
+                m_Players.push(new GoalKeeper(this, 1, TendGoal.Instance(), new Vector2(0, 1), new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
@@ -664,11 +669,7 @@ namespace SimpleSoccer {
                     ParamLoader.PlayerScale));
 
                 //create the players
-                m_Players.push(new FieldPlayer(this,
-                    6,
-                    Wait.Instance(),
-                    new Vector2(0, 1),
-                    new Vector2(0.0, 0.0),
+                m_Players.push(new FieldPlayer(this, 6, Wait.Instance(), new Vector2(0, 1), new Vector2(0.0, 0.0),
                     ParamLoader.PlayerMass,
                     ParamLoader.PlayerMaxForce,
                     ParamLoader.PlayerMaxSpeedWithoutBall,
@@ -731,55 +732,55 @@ namespace SimpleSoccer {
 
 
                 //create the players
-                m_Players.push(new FieldPlayer(this,
-                    9,
-                    Wait.Instance(),
-                    new Vector2(0, -1),
-                    new Vector2(0.0, 0.0),
-                    ParamLoader.PlayerMass,
-                    ParamLoader.PlayerMaxForce,
-                    ParamLoader.PlayerMaxSpeedWithoutBall,
-                    ParamLoader.PlayerMaxTurnRate,
-                    ParamLoader.PlayerScale,
-                    PlayerRole.Attacker));
+                //m_Players.push(new FieldPlayer(this,
+                //    9,
+                //    Wait.Instance(),
+                //    new Vector2(0, -1),
+                //    new Vector2(0.0, 0.0),
+                //    ParamLoader.PlayerMass,
+                //    ParamLoader.PlayerMaxForce,
+                //    ParamLoader.PlayerMaxSpeedWithoutBall,
+                //    ParamLoader.PlayerMaxTurnRate,
+                //    ParamLoader.PlayerScale,
+                //    PlayerRole.Attacker));
 
-                m_Players.push(new FieldPlayer(this,
-                    11,
-                    Wait.Instance(),
-                    new Vector2(0, -1),
-                    new Vector2(0.0, 0.0),
-                    ParamLoader.PlayerMass,
-                    ParamLoader.PlayerMaxForce,
-                    ParamLoader.PlayerMaxSpeedWithoutBall,
-                    ParamLoader.PlayerMaxTurnRate,
-                    ParamLoader.PlayerScale,
-                    PlayerRole.Attacker));
-
-
-                m_Players.push(new FieldPlayer(this,
-                    12,
-                    Wait.Instance(),
-                    new Vector2(0, -1),
-                    new Vector2(0.0, 0.0),
-                    ParamLoader.PlayerMass,
-                    ParamLoader.PlayerMaxForce,
-                    ParamLoader.PlayerMaxSpeedWithoutBall,
-                    ParamLoader.PlayerMaxTurnRate,
-                    ParamLoader.PlayerScale,
-                    PlayerRole.Defender));
+                //m_Players.push(new FieldPlayer(this,
+                //    11,
+                //    Wait.Instance(),
+                //    new Vector2(0, -1),
+                //    new Vector2(0.0, 0.0),
+                //    ParamLoader.PlayerMass,
+                //    ParamLoader.PlayerMaxForce,
+                //    ParamLoader.PlayerMaxSpeedWithoutBall,
+                //    ParamLoader.PlayerMaxTurnRate,
+                //    ParamLoader.PlayerScale,
+                //    PlayerRole.Attacker));
 
 
-                m_Players.push(new FieldPlayer(this,
-                    14,
-                    Wait.Instance(),
-                    new Vector2(0, -1),
-                    new Vector2(0.0, 0.0),
-                    ParamLoader.PlayerMass,
-                    ParamLoader.PlayerMaxForce,
-                    ParamLoader.PlayerMaxSpeedWithoutBall,
-                    ParamLoader.PlayerMaxTurnRate,
-                    ParamLoader.PlayerScale,
-                    PlayerRole.Defender));
+                //m_Players.push(new FieldPlayer(this,
+                //    12,
+                //    Wait.Instance(),
+                //    new Vector2(0, -1),
+                //    new Vector2(0.0, 0.0),
+                //    ParamLoader.PlayerMass,
+                //    ParamLoader.PlayerMaxForce,
+                //    ParamLoader.PlayerMaxSpeedWithoutBall,
+                //    ParamLoader.PlayerMaxTurnRate,
+                //    ParamLoader.PlayerScale,
+                //    PlayerRole.Defender));
+
+
+                //m_Players.push(new FieldPlayer(this,
+                //    14,
+                //    Wait.Instance(),
+                //    new Vector2(0, -1),
+                //    new Vector2(0.0, 0.0),
+                //    ParamLoader.PlayerMass,
+                //    ParamLoader.PlayerMaxForce,
+                //    ParamLoader.PlayerMaxSpeedWithoutBall,
+                //    ParamLoader.PlayerMaxTurnRate,
+                //    ParamLoader.PlayerScale,
+                //    PlayerRole.Defender));
 
             }
 

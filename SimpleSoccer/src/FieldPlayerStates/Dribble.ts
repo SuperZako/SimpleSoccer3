@@ -31,7 +31,34 @@ namespace SimpleSoccer {
 
         //@Override
         public Execute(player: FieldPlayer) {
-            let dot = player.Team().HomeGoal().Facing().dot(player.Heading());
+
+
+            let kickDirection = player.Team().HomeGoal().Facing();
+
+
+            if (player.Team().isBlue()) {
+                //kickDirection = player.Steering().Target();
+                kickDirection.Zero();
+                if (keyboard.pressed("up")) {
+                    kickDirection.add(new Vector2(0, -10));
+                }
+
+                if (keyboard.pressed("left")) {
+                    kickDirection.add(new Vector2(-10, 0));
+                }
+
+                if (keyboard.pressed("down")) {
+                    kickDirection.add(new Vector2(0, 10));
+                }
+
+                if (keyboard.pressed("right")) {
+                    kickDirection.add(new Vector2(10, 0));
+                }
+                kickDirection.Normalize();
+            }
+
+
+            let dot = kickDirection.dot(player.Heading());
 
             //if the ball is between the player and the home goal, it needs to swivel
             // the ball around by doing multiple small kicks and turns until the player 
@@ -44,7 +71,7 @@ namespace SimpleSoccer {
                 //calculate the sign (+/-) of the angle between the player heading and the 
                 //facing direction of the goal so that the player rotates around in the 
                 //correct direction
-                let angle = MathHelper.PiOver4 * -1 * player.Team().HomeGoal().Facing().Sign(player.Heading());
+                let angle = MathHelper.PiOver4 * -1 * kickDirection.Sign(player.Heading());
 
                 Vec2DRotateAroundOrigin(direction, angle);
 
@@ -54,7 +81,7 @@ namespace SimpleSoccer {
 
                 player.Ball().Kick(direction, KickingForce);
             } else { // kick the ball down the field
-                player.Ball().Kick(player.Team().HomeGoal().Facing(), ParamLoader.MaxDribbleForce);
+                player.Ball().Kick(kickDirection, ParamLoader.MaxDribbleForce);
             }
 
             //the player has kicked the ball so he must now change state to follow it

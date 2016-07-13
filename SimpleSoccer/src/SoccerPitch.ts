@@ -1,7 +1,9 @@
 /// <reference path="./common/Game/Region.ts" />
+/// <reference path="./common/D2/Wall2D.ts" />
 /// <reference path="./Goal.ts" />
 /// <reference path="./ParamLoader.ts" />
 /// <reference path="./SoccerBall.ts" />
+/// <reference path="./SoccerTeam.ts" />
 
 /**
  *  Desc:   A SoccerPitch is the main game object. It owns instances of
@@ -22,9 +24,9 @@ namespace SimpleSoccer {
         //    private SoccerBall 
         private ball: SoccerBall;
         //    private SoccerTeam 
-        private m_pRedTeam: SoccerTeam;
+        private redTeam: SoccerTeam;
         //    private SoccerTeam
-        private m_pBlueTeam: SoccerTeam;
+        private blueTeam: SoccerTeam;
 
         private m_pRedGoal: Goal;
         private m_pBlueGoal: Goal;
@@ -90,12 +92,12 @@ namespace SimpleSoccer {
 
 
             //create the teams 
-            this.m_pRedTeam = new SoccerTeam(this.m_pRedGoal, this.m_pBlueGoal, this, TeamColor.Red);
-            this.m_pBlueTeam = new SoccerTeam(this.m_pBlueGoal, this.m_pRedGoal, this, TeamColor.Blue);
+            this.redTeam = new SoccerTeam(this.m_pRedGoal, this.m_pBlueGoal, this, TeamColor.Red);
+            this.blueTeam = new SoccerTeam(this.m_pBlueGoal, this.m_pRedGoal, this, TeamColor.Blue);
 
             //make sure each team knows who their opponents are
-            this.m_pRedTeam.SetOpponents(this.m_pBlueTeam);
-            this.m_pBlueTeam.SetOpponents(this.m_pRedTeam);
+            this.redTeam.SetOpponents(this.blueTeam);
+            this.blueTeam.SetOpponents(this.redTeam);
 
             //create the walls
             let TopLeft = new Vector2(this.m_pPlayingArea.Left(), this.m_pPlayingArea.Top());
@@ -147,8 +149,8 @@ namespace SimpleSoccer {
             this.ball.Update();
 
             //update the teams
-            this.m_pRedTeam.Update();
-            this.m_pBlueTeam.Update();
+            this.redTeam.Update();
+            this.blueTeam.Update();
 
             //if a goal has been detected reset the pitch ready for kickoff
             if (this.m_pBlueGoal.Scored(this.ball) || this.m_pRedGoal.Scored(this.ball)) {
@@ -158,8 +160,8 @@ namespace SimpleSoccer {
                 this.ball.PlaceAtPosition(new Vector2(this.m_cxClient / 2.0, this.m_cyClient / 2.0));
 
                 //get the teams ready for kickoff
-                this.m_pRedTeam.ChangeState(PrepareForKickOff.Instance());
-                this.m_pBlueTeam.ChangeState(PrepareForKickOff.Instance());
+                this.redTeam.ChangeState(PrepareForKickOff.Instance());
+                this.blueTeam.ChangeState(PrepareForKickOff.Instance());
             }
         }
 
@@ -206,8 +208,8 @@ namespace SimpleSoccer {
             this.ball.Render(ctx);
 
             //Render the teams
-            this.m_pRedTeam.Render(ctx);
-            this.m_pBlueTeam.Render(ctx);
+            this.redTeam.Render(ctx);
+            this.blueTeam.Render(ctx);
 
             //    //render the walls
             //    gdi.WhitePen();

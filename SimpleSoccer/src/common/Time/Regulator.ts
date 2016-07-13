@@ -1,3 +1,5 @@
+/// <reference path="../misc/utils.ts" />
+
 /**
  *  Desc:   Use this class to regulate code flow (for an update function say)
  *          Instantiate the class with the frequency you would like your code

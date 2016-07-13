@@ -12,7 +12,7 @@ namespace SimpleSoccer {
 
         public static default_entity_type = -1;
 
-        private static m_iNextValidID = 0;
+        private static nextValidID = 0;
 
         //its location in the environment
         protected position = new Vector2();
@@ -34,14 +34,9 @@ namespace SimpleSoccer {
             this.SetID(id);
         }
 
-        // @Override
-        protected finalize() {
-            //super.finalize();
-        }
-
         // use this to grab the next valid ID
         public static GetNextValidID() {
-            return this.m_iNextValidID;
+            return this.nextValidID;
         }
 
 
@@ -118,19 +113,24 @@ namespace SimpleSoccer {
         //        m_iType = new_type;
         //    }
 
+        // @Override
+        protected finalize() {
+            //super.finalize();
+        }
+
         /**
-       *  this must be called within each constructor to make sure the ID is set
-       *  correctly. It verifies that the value passed to the method is greater
-       *  or equal to the next valid ID, before setting the ID and incrementing
-       *  the next valid ID
-       */
+         *  this must be called within each constructor to make sure the ID is set
+         *  correctly. It verifies that the value passed to the method is greater
+         *  or equal to the next valid ID, before setting the ID and incrementing
+         *  the next valid ID
+        */
         private SetID(id: number) {
             //make sure the val is equal to or greater than the next available ID
             //assert (val >= m_iNextValidID) : "<BaseGameEntity::SetID>: invalid ID";
 
             this.id = id;
 
-            BaseGameEntity.m_iNextValidID = this.id + 1;
+            BaseGameEntity.nextValidID = this.id + 1;
         }
     }
 }

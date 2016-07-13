@@ -46,6 +46,26 @@ namespace SimpleSoccer {
             //if the player is the closest player to the ball then he should keep
             //chasing it
             if (player.isClosestTeamMemberToBall()) {
+                //if (player.Team().isBlue()) {
+                //    let target = player.Pos();
+                //    if (keyboard.pressed("up")) {
+                //        target.add(new Vector2(0, -10));
+                //    }
+
+                //    if (keyboard.pressed("left")) {
+                //        target.add(new Vector2(-10, 0));
+                //    }
+
+                //    if (keyboard.pressed("down")) {
+                //        target.add(new Vector2(0, 10));
+                //    }
+
+                //    if (keyboard.pressed("right")) {
+                //        target.add(new Vector2(10, 0));
+                //    }
+                //    player.Steering().SetTarget(target);
+                //    return;
+                //}
                 player.Steering().SetTarget(player.Ball().Pos());
 
                 return;

@@ -14,10 +14,10 @@ namespace SimpleSoccer {
         //the position of the center of the goal line
         private center: Vector2;
         //each time Scored() detects a goal this is incremented
-        private m_iNumGoalsScored = 0;
+        private numGoalsScored = 0;
 
         constructor(private leftPost: Vector2, private rightPost: Vector2, private facing: Vector2) {
-            this.center = div(add(leftPost, rightPost), 2.0);
+            this.center = Vector2.divide(Vector2.add(leftPost, rightPost), 2.0);
         }
 
         /**
@@ -27,7 +27,7 @@ namespace SimpleSoccer {
          */
         public Scored(ball: SoccerBall) {
             if (LineIntersection2D(ball.Pos(), ball.OldPos(), this.leftPost, this.rightPost)) {
-                ++this.m_iNumGoalsScored;
+                ++this.numGoalsScored;
 
                 return true;
             }
@@ -35,7 +35,7 @@ namespace SimpleSoccer {
             return false;
         }
 
-        //-----------------------------------------------------accessor methods
+        // accessor methods
         public Center() {
             return new Vector2(this.center.x, this.center.y);
         }

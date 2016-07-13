@@ -2,18 +2,7 @@
  * @author Petr (http://www.sallyx.org/)
  */
 /* tslint:disable:no-switch-case-fall-through */
-//package SimpleSoccer.FieldPlayerStates;
 
-//import static SimpleSoccer.DEFINE.*;
-//import static SimpleSoccer.MessageTypes.*;
-//import SimpleSoccer.FieldPlayer;
-//import static SimpleSoccer.ParamLoader.Prm;
-//import common.D2.Vector2;
-//import static common.D2.Vector2.*;
-//import static common.Debug.DbgConsole.*;
-//import common.FSM.State;
-//import static common.Messaging.MessageDispatcher.*;
-//import common.Messaging.Telegram;
 namespace SimpleSoccer {
     export class GlobalPlayerState extends State<FieldPlayer> {
 
@@ -127,7 +116,7 @@ namespace SimpleSoccer {
                     }
 
                     //make the pass   
-                    player.Ball().Kick(sub(receiver.Pos(), player.Ball().Pos()), ParamLoader.MaxPassingForce);
+                    player.Ball().Kick(Vector2.subtract(receiver.Pos(), player.Ball().Pos()), ParamLoader.MaxPassingForce);
 
 
                     //if (def(PLAYER_STATE_INFO_ON)) {

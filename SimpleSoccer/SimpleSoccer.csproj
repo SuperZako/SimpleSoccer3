@@ -29,7 +29,7 @@
     <Content Include="images\icon-info.png" />
     <Content Include="images\run.png" />
     <Content Include="index.html" />
-    <TypeScriptCompile Include="js\THREEx.KeyboardState.ts" />
+    <TypeScriptCompile Include="src\THREEx\THREEx.KeyboardState.ts" />
     <Content Include="src\Applet.java" />
     <TypeScriptCompile Include="src\BaseGameEntity.ts" />
     <TypeScriptCompile Include="src\common\D2\C2DMatrix.ts" />
@@ -120,7 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
-    <Folder Include="src\THREEx\" />
+    <Folder Include="js\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

@@ -4,6 +4,11 @@
  * @author Petr (http://www.sallyx.org/)
  */
 
+/// <reference path="./PlayerBase.ts" />
+
+/// <reference path="./GoalKeeperStates/GlobalKeeperState.ts" />
+
+
 namespace SimpleSoccer {
     export class GoalKeeper extends PlayerBase {
         //    //an instance of the state machine class
@@ -54,7 +59,7 @@ namespace SimpleSoccer {
             let SteeringForce = this.m_pSteering.Calculate();
 
             //Acceleration = Force/Mass
-            let Acceleration = div(SteeringForce, this.m_dMass);
+            let Acceleration = Vector2.divide(SteeringForce, this.m_dMass);
             //update velocity
             this.m_vVelocity.add(Acceleration);
 
@@ -78,7 +83,7 @@ namespace SimpleSoccer {
 
             //look-at vector always points toward the ball
             if (!this.Pitch().GoalKeeperHasBall()) {
-                this.lookAt = Vec2DNormalize(sub(this.Ball().Pos(), this.Pos()));
+                this.lookAt = Vec2DNormalize(Vector2.subtract(this.Ball().Pos(), this.Pos()));
             }
         }
 

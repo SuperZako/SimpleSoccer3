@@ -40,7 +40,7 @@ namespace SimpleSoccer {
             if (result.receiver) {
 
                 //make the pass   
-                keeper.Ball().Kick(Vec2DNormalize(sub(result.PassTarget, keeper.Ball().Pos())), ParamLoader.MaxPassingForce);
+                keeper.Ball().Kick(Vec2DNormalize(Vector2.subtract(result.PassTarget, keeper.Ball().Pos())), ParamLoader.MaxPassingForce);
 
                 //goalkeeper no longer has ball 
                 keeper.Pitch().SetGoalKeeperHasBall(false);

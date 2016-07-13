@@ -119,7 +119,7 @@ namespace SimpleSoccer {
          *  @return true when the heading is facing in the desired direction
          */
         public RotateHeadingToFacePosition(target: Vector2) {
-            let toTarget = Vec2DNormalize(sub(target, this.position));
+            let toTarget = Vec2DNormalize(Vector2.subtract(target, this.position));
 
             //first determine the angle between the heading vector and the target
             let angle = Math.acos(this.m_vHeading.dot(toTarget));

@@ -45,7 +45,7 @@ namespace SimpleSoccer {
     export function WhereIsPoint(point: Vector2,
         PointOnPlane: Vector2, //any point on the plane
         PlaneNormal: Vector2) {
-        let dir = sub(PointOnPlane, point);
+        let dir = Vector2.subtract(PointOnPlane, point);
 
         let d = dir.dot(PlaneNormal);
 
@@ -105,7 +105,7 @@ namespace SimpleSoccer {
      *  Thanks to Dave Eberly for this one.
      */
     export function GetTangentPoints(C: Vector2, R: number, P: Vector2, T1: Vector2, T2: Vector2) {
-        let PmC = sub(P, C);
+        let PmC = Vector2.subtract(P, C);
         let SqrLen = PmC.LengthSq();
         let RSqr = R * R;
         if (SqrLen <= RSqr) {

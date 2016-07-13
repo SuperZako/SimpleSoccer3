@@ -118,7 +118,7 @@ namespace SimpleSoccer {
         //}
 
         protected CalculateNormal() {
-            let temp = Vec2DNormalize(sub(this.m_vB, this.m_vA));
+            let temp = Vec2DNormalize(Vector2.subtract(this.m_vB, this.m_vA));
 
             this.m_vN.x = -temp.y;
             this.m_vN.y = temp.x;

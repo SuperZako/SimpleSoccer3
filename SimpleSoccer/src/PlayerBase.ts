@@ -8,6 +8,7 @@
  * @author Petr (http://www.sallyx.org/)
  */
 ///<reference path='MovingEntity.ts' />
+///<reference path='SteeringBehaviors.ts' />
 
 namespace SimpleSoccer {
     export enum PlayerRole {
@@ -27,7 +28,7 @@ namespace SimpleSoccer {
         //the steering behaviors
         protected m_pSteering: SteeringBehaviors;
         //the region that this player is assigned to.
-        protected m_iHomeRegion: number;
+        //protected m_iHomeRegion: number;
         //the region this player moves to before kickoff
         protected m_iDefaultRegion: number;
         //the distance to the ball (in squared-space). This value is queried 
@@ -41,8 +42,9 @@ namespace SimpleSoccer {
 
         //----------------------------- ctor -------------------------------------
         //------------------------------------------------------------------------
-        constructor(home_team: SoccerTeam,
-            home_region: number,
+        constructor(
+            home_team: SoccerTeam,
+            protected homeRegion: number,
             heading: Vector2,
             velocity: Vector2,
             mass: number,
@@ -52,7 +54,7 @@ namespace SimpleSoccer {
             scale: number,
             role: PlayerRole) {
 
-            super(home_team.Pitch().GetRegionFromIndex(home_region).Center(),
+            super(home_team.Pitch().GetRegionFromIndex(homeRegion).Center(),
                 scale * 10.0,
                 velocity,
                 max_speed,
@@ -63,8 +65,8 @@ namespace SimpleSoccer {
                 max_force);
             this.team = home_team;
             this.m_dDistSqToBall = MaxFloat;
-            this.m_iHomeRegion = home_region;
-            this.m_iDefaultRegion = home_region;
+            //this.m_iHomeRegion = home_region;
+            this.m_iDefaultRegion = homeRegion;
             this.playerRole = role;
 
             //setup the vertex buffers and calculate the bounding radius
@@ -94,7 +96,7 @@ namespace SimpleSoccer {
             this.m_pSteering = new SteeringBehaviors(this, this.team.Pitch(), this.Ball());
 
             //a player's start target is its start position (because it's just waiting)
-            this.m_pSteering.SetTarget(home_team.Pitch().GetRegionFromIndex(home_region).Center());
+            this.m_pSteering.SetTarget(home_team.Pitch().GetRegionFromIndex(homeRegion).Center());
             //new AutoList<PlayerBase>().add(this);
             PlayerBase.members.push(this);
         }
@@ -204,9 +206,9 @@ namespace SimpleSoccer {
          */
         public InHomeRegion() {
             if (this.playerRole === PlayerRole.GoalKeeper) {
-                return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), RegionModifier.Normal);
+                return this.Pitch().GetRegionFromIndex(this.homeRegion).Inside(this.Pos(), RegionModifier.Normal);
             } else {
-                return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), RegionModifier.HalfSize);
+                return this.Pitch().GetRegionFromIndex(this.homeRegion).Inside(this.Pos(), RegionModifier.HalfSize);
             }
         }
 
@@ -242,7 +244,7 @@ namespace SimpleSoccer {
          * front of the player
          */
         public PositionInFrontOfPlayer(position: Vector2) {
-            let ToSubject = sub(position, this.Pos());
+            let ToSubject = Vector2.subtract(position, this.Pos());
 
             if (ToSubject.dot(this.Heading()) > 0) {
                 return true;
@@ -297,7 +299,7 @@ namespace SimpleSoccer {
         //    }
 
         public SetDefaultHomeRegion() {
-            this.m_iHomeRegion = this.m_iDefaultRegion;
+            this.homeRegion = this.m_iDefaultRegion;
         }
 
         public Ball() {
@@ -312,12 +314,13 @@ namespace SimpleSoccer {
             return this.m_pSteering;
         }
 
+
         public HomeRegion() {
-            return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion);
+            return this.Pitch().GetRegionFromIndex(this.homeRegion);
         }
 
-        public SetHomeRegion(NewRegion: number) {
-            this.m_iHomeRegion = NewRegion;
+        public SetHomeRegion(newRegion: number) {
+            this.homeRegion = newRegion;
         }
 
         public Team() {

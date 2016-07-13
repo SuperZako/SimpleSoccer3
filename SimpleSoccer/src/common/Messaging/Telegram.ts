@@ -1,9 +1,6 @@
 /**
  * @author Petr (http://www.sallyx.org/)
  */
-//package common.Messaging;
-
-//import SimpleSoccer.MessageTypes;
 namespace SimpleSoccer {
     export class Telegram /*implements Comparable */ {
         //    //the entity that sent this telegram
@@ -35,21 +32,18 @@ namespace SimpleSoccer {
         //        this(time, sender, receiver, msg, null);
         //    }
 
-        constructor(time: number,
-            sender: number,
-            receiver: number,
-            msg: MessageTypes,
-            info: Object) {
+        constructor(time: number, sender: number, receiver: number, msg: MessageTypes, info: Object) {
             this.DispatchTime = time;
             this.Sender = sender;
             this.Receiver = receiver;
             this.Msg = msg;
             this.ExtraInfo = info;
         }
-        ////these telegrams will be stored in a priority queue. Therefore the >
-        ////operator needs to be overloaded so that the PQ can sort the telegrams
-        ////by time priority. Note how the times must be smaller than
-        ////SmallestDelay apart before two Telegrams are considered unique.
+
+        //these telegrams will be stored in a priority queue. Therefore the >
+        //operator needs to be overloaded so that the PQ can sort the telegrams
+        //by time priority. Note how the times must be smaller than
+        //SmallestDelay apart before two Telegrams are considered unique.
         //    public final static double SmallestDelay = 0.25;
 
         //    /**
