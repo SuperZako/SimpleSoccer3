@@ -21,11 +21,11 @@ namespace SimpleSoccer {
         protected boundingRadius = 0.0;
 
         //each entity has a unique ID
-        private m_ID: number;
+        private id: number;
         //every entity has a type associated with it (health, troll, ammo etc)
-        private m_iType = BaseGameEntity.default_entity_type;
+        private type = BaseGameEntity.default_entity_type;
         //    //this is a generic flag. 
-        private m_bTag = false;
+        private tag = false;
         //    //this is the next valid ID. Each time a BaseGameEntity is instantiated
         //    //this value is updated
 
@@ -34,15 +34,17 @@ namespace SimpleSoccer {
             this.SetID(id);
         }
 
+        // @Override
+        protected finalize() {
+            //super.finalize();
+        }
+
         // use this to grab the next valid ID
         public static GetNextValidID() {
             return this.m_iNextValidID;
         }
 
-        //    @Override
-        protected finalize() {
-            //super.finalize();
-        }
+
 
         public Update() {
             return;
@@ -79,7 +81,7 @@ namespace SimpleSoccer {
         }
 
         public ID() {
-            return this.m_ID;
+            return this.id;
         }
 
         //    public boolean IsTagged() {
@@ -122,13 +124,13 @@ namespace SimpleSoccer {
        *  or equal to the next valid ID, before setting the ID and incrementing
        *  the next valid ID
        */
-        private SetID(val: number) {
+        private SetID(id: number) {
             //make sure the val is equal to or greater than the next available ID
             //assert (val >= m_iNextValidID) : "<BaseGameEntity::SetID>: invalid ID";
 
-            this.m_ID = val;
+            this.id = id;
 
-            BaseGameEntity.m_iNextValidID = this.m_ID + 1;
+            BaseGameEntity.m_iNextValidID = this.id + 1;
         }
     }
 }

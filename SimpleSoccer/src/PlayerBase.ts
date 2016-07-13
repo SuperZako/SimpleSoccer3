@@ -17,13 +17,13 @@ namespace SimpleSoccer {
     }
 
     export abstract class PlayerBase extends MovingEntity {
-        private static m_Members: PlayerBase[] = [];
+        private static members: PlayerBase[] = [];
 
 
         //this player's role in the team
         protected playerRole: PlayerRole;
         //a pointer to this player's team
-        protected m_pTeam: SoccerTeam;
+        protected team: SoccerTeam;
         //the steering behaviors
         protected m_pSteering: SteeringBehaviors;
         //the region that this player is assigned to.
@@ -61,7 +61,7 @@ namespace SimpleSoccer {
                 new Vector2(scale, scale),
                 max_turn_rate,
                 max_force);
-            this.m_pTeam = home_team;
+            this.team = home_team;
             this.m_dDistSqToBall = MaxFloat;
             this.m_iHomeRegion = home_region;
             this.m_iDefaultRegion = home_region;
@@ -91,24 +91,18 @@ namespace SimpleSoccer {
             }
 
             //set up the steering behavior class
-            this.m_pSteering = new SteeringBehaviors(this, this.m_pTeam.Pitch(), this.Ball());
+            this.m_pSteering = new SteeringBehaviors(this, this.team.Pitch(), this.Ball());
 
             //a player's start target is its start position (because it's just waiting)
             this.m_pSteering.SetTarget(home_team.Pitch().GetRegionFromIndex(home_region).Center());
             //new AutoList<PlayerBase>().add(this);
-            PlayerBase.m_Members.push(this);
+            PlayerBase.members.push(this);
         }
 
         public static GetAllMembers() {
-            return this.m_Members;
+            return this.members;
         }
 
-        //    @Override
-        //    protected void finalize() throws Throwable {
-        //        super.finalize();
-        //        m_pSteering = null;
-        //        new AutoList<PlayerBase>().remove(this);
-        //    }
 
         /**
          *  returns true if there is an opponent within this player's 
@@ -210,9 +204,9 @@ namespace SimpleSoccer {
          */
         public InHomeRegion() {
             if (this.playerRole === PlayerRole.GoalKeeper) {
-                return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), Region.normal);
+                return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), RegionModifier.Normal);
             } else {
-                return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), Region.halfsize);
+                return this.Pitch().GetRegionFromIndex(this.m_iHomeRegion).Inside(this.Pos(), RegionModifier.HalfSize);
             }
         }
 
@@ -327,7 +321,7 @@ namespace SimpleSoccer {
         }
 
         public Team() {
-            return this.m_pTeam;
+            return this.team;
         }
 
         //    /**
@@ -342,7 +336,12 @@ namespace SimpleSoccer {
         //            PlayerBase p2) {
         //        return (p1.DistToOppGoal() > p2.DistToOppGoal());
         //    }
-
+        //    @Override
+        protected finalize() {
+            super.finalize();
+            this.m_pSteering = null;
+            //        new AutoList<PlayerBase>().remove(this);
+        }
 
     }
 }

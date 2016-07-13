@@ -5,26 +5,12 @@
  * 
  * @author Petr (http://www.sallyx.org/)
  */
-//package common.Game;
-
-//import common.misc.Cgdi;
-//import static common.misc.Cgdi.gdi;
-//import common.D2.Vector2;
-//import static common.misc.utils.RandInRange;
-//import static common.misc.Stream_Utility_function.ttos;
-//import static java.lang.Math.*;
-
 namespace SimpleSoccer {
-    export enum region_modifier {
-        halfsize,
-        normal,
+    export enum RegionModifier {
+        HalfSize,
+        Normal,
     }
     export class Region {
-
-        public static halfsize = region_modifier.halfsize;
-        public static normal = region_modifier.normal;
-
-
         protected m_dTop: number;
         protected m_dLeft: number;
         protected m_dRight: number;
@@ -82,8 +68,8 @@ namespace SimpleSoccer {
         //    return Inside(pos, region_modifier.normal);
         //}
 
-        public Inside(pos: Vector2, r = region_modifier.normal) {
-            if (r === region_modifier.normal) {
+        public Inside(pos: Vector2, r = RegionModifier.Normal) {
+            if (r === RegionModifier.Normal) {
                 return ((pos.x > this.m_dLeft) && (pos.x < this.m_dRight) && (pos.y > this.m_dTop) && (pos.y < this.m_dBottom));
             } else {
                 const marginX = this.m_dWidth * 0.25;

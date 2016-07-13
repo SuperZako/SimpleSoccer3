@@ -31,7 +31,7 @@ namespace SimpleSoccer {
         public Enter(player: FieldPlayer) {
             player.Steering().ArriveOn();
 
-            if (!player.HomeRegion().Inside(player.Steering().Target(), Region.halfsize)) {
+            if (!player.HomeRegion().Inside(player.Steering().Target(), RegionModifier.HalfSize)) {
                 player.Steering().SetTarget(player.HomeRegion().Center());
             }
 
@@ -56,7 +56,7 @@ namespace SimpleSoccer {
             //if game is on and close enough to home, change state to wait and set the 
             //player target to his current position.(so that if he gets jostled out of 
             //position he can move back to it)
-            if (player.Pitch().GameOn() && player.HomeRegion().Inside(player.Pos(), Region.halfsize)) {
+            if (player.Pitch().GameOn() && player.HomeRegion().Inside(player.Pos(), RegionModifier.HalfSize)) {
                 player.Steering().SetTarget(player.Pos());
                 player.ChangeState(Wait.Instance());
             } else if (!player.Pitch().GameOn() && player.AtTarget()) {

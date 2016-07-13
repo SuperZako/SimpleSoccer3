@@ -12,12 +12,12 @@ namespace SimpleSoccer {
         //a vector representing the facing direction of the goal
         //private m_vFacing: Vector2;
         //the position of the center of the goal line
-        private m_vCenter: Vector2;
+        private center: Vector2;
         //each time Scored() detects a goal this is incremented
         private m_iNumGoalsScored = 0;
 
         constructor(private leftPost: Vector2, private rightPost: Vector2, private facing: Vector2) {
-            this.m_vCenter = div(add(leftPost, rightPost), 2.0);
+            this.center = div(add(leftPost, rightPost), 2.0);
         }
 
         /**
@@ -37,7 +37,7 @@ namespace SimpleSoccer {
 
         //-----------------------------------------------------accessor methods
         public Center() {
-            return new Vector2(this.m_vCenter.x, this.m_vCenter.y);
+            return new Vector2(this.center.x, this.center.y);
         }
 
         public Facing() {

@@ -12,24 +12,19 @@ namespace SimpleSoccer {
     export class StateMachine<entity_type> {
         ////a pointer to the agent that owns this instance
 
-        private m_pOwner: entity_type;
-        private m_pCurrentState: State<entity_type>;
+        private m_pCurrentState: State<entity_type> = null;
         //a record of the last state the agent was in
-        private m_pPreviousState: State<entity_type>;
+        private m_pPreviousState: State<entity_type> = null;
         //this is called every time the FSM is updated
-        private m_pGlobalState: State<entity_type>;
+        private m_pGlobalState: State<entity_type> = null;
 
-        public constructor(owner: entity_type) {
-            this.m_pOwner = owner;
-            this.m_pCurrentState = null;
-            this.m_pPreviousState = null;
-            this.m_pGlobalState = null;
+        public constructor(private owner: entity_type) {
         }
 
         //@Override
-        //protected void finalize() throws Throwable {
-        //    super.finalize();
-        //}
+        protected finalize() {
+            //    super.finalize();
+        }
 
         //use these methods to initialize the FSM
         public SetCurrentState(s: State<entity_type>) {
@@ -48,25 +43,25 @@ namespace SimpleSoccer {
         public Update() {
             //if a global state exists, call its execute method, else do nothing
             if (this.m_pGlobalState !== null) {
-                this.m_pGlobalState.Execute(this.m_pOwner);
+                this.m_pGlobalState.Execute(this.owner);
             }
 
             //same for the current state
             if (this.m_pCurrentState !== null) {
-                this.m_pCurrentState.Execute(this.m_pOwner);
+                this.m_pCurrentState.Execute(this.owner);
             }
         }
 
         public HandleMessage(msg: Telegram) {
             //first see if the current state is valid and that it can handle
             //the message
-            if (this.m_pCurrentState != null && this.m_pCurrentState.OnMessage(this.m_pOwner, msg)) {
+            if (this.m_pCurrentState != null && this.m_pCurrentState.OnMessage(this.owner, msg)) {
                 return true;
             }
 
             //if not, and if a global state has been implemented, send 
             //the message to the global state
-            if (this.m_pGlobalState != null && this.m_pGlobalState.OnMessage(this.m_pOwner, msg)) {
+            if (this.m_pGlobalState != null && this.m_pGlobalState.OnMessage(this.owner, msg)) {
                 return true;
             }
 
@@ -81,13 +76,13 @@ namespace SimpleSoccer {
             this.m_pPreviousState = this.m_pCurrentState;
 
             //call the exit method of the existing state
-            this.m_pCurrentState.Exit(this.m_pOwner);
+            this.m_pCurrentState.Exit(this.owner);
 
             //change state to the new state
             this.m_pCurrentState = pNewState;
 
             //call the entry method of the new state
-            this.m_pCurrentState.Enter(this.m_pOwner);
+            this.m_pCurrentState.Enter(this.owner);
         }
 
         ////change state back to the previous state
